@@ -1844,3 +1844,5 @@ const products = {
     skip: 0,
     limit: 100
     }
+
+    export default products;
