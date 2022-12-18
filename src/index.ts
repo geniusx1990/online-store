@@ -1,5 +1,9 @@
-import locationHandler from './routes';
+import Header from './components/header/header';
+import Filters from './components/filters/filters';
+import './global.css';
 
-window.addEventListener('hashchange', locationHandler);
-locationHandler();
-console.log('RRRRR')
+const header = new Header();
+header.drawHeader();
+
+const filters = new Filters();
+filters.drawFilters();

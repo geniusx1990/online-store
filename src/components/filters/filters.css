@@ -1,0 +1,34 @@
+.filters {
+    width: 400px;
+    height: 800px;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.filters__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.filters__button {
+    width: 150px;
+    height: 50px;
+    border: none;
+}
+
+.categories,
+.brands {
+    width: 100%;
+    height: 200px;
+    padding: 20px;
+    border: 1px solid black;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+
+
