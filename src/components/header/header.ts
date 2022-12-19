@@ -22,9 +22,16 @@ class Header {
     }
 
     private createCartButton() {
+        const btnWrapper = document.createElement('div');
+        btnWrapper.className = 'header__button-wrapper';
         const cartButton = document.createElement('a');
         cartButton.className = 'header__button button_cart';
-        return cartButton;
+        const productsNum = document.createElement('div');
+        productsNum.className = 'header__products-number';
+        productsNum.textContent = '0';
+        btnWrapper.appendChild(cartButton);
+        btnWrapper.appendChild(productsNum);
+        return btnWrapper;
     }
 
     draw() {

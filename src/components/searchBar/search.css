@@ -4,7 +4,7 @@
     height: 50px;
     border-radius: 25px;
     overflow: hidden;
-    border: 1px solid black;
+    border: 2px solid yellow;
 }
 
 .search__input {
@@ -13,7 +13,7 @@
     padding: 10px 20px;
     border-radius: 25px;
     outline: none;
-    border: none;
+    border: 1px solid yellow;
 }
 
 .search__button {
@@ -24,4 +24,5 @@
     height: 50px;
     background-color: yellow;
     border: none;
+    cursor: pointer;
 }
