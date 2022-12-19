@@ -1,26 +1,20 @@
 import './filters.css';
 import products from '../../utils/products';
-class Filters {
 
-    private drawCategories() {
+class Filters {
+    private container: HTMLElement;
+
+    constructor() {
+        this.container = document.createElement('div');
+        this.container.className = 'main__filters filters';
+    }
+
+    private createCategories() {
         const categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
 
-        const categories = document.createElement('div');
-        categories.className = 'filters__categories categories';
-    
-        const categoryTitle = document.createElement('div');
-        categoryTitle.className = 'categories__upper';
-    
-        const title = document.createElement('h3');
-        title.className = 'categories__title';
-        title.textContent = 'Categories';
-        categoryTitle.appendChild(title);
-        categories.appendChild(categoryTitle);
-    
         const categoriesList = document.createElement('div');
         categoriesList.className = 'categories__list';
     
-
         categoriesNames.forEach(item => {
             const checkItem = document.createElement('div');
             checkItem.className = 'categories__list-item list-item';
@@ -37,29 +31,14 @@ class Filters {
     
             checkItem.appendChild(checkBox);
             checkItem.appendChild(boxLabel);
-    
             categoriesList.appendChild(checkItem);
         })
-    
-        categories.appendChild(categoriesList);
-        return categories;
-    
+        return categoriesList;
     }
 
-    private drawBrands() {
+    private createBrands() {
         const brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
-        const brands = document.createElement('div');
-        brands.className = 'filters__brands brands';
-    
-        const brandsTitle = document.createElement('div');
-        brandsTitle.className = 'brands__upper';
-    
-        const title = document.createElement('h3');
-        title.className = 'brands__title';
-        title.textContent = 'Brands';
-        brandsTitle.appendChild(title);
-        brands.appendChild(brandsTitle);
-    
+  
         const brandsList = document.createElement('div');
         brandsList.className = 'brands__list';
     
@@ -79,20 +58,12 @@ class Filters {
     
             checkItem.appendChild(checkBox);
             checkItem.appendChild(boxLabel);
-    
             brandsList.appendChild(checkItem);
         })
-    
-        brands.appendChild(brandsList);
-        return brands;
-    
+        return brandsList; 
     }
 
-    drawFilters() {
-
-        const filters = document.createElement('div');
-        filters.className = 'main__filters filters';
-
+    private createButtons() {
         const filterButtons = document.createElement('div');
         filterButtons.className = 'filters__buttons';
 
@@ -106,24 +77,37 @@ class Filters {
 
         filterButtons.appendChild(resetButton);
         filterButtons.appendChild(linkButton);
-        filters.appendChild(filterButtons);
-
-        const categories = this.drawCategories();
-        filters.appendChild(categories);
-
-        const brands = this.drawBrands();
-        filters.appendChild(brands);
-
-        const content = document.querySelector('.content');
-        content?.appendChild(filters);
-
+        this.container.appendChild(filterButtons);
+        return filterButtons;
     }
 
+    drawFilters() {
+        const title = document.createElement('h2');
+        title.className = 'filters__title';
+        title.textContent = 'Filters';
+        this.container.appendChild(title);
+
+        const categoriesTitle = document.createElement('h3');
+        categoriesTitle.className = 'categories__title';
+        categoriesTitle.textContent = 'Categories';
+        this.container.appendChild(categoriesTitle);
+
+        const categories = this.createCategories();
+        this.container.appendChild(categories);
+
+        const brandsTitle = document.createElement('h3');
+        brandsTitle.className = 'brands__title';
+        brandsTitle.textContent = 'Brands';
+        this.container.appendChild(brandsTitle);
+
+        const brands = this.createBrands();
+        this.container.appendChild(brands);
+
+        const buttons = this.createButtons();
+        this.container.appendChild(buttons);
+
+        return this.container;
+    }
 }
-
-
-
-
-
 
 export default Filters;

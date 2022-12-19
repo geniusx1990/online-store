@@ -10,7 +10,9 @@ const headerContainer = header.draw();
 document.body.prepend(headerContainer)
 
 const filters = new Filters();
-filters.drawFilters();
+const mainFilters = filters.drawFilters();
+const content = document.querySelector('.content');
+content?.append(mainFilters);
 
 const cards = new Cards();
 cards.drawCards();
