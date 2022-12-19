@@ -3,7 +3,6 @@ import products from '../../utils/products';
 class Filters {
 
     private drawCategories() {
-        //const categoriesNames = ['smartphones', 'laptops', 'fragrances', 'skincare', 'groceries', 'home-decoration', 'furniture', 'tops', 'womens-dresses', 'womens-shoes', 'mens-shirts', 'mens-shoes', 'mens-watches', 'womens-watches', 'womens-bags', 'womens-jewellery', 'sunglasses', 'automotive', 'motorcycle', 'lighting'];
         const categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
 
         const categories = document.createElement('div');
@@ -48,7 +47,6 @@ class Filters {
     }
 
     private drawBrands() {
-        //const brandsNames = ['Apple', 'Samsung', 'OPPO', 'Huawei', 'Microsoft Surface', 'Infinix', 'HP Pavilion', 'Impression of Acqua Di Gio', 'Royal_Mirage', 'Fog Scent Xpressio', 'Al Munakh', 'Lord - Al-Rehab', 'L\'Oreal Paris', 'Hemani Tea', 'Dermive', 'ROREC White Rice', 'Fair & Clear', 'Saaf & Khaas', 'Bake Parlor Big', 'Baking Food Items', 'fauji', 'Dry Rose', 'Boho Decor', 'Flying Wooden', 'LED Lights', 'luxury palace', 'Golden', 'Furniture Bed Set', 'Ratttan Outdoor', 'Kitchen Shelf', 'Multi Purpose', 'AmnaMart', 'Professional Wear', 'Soft Cotton', 'Top Sweater'];
         const brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
         const brands = document.createElement('div');
         brands.className = 'filters__brands brands';

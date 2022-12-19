@@ -6,7 +6,8 @@ import './global.css';
 import products from './utils/products';
 
 const header = new Header();
-header.drawHeader();
+const headerContainer = header.draw();
+document.body.prepend(headerContainer)
 
 const filters = new Filters();
 filters.drawFilters();
