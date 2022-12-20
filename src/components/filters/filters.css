@@ -28,6 +28,13 @@
     cursor: pointer;
 }
 
+.categories__title,
+.brands__title {
+    font-size: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #efefef;
+}
+
 .stock__title,
 .price__title {
     font-size: 18px;
