@@ -139,7 +139,7 @@ input[type="range"]::-ms-thumb {
 
 .stock-slider__values,
 .price-slider__values {
-    width: 35%;
+    width: 45%;
     background-color: #ffdd22;
     font-size: 18px;
     font-weight: bold;

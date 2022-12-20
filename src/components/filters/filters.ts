@@ -78,15 +78,15 @@ class Filters {
 
         const valueOne = document.createElement('span');
         valueOne.className = `${title}-slider__value-one`;
-        valueOne.textContent = `${minValue} `;
+        valueOne.textContent = `${minValue}`;
         values.append(valueOne);
         
         const dash = document.createElement('span');
-        dash.textContent = '-';
+        dash.textContent = ' - ';
         values.append(dash);
 
         const valueTwo = document.createElement('span');
-        valueTwo.className = `${title}-slider__value-one`;
+        valueTwo.className = `${title}-slider__value-two`;
         valueTwo.textContent = ` ${maxValue}`;
         values.append(valueTwo);
 
@@ -111,7 +111,7 @@ class Filters {
         secondInput.min = minValue;
         secondInput.max = maxValue;
         secondInput.value = maxValue;
-        secondInput.id = `${title}-slider__input ${title}-input_second`;
+        secondInput.className = `${title}-slider__input ${title}-input_second`;
         sliderWrapper.append(secondInput);
 
         return sliderContainer;   

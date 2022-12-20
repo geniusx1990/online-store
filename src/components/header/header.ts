@@ -35,7 +35,6 @@ class Header {
     }
 
     draw() {
-
         const headerWrapper = document.createElement('div');
         headerWrapper.className = 'header__wrapper';
         this.container.appendChild(headerWrapper);
@@ -50,9 +49,7 @@ class Header {
         headerWrapper.appendChild(cartBtn);
 
         return this.container;
-
-    }
-    
+    }    
 }
 
 export default Header;
