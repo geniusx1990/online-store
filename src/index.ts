@@ -16,3 +16,4 @@ content?.append(mainFilters);
 
 const cards = new Cards();
 cards.drawCards();
+

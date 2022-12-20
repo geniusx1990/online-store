@@ -4,7 +4,7 @@
     height: 50px;
     border-radius: 25px;
     overflow: hidden;
-    border: 2px solid yellow;
+    border: 2px solid #ffdd22;
 }
 
 .search__input {
@@ -13,7 +13,7 @@
     padding: 10px 20px;
     border-radius: 25px;
     outline: none;
-    border: 1px solid yellow;
+    border: 1px solid #ffdd22;
 }
 
 .search__button {
@@ -22,7 +22,10 @@
     right: 0;
     width: 50px;
     height: 50px;
-    background-color: yellow;
+    background: url('../../assets/svg/icon-search.svg'), #ffdd22;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 30%;
     border: none;
     cursor: pointer;
 }

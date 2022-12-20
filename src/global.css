@@ -7,6 +7,7 @@ html, body {
     padding: 0;
     margin: 0;
     font-family: 'Lato', sans-serif;
+    color: #333e48;
 }
 * {
     box-sizing: border-box;

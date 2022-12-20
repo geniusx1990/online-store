@@ -63,6 +63,60 @@ class Filters {
         return brandsList; 
     }
 
+    private createDualSliderFilter(title: string, minValue: string, maxValue: string) {
+        const sliderContainer = document.createElement('div');
+        sliderContainer.className = `filters__${title}-slider-container`;
+
+        const sliderTitle = document.createElement('h3');
+        sliderTitle.className = `${title}__title`;
+        sliderTitle.textContent = title;
+        sliderContainer.append(sliderTitle);
+
+        const values = document.createElement('div');
+        values.className = `${title}-slider__values`;
+        sliderContainer.append(values);
+
+        const valueOne = document.createElement('span');
+        valueOne.className = `${title}-slider__value-one`;
+        valueOne.textContent = `${minValue} `;
+        values.append(valueOne);
+        
+        const dash = document.createElement('span');
+        dash.textContent = '-';
+        values.append(dash);
+
+        const valueTwo = document.createElement('span');
+        valueTwo.className = `${title}-slider__value-one`;
+        valueTwo.textContent = ` ${maxValue}`;
+        values.append(valueTwo);
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = `filters__${title}-slider slider`;
+        sliderContainer.append(sliderWrapper);
+
+        const track = document.createElement('div');
+        track.className = `${title}-slider__track`;
+        sliderWrapper.append(track);
+
+        const firstInput = document.createElement('input');
+        firstInput.type = 'range';
+        firstInput.min = minValue;
+        firstInput.max = maxValue;
+        firstInput.value = minValue;
+        firstInput.className = `${title}-slider__input ${title}-input_first`;
+        sliderWrapper.append(firstInput);
+
+        const secondInput = document.createElement('input');
+        secondInput.type = 'range';
+        secondInput.min = minValue;
+        secondInput.max = maxValue;
+        secondInput.value = maxValue;
+        secondInput.id = `${title}-slider__input ${title}-input_second`;
+        sliderWrapper.append(secondInput);
+
+        return sliderContainer;   
+    }
+
     private createButtons() {
         const filterButtons = document.createElement('div');
         filterButtons.className = 'filters__buttons';
@@ -102,6 +156,12 @@ class Filters {
 
         const brands = this.createBrands();
         this.container.appendChild(brands);
+
+        const priceSlider = this.createDualSliderFilter('price', '0', '2000');
+        this.container.appendChild(priceSlider);
+
+        const inStockSlider = this.createDualSliderFilter('stock', '0', '150');
+        this.container.appendChild(inStockSlider);
 
         const buttons = this.createButtons();
         this.container.appendChild(buttons);
