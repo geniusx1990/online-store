@@ -11,12 +11,12 @@ class Header {
         this.search = new SearchBar();
     }
 
-    private createLogo() {
+    private createLogo(logoName: string) {
         const logo = document.createElement('div');
         logo.className = ' logo header__logo';
         const logoText = document.createElement('h1');
         logoText.className = 'logo__text';
-        logoText.textContent = 'Online Store';
+        logoText.textContent = logoName;
         logo.appendChild(logoText);
         return logo;
     }
@@ -39,7 +39,7 @@ class Header {
         headerWrapper.className = 'header__wrapper';
         this.container.appendChild(headerWrapper);
 
-        const logo = this.createLogo();
+        const logo = this.createLogo('Online Store');
         headerWrapper.appendChild(logo);
 
         const searchBar = this.search.draw();

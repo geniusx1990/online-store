@@ -1,7 +1,7 @@
 import Header from '../../components/header/header';
 import Filters from '../../components/filters/filters';
 import Sort from '../../components/sort/sort';
-import Cards from '../../components/Cards/cards';
+import Cards from '../../components/cards/cards';
 import './main.css';
 
 class MainPage {
@@ -11,8 +11,9 @@ class MainPage {
     sort: Sort;
     cards: Cards;
 
-    constructor() {
+    constructor(pageName: string) {
         this.container = document.createElement('div');
+        this.container.className = pageName;
         this.header = new Header();
         this.filters = new Filters();
         this.sort = new Sort();

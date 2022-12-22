@@ -1,6 +1,5 @@
-import MainPage from './pages/main/main';
+import App from './pages/app/app';
 import './global.css';
 
-const mainPage = new MainPage;
-const main = mainPage.draw();
-document.body.append(main);
+const app = new App();
+app.start();
