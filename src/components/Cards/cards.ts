@@ -68,14 +68,15 @@ class Cards {
     }
 
     drawCards() {
-        const content = document.querySelector('.content');
+        // const content = document.querySelector('.content');
 
         const cardsContainer = document.createElement('div');
         cardsContainer.className = 'cards_container';
 
         const cardItem = this.drawContent();
         cardsContainer.appendChild(cardItem);
-        content?.appendChild(cardsContainer);
+        // content?.appendChild(cardsContainer);
+        return cardsContainer;
     }
 
 
