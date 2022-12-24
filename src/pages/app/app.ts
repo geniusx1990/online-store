@@ -41,17 +41,6 @@ class App {
         });
     }
 
-
-
-    // renderPage(idPage: string) {
-    //     document.body.innerHTML = '';
-    //     let page: HTMLElement | null = null;
-    //     if(idPage === 'main-page') {
-    //         page = new MainPage()
-    //     }
-
-    // }
-
     start() {
         App.renderNewPage(Pages.MainPage);
         this.enableRouteChangee();

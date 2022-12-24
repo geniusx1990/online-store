@@ -1,22 +1,21 @@
-import Header from "../../components/header/header";
 import Page from "../../components/templates/page";
+import CartHeader from '../../components/header/cartHeader';
+import './cart.css';
 
 class CartPage extends Page {
+    header: CartHeader;
   
     constructor(pageName: string) {
         super(pageName);
-/*         this.container = document.createElement('div');
-        this.container.className = pageName;
-        this.header = new Header(); */
+        this.header = new CartHeader();
     }
 
-/*     draw() {
-        const mainHeader = this.header.draw();
-        this.container.append(mainHeader);
+    draw() {
+       
         
-        return this.constructor;
+        return this.container;
 
-    } */
+    } 
 }
 
 export default CartPage;
