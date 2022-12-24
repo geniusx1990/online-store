@@ -5,13 +5,17 @@ import Page from '../../components/templates/page';
 
 export enum Pages {
     MainPage = 'main-page',
-    Cartpage = 'cart-page',
+    CartPage = 'cart-page',
     ProductPage = 'product-page'
 }
 
 class App {
     private static container: HTMLElement = document.body;
     private initialPage: MainPage;
+ 
+    constructor() {
+        this.initialPage = new MainPage(Pages.MainPage);
+    }
 
     static renderNewPage(idPage: string) {
         App.container.innerHTML = '';
@@ -19,7 +23,7 @@ class App {
 
         if (idPage === Pages.MainPage) {
             page = new MainPage(idPage);
-        }  else if (idPage === Pages.Cartpage) {
+        }  else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
         } 
  
@@ -27,10 +31,6 @@ class App {
             const pageHtml = page.draw()
             App.container.append(pageHtml);
         }
-    }
-
-    constructor() {
-        this.initialPage = new MainPage(Pages.MainPage);
     }
 
     private enableRouteChangee() {
@@ -42,16 +42,9 @@ class App {
     }
 
     start() {
-        App.renderNewPage(Pages.MainPage);
+        App.renderNewPage(Pages.CartPage); // should be Pages.MainPage
         this.enableRouteChangee();
-/*         const mainPageHTML = this.initialPage.draw();
-        this.container.append(mainPageHTML); */
-        // return this.container; 
-
-        //App.renderNewPage('main-page')
-
     }
-
 }
 
 export default App;

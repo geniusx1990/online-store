@@ -1,0 +1,64 @@
+.main {
+    width: 100%;
+    display: flex;
+}
+
+.main__products {
+    width: 70%;
+}
+
+.main__summary {
+    width: 30%;
+    border: 1px dotted green;
+}
+
+.products-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.products-panel__title {
+    font-size: 22px;
+}
+
+.products-panel__counters {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    font-size: 18px;
+}
+
+.pages {
+    display: flex;
+    gap: 10px;
+}
+
+.items__label {
+    margin-right: 10px;
+}
+
+.pages__button {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.button_left {
+    background: url('../../assets/svg/arrow-icon.png'), #ffdd22;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+}
+
+.button_right {
+    background: url('../../assets/svg/arrow-icon.png'), #ffdd22;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
