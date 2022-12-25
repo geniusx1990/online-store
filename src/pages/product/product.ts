@@ -1,20 +1,21 @@
-import Header from "../../components/header/header";
+import CartHeader from "../../components/header/cartHeader";
 
 class ProductPage {
     private container: HTMLElement;
-    header: Header;
+    header: CartHeader;
 
     constructor(pageName: string) {
         this.container = document.createElement('div');
         this.container.className = pageName;
-        this.header = new Header();
+        this.header = new CartHeader();
+
     }
 
     draw() {
         const productHeader = this.header.draw();
         this.container.append(productHeader);
-        return this.constructor;
-        
+
+        return this.constructor;    
     }
 }
 

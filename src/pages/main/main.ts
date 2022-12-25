@@ -19,6 +19,21 @@ class MainPage extends Page {
         this.cards = new Cards(); 
     }
 
+    private createLayoutButtons() {
+        const buttonWrapper = document.createElement('div');
+        buttonWrapper.className = 'layout';
+
+        const buttonSquares = document.createElement('button');
+        buttonSquares.className = 'layout__button button_squares';
+        buttonWrapper.append(buttonSquares);
+
+        const buttonLines = document.createElement('button');
+        buttonLines.className = 'layout__button button_lines';
+        buttonWrapper.append(buttonLines);
+
+        return buttonWrapper;
+    }
+
     draw() {
 
         const mainHeader = this.header.draw();
@@ -41,6 +56,9 @@ class MainPage extends Page {
 
         const sortMain = this.sort.drawSort();
         sortingWrapper.append(sortMain);
+
+        const layoutButtons = this.createLayoutButtons();
+        sortingWrapper.append(layoutButtons);
 
         const cardsMain = this.cards.drawCards();
         content.append(cardsMain);
