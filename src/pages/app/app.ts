@@ -2,16 +2,21 @@ import MainPage from '../main/main';
 import CartPage from '../cart/cart';
 import ProductPage from '../product/product';
 import Page from '../../components/templates/page';
+import products from '../../utils/products';
 
 export enum Pages {
     MainPage = 'main-page',
-    Cartpage = 'cart-page',
+    CartPage = 'cart-page',
     ProductPage = 'product-page'
 }
 
 class App {
     private static container: HTMLElement = document.body;
     private initialPage: MainPage;
+ 
+    constructor() {
+        this.initialPage = new MainPage(Pages.MainPage);
+    }
 
     static renderNewPage(idPage: string) {
         App.container.innerHTML = '';
@@ -19,18 +24,14 @@ class App {
 
         if (idPage === Pages.MainPage) {
             page = new MainPage(idPage);
-        }  else if (idPage === Pages.Cartpage) {
+        }  else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
         } 
  
         if (page) {
-            const pageHtml = page.draw()
+            const pageHtml = page.draw();
             App.container.append(pageHtml);
         }
-    }
-
-    constructor() {
-        this.initialPage = new MainPage(Pages.MainPage);
     }
 
     private enableRouteChangee() {
@@ -41,28 +42,10 @@ class App {
         });
     }
 
-
-
-    // renderPage(idPage: string) {
-    //     document.body.innerHTML = '';
-    //     let page: HTMLElement | null = null;
-    //     if(idPage === 'main-page') {
-    //         page = new MainPage()
-    //     }
-
-    // }
-
     start() {
         App.renderNewPage(Pages.MainPage);
         this.enableRouteChangee();
-/*         const mainPageHTML = this.initialPage.draw();
-        this.container.append(mainPageHTML); */
-        // return this.container; 
-
-        //App.renderNewPage('main-page')
-
     }
-
 }
 
 export default App;

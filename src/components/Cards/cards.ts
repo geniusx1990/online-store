@@ -1,13 +1,20 @@
 import './cards.css';
 import products from "../../utils/products";
+import {Product} from '../../utils/types';
 
 class Cards {
+    private container: HTMLElement;
+    products: Product[];
 
-    private drawContent() {
-        
+    constructor(products: Product[]) {
+        this.container = document.createElement('div');
+        this.container.className = 'cards_container';
+        this.products = products;
+    }
+
+    private drawContent() {  
         const cardItem = document.createElement('div');
         cardItem.className = 'cards';
-
 
         for (const key in products.products) {
             const prodcutCard = document.createElement('div');
@@ -25,18 +32,16 @@ class Cards {
             cardImage.src = products.products[key].thumbnail;
             prodcutCard.appendChild(cardImage);
 
-
             const cardInfo = document.createElement('div');
             cardInfo.className = 'card-description';
 
-            const cardDescription = document.createElement('span');
-            cardDescription.className = 'description';
-
-            const branName = document.createElement('span');
+            const branName = document.createElement('p');
             branName.className = 'brand-name';
             branName.textContent = `Brand name: ${products.products[key].brand}`;
-            prodcutCard.appendChild(branName);
+            cardInfo.appendChild(branName);
 
+            const cardDescription = document.createElement('p');
+            cardDescription.className = 'description';
             cardDescription.textContent = products.products[key].description;
             cardInfo.appendChild(cardDescription);
             prodcutCard.appendChild(cardInfo);
@@ -59,28 +64,16 @@ class Cards {
             priceContent.appendChild(addCart);
 
             prodcutCard.appendChild(priceContent);
-
-
         }
-
         return cardItem;
-
     }
 
     drawCards() {
-        // const content = document.querySelector('.content');
-
-        const cardsContainer = document.createElement('div');
-        cardsContainer.className = 'cards_container';
-
         const cardItem = this.drawContent();
-        cardsContainer.appendChild(cardItem);
-        // content?.appendChild(cardsContainer);
-        return cardsContainer;
+        this.container.appendChild(cardItem);
+
+        return this.container;
     }
-
-
-
 }
 
 export default Cards;

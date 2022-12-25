@@ -1,0 +1,98 @@
+.product-card {
+    width: 100%;
+    display: flex;
+    border-radius: 15px;
+    border: 2px solid #efefef;
+    /* border: 2px solid #333e48; */
+}
+
+.product-card__image-wrapper {
+    width: 25%;
+    padding: 10px;
+}
+
+.product-card__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 15px;
+}
+
+.product-card__info {
+    width: 55%;
+    padding: 10px;
+}
+
+.product-card__title {
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #efefef;
+    text-align: center;
+}
+
+.product-card__description {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.product-card__extra {
+    display: flex;
+    width: 70%;
+    font-size: 12px;
+    font-weight: bold;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.product-card__price-block {
+    width: 20%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product-card__stock {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.product-card__counter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.product-card__button {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.button_minus {
+    background: url('../../assets/svg/minus-icon.png'), #ffdd22;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.button_plus {
+    background: url('../../assets/svg/plus-icon.png'), #ffdd22;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.product-card__price {
+    font-size: 16px;
+    font-weight: bold;
+}

@@ -1,7 +1,7 @@
 .header {
     width: 100%;
     border-bottom: 2px solid #efefef;
-    padding: 20px 30px;
+    padding: 40px 30px;
 
 }
 
@@ -45,4 +45,13 @@
     text-align: center;
     font-size: 15px;
     line-height: 30px;
+}
+
+.header__total-text {
+    font-size: 24px;
+}
+
+.header__total {
+    display: flex;
+    gap: 10px;
 }
