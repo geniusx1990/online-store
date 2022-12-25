@@ -57,7 +57,7 @@ class CartProduct {
         priceBlock.append(counter);
 
         const leftButton = document.createElement('button');
-        leftButton.className = 'product-card__button button_left';
+        leftButton.className = 'product-card__button button_minus';
         counter.append(leftButton);
 
         const productsNumber = document.createElement('span');
@@ -66,7 +66,7 @@ class CartProduct {
         counter.append(productsNumber);
 
         const rightButton = document.createElement('button');
-        rightButton.className = 'product-card__button button_right';
+        rightButton.className = 'product-card__button button_plus';
         counter.append(rightButton);
 
         const price = document.createElement('p');
