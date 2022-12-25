@@ -2,6 +2,7 @@ import MainPage from '../main/main';
 import CartPage from '../cart/cart';
 import ProductPage from '../product/product';
 import Page from '../../components/templates/page';
+import products from '../../utils/products';
 
 export enum Pages {
     MainPage = 'main-page',
