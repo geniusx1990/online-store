@@ -29,14 +29,13 @@ class Cards {
             const cardInfo = document.createElement('div');
             cardInfo.className = 'card-description';
 
-            const cardDescription = document.createElement('span');
-            cardDescription.className = 'description';
-
-            const branName = document.createElement('span');
+            const branName = document.createElement('p');
             branName.className = 'brand-name';
             branName.textContent = `Brand name: ${products.products[key].brand}`;
-            prodcutCard.appendChild(branName);
+            cardInfo.appendChild(branName);
 
+            const cardDescription = document.createElement('p');
+            cardDescription.className = 'description';
             cardDescription.textContent = products.products[key].description;
             cardInfo.appendChild(cardDescription);
             prodcutCard.appendChild(cardInfo);
@@ -59,7 +58,6 @@ class Cards {
             priceContent.appendChild(addCart);
 
             prodcutCard.appendChild(priceContent);
-
 
         }
 
