@@ -37,7 +37,7 @@ class CartProduct {
 
         const discount = document.createElement('div');
         discount.className = 'product-card__discount';
-        discount.textContent = `discount: ${this.product.discountPercentage}`;
+        discount.textContent = `Discount: ${this.product.discountPercentage}%`;
         extraInfo.append(discount);
 
         return productInfo;
@@ -71,7 +71,7 @@ class CartProduct {
 
         const price = document.createElement('p');
         price.className = 'product-card__price';
-        price.textContent = `Price: ${this.product.price}`;
+        price.textContent = `Price: $${this.product.price}`;
         priceBlock.append(price);
 
         return priceBlock;

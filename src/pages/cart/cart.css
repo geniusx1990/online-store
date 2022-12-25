@@ -16,7 +16,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 2px solid #efefef;
+    margin-bottom: 10px;
 }
 
 .products-panel__title {
@@ -77,12 +78,12 @@
 .summary {
     width: 80%;
     margin: 0 auto;
-    padding-top: 20px;
+    padding-top: 23px;
 }
 
 .summary__title {
     font-size: 22px;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 2px solid #efefef;
     padding-bottom: 20px;
     margin-bottom: 20px;
     text-align: center;

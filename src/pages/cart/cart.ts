@@ -7,10 +7,12 @@ import './cart.css';
 
 class CartPage extends Page {
     header: CartHeader;
+    product: CartProduct;
   
     constructor(pageName: string) {
         super(pageName);
         this.header = new CartHeader();
+        this.product = new CartProduct(products.products[1])
     }
 
     private createProductsCounter() {
@@ -142,6 +144,9 @@ class CartPage extends Page {
 
         const productsPanel = this.createProductsCounter();
         products.append(productsPanel);
+
+        const productCard = this.product.draw();
+        products.append(productCard);
 
         const summary = document.createElement('div');
         summary.className = 'main__summary';
