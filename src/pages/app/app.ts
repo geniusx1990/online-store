@@ -29,7 +29,7 @@ class App {
         } 
  
         if (page) {
-            const pageHtml = page.draw()
+            const pageHtml = page.draw();
             App.container.append(pageHtml);
         }
     }

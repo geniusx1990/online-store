@@ -6,6 +6,7 @@
 
 .filters__title {
     font-size: 28px;
+    color: #878788;
     margin: 0 0 20px;
 }
 
@@ -30,7 +31,8 @@
 
 .categories__title,
 .brands__title {
-    font-size: 18px;
+    font-size: 22px;
+    color: #878788;
     padding-bottom: 10px;
     border-bottom: 2px solid #efefef;
     margin-bottom: 20px;
@@ -38,7 +40,8 @@
 
 .stock__title,
 .price__title {
-    font-size: 18px;
+    font-size: 22px;
+    color: #878788;
     padding-bottom: 10px;
     border-bottom: 2px solid #efefef;
     text-transform: lowercase;
@@ -72,6 +75,7 @@ input[type='checkbox'] {
 
 .list-item__label {
     padding-right: 5px;
+    font-weight: bold;
 }
 
 .list-item__number {

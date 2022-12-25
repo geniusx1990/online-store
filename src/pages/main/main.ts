@@ -4,6 +4,7 @@ import Cards from "../../components/cards/cards";
 import Filters from "../../components/filters/filters";
 import Header from "../../components/header/header";
 import Sort from "../../components/sort/sort";
+import products from '../../utils/products';
 
 class MainPage extends Page {
     header: Header;
@@ -16,7 +17,7 @@ class MainPage extends Page {
         this.header = new Header();
         this.filters = new Filters();
         this.sort = new Sort();
-        this.cards = new Cards(); 
+        this.cards = new Cards(products.products); 
     }
 
     private createLayoutButtons() {
@@ -57,11 +58,24 @@ class MainPage extends Page {
         const sortMain = this.sort.drawSort();
         sortingWrapper.append(sortMain);
 
+        const itemsFound = document.createElement('div');
+        itemsFound.className = 'items-found';
+        itemsFound.textContent = `Items found: `;
+        sortingWrapper.append(itemsFound);
+
+        const numberItems = document.createElement('span');
+        numberItems.className = 'items-found__number';
+        itemsFound.append(numberItems);
+
         const layoutButtons = this.createLayoutButtons();
         sortingWrapper.append(layoutButtons);
 
         const cardsMain = this.cards.drawCards();
         content.append(cardsMain);
+
+        // const cardsDrawn = document.querySelectorAll('.product_item');
+        // const found = cardsDrawn.length;
+        // numberItems.textContent = `${found}`;
 
         return this.container;
     }

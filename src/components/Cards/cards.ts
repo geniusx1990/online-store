@@ -1,13 +1,20 @@
 import './cards.css';
 import products from "../../utils/products";
+import {Product} from '../../utils/types';
 
 class Cards {
+    private container: HTMLElement;
+    products: Product[];
 
-    private drawContent() {
-        
+    constructor(products: Product[]) {
+        this.container = document.createElement('div');
+        this.container.className = 'cards_container';
+        this.products = products;
+    }
+
+    private drawContent() {  
         const cardItem = document.createElement('div');
         cardItem.className = 'cards';
-
 
         for (const key in products.products) {
             const prodcutCard = document.createElement('div');
@@ -24,7 +31,6 @@ class Cards {
             cardImage.className = 'product_image';
             cardImage.src = products.products[key].thumbnail;
             prodcutCard.appendChild(cardImage);
-
 
             const cardInfo = document.createElement('div');
             cardInfo.className = 'card-description';
@@ -58,25 +64,16 @@ class Cards {
             priceContent.appendChild(addCart);
 
             prodcutCard.appendChild(priceContent);
-
         }
-
         return cardItem;
-
     }
 
     drawCards() {
-        const cardsContainer = document.createElement('div');
-        cardsContainer.className = 'cards_container';
-
         const cardItem = this.drawContent();
-        cardsContainer.appendChild(cardItem);
+        this.container.appendChild(cardItem);
 
-        return cardsContainer;
+        return this.container;
     }
-
-
-
 }
 
 export default Cards;
