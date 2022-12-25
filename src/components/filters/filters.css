@@ -60,11 +60,22 @@
 
 input[type='checkbox'] {
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .list-item {
     display: flex;
     align-items: center;
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+.list-item__label {
+    padding-right: 5px;
+}
+
+.list-item__number {
+    margin-left: auto;
 }
 
 .slider {

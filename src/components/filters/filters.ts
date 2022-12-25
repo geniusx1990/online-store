@@ -28,9 +28,15 @@ class Filters {
             boxLabel.className = 'list-item__label'
             boxLabel.htmlFor = item;
             boxLabel.textContent = item;
+
+            const numItems = products.products.filter(el => el.category === item).length;
+            const numberItems = document.createElement('span');
+            numberItems.className = 'list-item__number'
+            numberItems.textContent = `(${numItems})`;
     
             checkItem.appendChild(checkBox);
             checkItem.appendChild(boxLabel);
+            checkItem.appendChild(numberItems);
             categoriesList.appendChild(checkItem);
         })
         return categoriesList;
@@ -55,10 +61,16 @@ class Filters {
             boxLabel.className = 'list-item__label'
             boxLabel.htmlFor = item;
             boxLabel.textContent = item;
+
+            const numItems = products.products.filter(el => el.brand === item).length;
+            const numberItems = document.createElement('span');
+            numberItems.className = 'list-item__number'
+            numberItems.textContent = `(${numItems})`;
     
-            checkItem.appendChild(checkBox);
-            checkItem.appendChild(boxLabel);
-            brandsList.appendChild(checkItem);
+            checkItem.append(checkBox);
+            checkItem.append(boxLabel);
+            checkItem.append(numberItems);
+            brandsList.append(checkItem);
         })
         return brandsList; 
     }
