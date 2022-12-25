@@ -42,7 +42,7 @@ class App {
     }
 
     start() {
-        App.renderNewPage(Pages.CartPage); // should be Pages.MainPage
+        App.renderNewPage(Pages.MainPage);
         this.enableRouteChangee();
     }
 }

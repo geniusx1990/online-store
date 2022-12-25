@@ -1,4 +1,3 @@
-
 .main {
     width: 100%;
     display: flex;
@@ -17,6 +16,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
+    border-bottom: 1px solid #efefef;
 }
 
 .products-panel__title {
@@ -37,6 +37,17 @@
 
 .items__label {
     margin-right: 10px;
+}
+
+#items {
+    width: 60px;
+    border: 2px solid #ffdd22;
+    border-radius: 15px;
+    padding: 5px 10px;
+}
+
+#items:focus {
+    outline: none;
 }
 
 .pages__button {
@@ -66,12 +77,13 @@
 .summary {
     width: 80%;
     margin: 0 auto;
+    padding-top: 20px;
 }
 
 .summary__title {
     font-size: 22px;
     border-bottom: 1px solid #efefef;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     margin-bottom: 20px;
     text-align: center;
 }

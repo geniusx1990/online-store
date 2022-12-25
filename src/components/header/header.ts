@@ -26,6 +26,7 @@ class Header {
         btnWrapper.className = 'header__button-wrapper';
         const cartButton = document.createElement('a');
         cartButton.className = 'header__button button_cart';
+        cartButton.href = '#cart-page';
         const productsNum = document.createElement('div');
         productsNum.className = 'header__products-number';
         productsNum.textContent = '0';
@@ -53,19 +54,3 @@ class Header {
 }
 
 export default Header;
-
-
-// const cartTotal = document.createElement('div');
-// cartTotal.className = 'header__total';
-
-// const totalText = document.createElement('span');
-// totalText.className = 'header__total-text';
-// totalText.textContent = 'Cart total: ';
-
-// const totalSum = document.createElement('span');
-// totalSum.className = 'header__total-sum';
-// totalSum.textContent = '';
-
-// cartTotal.appendChild(totalText);
-// cartTotal.appendChild(totalSum);
-// headerWrapper.appendChild(cartTotal);
