@@ -14,7 +14,7 @@ class CartPage extends Page {
         const productsPanel = document.createElement('div');
         productsPanel.className = 'main__products-panel products-panel';
 
-        const title = document.createElement('h3');
+        const title = document.createElement('h2');
         title.className = 'products-panel__title';
         title.textContent = 'Products In Cart';
         productsPanel.append(title);
@@ -65,6 +65,66 @@ class CartPage extends Page {
         return productsPanel;
     }
 
+    private createSummary() {
+        const summary = document.createElement('div');
+        summary.className = 'summary';
+
+        const title = document.createElement('h3');
+        title.className = 'summary__title';
+        title.textContent = 'Summary';
+        summary.append(title);
+
+        const productsCounter = document.createElement('div');
+        productsCounter.className = 'summary__products';
+        summary.append(productsCounter);
+
+        const productsTitle = document.createElement('h4');
+        productsTitle.className = 'summary__products-title';
+        productsTitle.textContent = 'Products: ';
+        productsCounter.append(productsTitle);
+
+        const productsNumber = document.createElement('span');
+        productsNumber.className = 'summary__products-number';
+        productsNumber.textContent = '0';
+        productsCounter.append(productsNumber);
+
+        const total = document.createElement('div');
+        total.className = 'summary__total';
+        summary.append(total);
+
+        const totalTitle = document.createElement('h4');
+        totalTitle.className = 'summary__total-title';
+        totalTitle.textContent = 'Total: ';
+        total.append(totalTitle);
+
+        const totalNumber = document.createElement('span');
+        totalNumber.className = 'summary__total-number';
+        totalNumber.textContent = '0';
+        total.append(totalNumber);
+
+        const promo = document.createElement('div');
+        promo.className = 'summary__promo';
+        summary.append(promo);
+
+        const promoInput = document.createElement('input');
+        promoInput.type = 'text';
+        promoInput.className = 'summary__promo-input';
+        promoInput.placeholder = 'Enter promo code';
+        promo.append(promoInput);
+
+        const promoText = document.createElement('p');
+        promoText.className = 'summary__promo-text';
+        promoText.textContent = 'Test promo codes: EX22, SV22';
+        promo.append(promoText);
+
+        const buyButton = document.createElement('button');
+        buyButton.className = 'summary__button';
+        buyButton.textContent = 'BUY NOW';
+        summary.append(buyButton);
+
+        return summary;
+    }
+
     draw() {
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
@@ -83,6 +143,9 @@ class CartPage extends Page {
         const summary = document.createElement('div');
         summary.className = 'main__summary';
         main.append(summary);
+
+        const summaryBlock = this.createSummary();
+        summary.append(summaryBlock);
 
         return this.container;
 
