@@ -34,8 +34,6 @@ class DualFilter {
         sliderTrack.style.background = `linear-gradient(to right, #efefef ${percentOne}%, #333e48 ${percentOne}%, #333e48 ${percentTwo}%, #efefef ${percentTwo}%)`;
     }
 
-
-
     draw() {
         const sliderTitle = document.createElement('h3');
         sliderTitle.className = `${this.title}__title`;
@@ -91,7 +89,6 @@ class DualFilter {
         secondInput.addEventListener('input', () => {
             this.slidePricesTwo(firstInput, secondInput, 0, valueTwo, this.maxValue, track);
         })
-
 
         return this.container;   
     }

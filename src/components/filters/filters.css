@@ -48,6 +48,8 @@
     margin-bottom: 20px;
 }
 
+.categories__title::first-letter,
+.brands__title::first-letter,
 .stock__title::first-letter,
 .price__title::first-letter {
     text-transform: uppercase;
