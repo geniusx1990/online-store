@@ -1,5 +1,6 @@
 import './filters.css';
 import products from '../../utils/products';
+import DualFilter from '../filters/dualFilter';
 
 class Filters {
     private container: HTMLElement;
@@ -34,10 +35,10 @@ class Filters {
             numberItems.className = 'list-item__number'
             numberItems.textContent = `(${numItems})`;
     
-            checkItem.appendChild(checkBox);
-            checkItem.appendChild(boxLabel);
-            checkItem.appendChild(numberItems);
-            categoriesList.appendChild(checkItem);
+            checkItem.append(checkBox);
+            checkItem.append(boxLabel);
+            checkItem.append(numberItems);
+            categoriesList.append(checkItem);
         })
         return categoriesList;
     }
@@ -75,60 +76,6 @@ class Filters {
         return brandsList; 
     }
 
-    private createDualSliderFilter(title: string, minValue: string, maxValue: string) {
-        const sliderContainer = document.createElement('div');
-        sliderContainer.className = `filters__${title}-slider-container`;
-
-        const sliderTitle = document.createElement('h3');
-        sliderTitle.className = `${title}__title`;
-        sliderTitle.textContent = title;
-        sliderContainer.append(sliderTitle);
-
-        const values = document.createElement('div');
-        values.className = `${title}-slider__values`;
-        sliderContainer.append(values);
-
-        const valueOne = document.createElement('span');
-        valueOne.className = `${title}-slider__value-one`;
-        valueOne.textContent = `${minValue}`;
-        values.append(valueOne);
-        
-        const dash = document.createElement('span');
-        dash.textContent = ' - ';
-        values.append(dash);
-
-        const valueTwo = document.createElement('span');
-        valueTwo.className = `${title}-slider__value-two`;
-        valueTwo.textContent = ` ${maxValue}`;
-        values.append(valueTwo);
-
-        const sliderWrapper = document.createElement('div');
-        sliderWrapper.className = `filters__${title}-slider slider`;
-        sliderContainer.append(sliderWrapper);
-
-        const track = document.createElement('div');
-        track.className = `${title}-slider__track`;
-        sliderWrapper.append(track);
-
-        const firstInput = document.createElement('input');
-        firstInput.type = 'range';
-        firstInput.min = minValue;
-        firstInput.max = maxValue;
-        firstInput.value = minValue;
-        firstInput.className = `${title}-slider__input ${title}-input_first`;
-        sliderWrapper.append(firstInput);
-
-        const secondInput = document.createElement('input');
-        secondInput.type = 'range';
-        secondInput.min = minValue;
-        secondInput.max = maxValue;
-        secondInput.value = maxValue;
-        secondInput.className = `${title}-slider__input ${title}-input_second`;
-        sliderWrapper.append(secondInput);
-
-        return sliderContainer;   
-    }
-
     private createButtons() {
         const filterButtons = document.createElement('div');
         filterButtons.className = 'filters__buttons';
@@ -141,9 +88,9 @@ class Filters {
         linkButton.className = 'filters__button button_link';
         linkButton.textContent = 'Copy Link';
 
-        filterButtons.appendChild(resetButton);
-        filterButtons.appendChild(linkButton);
-        this.container.appendChild(filterButtons);
+        filterButtons.append(resetButton);
+        filterButtons.append(linkButton);
+        this.container.append(filterButtons);
         return filterButtons;
     }
 
@@ -151,32 +98,33 @@ class Filters {
         const title = document.createElement('h2');
         title.className = 'filters__title';
         title.textContent = 'Filters';
-        this.container.appendChild(title);
+        this.container.append(title);
 
         const categoriesTitle = document.createElement('h3');
         categoriesTitle.className = 'categories__title';
         categoriesTitle.textContent = 'Categories';
-        this.container.appendChild(categoriesTitle);
+        this.container.append(categoriesTitle);
 
         const categories = this.createCategories();
-        this.container.appendChild(categories);
+        this.container.append(categories);
 
         const brandsTitle = document.createElement('h3');
         brandsTitle.className = 'brands__title';
         brandsTitle.textContent = 'Brands';
-        this.container.appendChild(brandsTitle);
+        this.container.append(brandsTitle);
 
         const brands = this.createBrands();
-        this.container.appendChild(brands);
+        this.container.append(brands);
 
-        const priceSlider = this.createDualSliderFilter('price', '0', '2000');
-        this.container.appendChild(priceSlider);
+        const priceSlider = new DualFilter('price', '0', '2000');
+        const mainPriceSlider = priceSlider.draw();
+        this.container.append(mainPriceSlider);
 
-        const inStockSlider = this.createDualSliderFilter('stock', '0', '150');
-        this.container.appendChild(inStockSlider);
+        const inStockSlider = new DualFilter('stock', '0', '150');
+        this.container.append(inStockSlider.draw());
 
         const buttons = this.createButtons();
-        this.container.appendChild(buttons);
+        this.container.append(buttons);
 
         return this.container;
     }
