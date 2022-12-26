@@ -5,6 +5,7 @@ class Sort {
 
     constructor() {
         this.container = document.createElement('div');
+        this.container.className = 'sort-container';
     }
 
     drawSort() {

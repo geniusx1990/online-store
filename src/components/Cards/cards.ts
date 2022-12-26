@@ -1,5 +1,4 @@
 import './cards.css';
-import products from "../../utils/products";
 import {Product} from '../../utils/types';
 
 class Cards {
@@ -16,54 +15,54 @@ class Cards {
         const cardItem = document.createElement('div');
         cardItem.className = 'cards';
 
-        for (const key in products.products) {
-            const prodcutCard = document.createElement('div');
-            prodcutCard.className = 'product_item';
+        for (let product of this.products) {
+            const productCard = document.createElement('div');
+            productCard.className = 'product_item';
 
             const title = document.createElement('p');
             title.className = 'product_title';
 
-            title.textContent = products.products[key].title;
-            prodcutCard.appendChild(title);
-            cardItem.appendChild(prodcutCard);
+            title.textContent = product.title;
+            productCard.append(title);
+            cardItem.append(productCard);
 
             const cardImage = document.createElement('img');
             cardImage.className = 'product_image';
-            cardImage.src = products.products[key].thumbnail;
-            prodcutCard.appendChild(cardImage);
+            cardImage.src = product.thumbnail;
+            productCard.append(cardImage);
 
             const cardInfo = document.createElement('div');
             cardInfo.className = 'card-description';
 
             const branName = document.createElement('p');
             branName.className = 'brand-name';
-            branName.textContent = `Brand name: ${products.products[key].brand}`;
-            cardInfo.appendChild(branName);
+            branName.textContent = `Brand name: ${product.brand}`;
+            cardInfo.append(branName);
 
             const cardDescription = document.createElement('p');
             cardDescription.className = 'description';
-            cardDescription.textContent = products.products[key].description;
-            cardInfo.appendChild(cardDescription);
-            prodcutCard.appendChild(cardInfo);
+            cardDescription.textContent = product.description;
+            cardInfo.append(cardDescription);
+            productCard.append(cardInfo);
 
             const priceContent = document.createElement('div');
             priceContent.className = 'card-price-container';
 
             const priceCard = document.createElement('h2');
             priceCard.className = 'price';
-            priceCard.textContent = `${products.products[key].price} $`;
-            priceContent.appendChild(priceCard);
+            priceCard.textContent = `${product.price} $`;
+            priceContent.append(priceCard);
 
             const stockCard = document.createElement('p');
             stockCard.className = 'card-in-stock';
-            stockCard.textContent = `In stock: ${products.products[key].stock}`
-            priceContent.appendChild(stockCard);
+            stockCard.textContent = `In stock: ${product.stock}`
+            priceContent.append(stockCard);
 
             const addCart = document.createElement('span');
             addCart.className = 'add-to-cart';
-            priceContent.appendChild(addCart);
+            priceContent.append(addCart);
 
-            prodcutCard.appendChild(priceContent);
+            productCard.append(priceContent);
         }
         return cardItem;
     }
