@@ -73,9 +73,8 @@ class MainPage extends Page {
         const cardsMain = this.cards.drawCards();
         content.append(cardsMain);
 
-        // const cardsDrawn = document.querySelectorAll('.product_item');
-        // const found = cardsDrawn.length;
-        // numberItems.textContent = `${found}`;
+        const found = this.cards.getItemsFound();
+        numberItems.textContent = `${found}`;
 
         return this.container;
     }

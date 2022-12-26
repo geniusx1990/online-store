@@ -64,11 +64,17 @@ class Cards {
 
             productCard.append(priceContent);
         }
+
         return cardItem;
+    }
+
+    getItemsFound() {
+        return this.products.length;
     }
 
     drawCards() {
         const cardItem = this.drawContent();
+        console.log(cardItem)
         this.container.appendChild(cardItem);
 
         return this.container;
