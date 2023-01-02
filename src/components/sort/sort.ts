@@ -1,3 +1,5 @@
+import products from '../../utils/products';
+import { Product } from '../../utils/types';
 import './sort.css';
 
 class Sort {
@@ -6,6 +8,16 @@ class Sort {
     constructor() {
         this.container = document.createElement('div');
         this.container.className = 'sort-container';
+    }
+
+    sortItems(items: Product[], value: string) {
+        if(value === 'Sort by price ascending') {
+            items.sort((item1, item2) => item1.price - item2.price);
+        }
+        else if(value === 'Sort by price descending') {
+            items.sort((item1, item2) => item2.price - item1.price);
+        }
+        console.log(items)
     }
 
     drawSort() {
@@ -20,6 +32,11 @@ class Sort {
             option.value = item;
             option.textContent = item;
             select.append(option);
+        })
+
+        select.addEventListener('change', (e) => {
+            
+            
         })
 
         this.container.append(select);

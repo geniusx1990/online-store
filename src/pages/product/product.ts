@@ -1,12 +1,11 @@
 import CartHeader from "../../components/header/cartHeader";
+import Page from '../../components/templates/page';
 
-class ProductPage {
-    private container: HTMLElement;
+class ProductPage extends Page{
     header: CartHeader;
 
     constructor(pageName: string) {
-        this.container = document.createElement('div');
-        this.container.className = pageName;
+        super(pageName)
         this.header = new CartHeader();
 
     }
@@ -15,7 +14,7 @@ class ProductPage {
         const productHeader = this.header.draw();
         this.container.append(productHeader);
 
-        return this.constructor;    
+        return this.container;    
     }
 }
 

@@ -1,3 +1,7 @@
+import products from "../../utils/products";
+import { Product } from "../../utils/types";
+import './filters.css';
+
 class DualFilter {
     private container: HTMLElement;
     title: string;
@@ -33,6 +37,10 @@ class DualFilter {
         let percentTwo = (parseInt(sliderTwo.value) / parseInt(maxValue)) * 100;
         sliderTrack.style.background = `linear-gradient(to right, #efefef ${percentOne}%, #333e48 ${percentOne}%, #333e48 ${percentTwo}%, #efefef ${percentTwo}%)`;
     }
+
+    // filterData(valueOne: string, valueTwo: string, data: Product[]) {
+
+    // }
 
     draw() {
         const sliderTitle = document.createElement('h3');
@@ -84,10 +92,12 @@ class DualFilter {
 
         firstInput.addEventListener('input', () => {
             this.slidePricesOne(firstInput, secondInput, 0, valueOne, this.maxValue, track);
+            // this.filterData(firstInput.value, secondInput.value, products.products);
         })
 
         secondInput.addEventListener('input', () => {
             this.slidePricesTwo(firstInput, secondInput, 0, valueTwo, this.maxValue, track);
+            // this.filterData(firstInput.value, secondInput.value, products.products);
         })
 
         return this.container;   

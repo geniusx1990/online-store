@@ -47,11 +47,20 @@ class CartProduct {
         const priceBlock = document.createElement('div');
         priceBlock.className = 'product-card__price-block';
 
-        const stockNumber = document.createElement('p');
-        stockNumber.className = 'product-card__stock';
-        stockNumber.textContent = `Stock: ${this.product.stock}`;
-        priceBlock.append(stockNumber);
+        const stockBlock = document.createElement('div');
+        stockBlock.className = 'product-card__stock';
+        priceBlock.append(stockBlock);
 
+        const stockTitle = document.createElement('span');
+        stockTitle.className = 'product-card__stock-title';
+        stockTitle.textContent = `Stock: `;
+        stockBlock.append(stockTitle);
+
+        const stockNumber = document.createElement('span');
+        stockNumber.className = 'product-card__stock-number';
+        stockNumber.textContent = ` ${this.product.stock}`;
+        stockBlock.append(stockNumber);
+       
         const counter = document.createElement('div');
         counter.className = 'product-card__counter';
         priceBlock.append(counter);
@@ -59,6 +68,26 @@ class CartProduct {
         const leftButton = document.createElement('button');
         leftButton.className = 'product-card__button button_minus';
         counter.append(leftButton);
+
+        const totalSum = document.querySelector('.summary__total-number');
+        console.log(totalSum)
+
+        leftButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            productsNumber.textContent = (Number(productsNumber.textContent) - 1).toString();
+            // if(productsNumber.textContent == '1') {
+            //     leftButton.disabled = true;
+            // } else {
+            //     leftButton.disabled = false;
+            // }
+            priceSum.textContent = (Number(priceSum.textContent) - this.product.price).toString();
+            stockNumber.textContent = (Number(stockNumber.textContent) + 1).toString();
+            // if(stockNumber.textContent == `${this.product.stock}`) {
+            //     leftButton.disabled = true;
+            // } else {
+            //     leftButton.disabled = false;
+            // }
+        })
 
         const productsNumber = document.createElement('span');
         productsNumber.className = 'product-card__products-number';
@@ -69,10 +98,31 @@ class CartProduct {
         rightButton.className = 'product-card__button button_plus';
         counter.append(rightButton);
 
-        const price = document.createElement('p');
+        rightButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            productsNumber.textContent = (Number(productsNumber.textContent) + 1).toString();
+            priceSum.textContent = (Number(priceSum.textContent) + this.product.price).toString();
+            stockNumber.textContent = (Number(stockNumber.textContent) - 1).toString();
+            // if(stockNumber.textContent == '0') {
+            //     rightButton.disabled = true;
+            // } else {
+            //     rightButton.disabled = false;
+            // }
+        })
+
+        const price = document.createElement('div');
         price.className = 'product-card__price';
-        price.textContent = `Price: $${this.product.price}`;
         priceBlock.append(price);
+
+        const priceTitle = document.createElement('span');
+        priceTitle.className = 'product-card__price-title';
+        price.textContent = `Price: $`;
+        price.append(priceTitle);
+
+        const priceSum = document.createElement('span');
+        priceSum.className = `product-card__price-sum`;
+        priceSum.textContent = `${this.product.price}`;
+        price.append(priceSum);
 
         return priceBlock;
     }

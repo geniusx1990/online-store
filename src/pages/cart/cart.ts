@@ -7,12 +7,10 @@ import './cart.css';
 
 class CartPage extends Page {
     header: CartHeader;
-    product: CartProduct;
   
     constructor(pageName: string) {
         super(pageName);
         this.header = new CartHeader();
-        this.product = new CartProduct(products.products[1])
     }
 
     private createProductsCounter() {
@@ -90,7 +88,8 @@ class CartPage extends Page {
 
         const productsNumber = document.createElement('span');
         productsNumber.className = 'summary__products-number';
-        productsNumber.textContent = '0';
+        const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
+        productsNumber.textContent = storageProducts.length.toString() || '0';
         productsCounter.append(productsNumber);
 
         const total = document.createElement('div');
@@ -104,7 +103,8 @@ class CartPage extends Page {
 
         const totalNumber = document.createElement('span');
         totalNumber.className = 'summary__total-number';
-        totalNumber.textContent = '0';
+        const storageSum: number = storageProducts.reduce((sum: number, el: Product) => sum + el.price, 0);
+        totalNumber.textContent = `$${storageSum}` || '$0';
         total.append(totalNumber);
 
         const promo = document.createElement('div');
@@ -130,7 +130,14 @@ class CartPage extends Page {
         return summary;
     }
 
+    getLocalStorage() {
+        const storageItems: Product[] = JSON.parse(localStorage.cartItems);
+        return storageItems;
+    }
+
     draw() {
+        this.container.innerHTML = '';
+
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
         
@@ -145,9 +152,13 @@ class CartPage extends Page {
         const productsPanel = this.createProductsCounter();
         products.append(productsPanel);
 
-        const productCard = this.product.draw();
-        products.append(productCard);
-
+        const storage = this.getLocalStorage();
+        storage.forEach(item => {
+            const card = new CartProduct(item);
+            const productCard = card.draw();
+            products.append(productCard)
+        });
+      
         const summary = document.createElement('div');
         summary.className = 'main__summary';
         main.append(summary);
