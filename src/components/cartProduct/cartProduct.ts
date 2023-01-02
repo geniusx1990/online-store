@@ -144,6 +144,10 @@ class CartProduct {
         const priceBlock = this.createPriceBlock();
         this.container.append(priceBlock);
 
+        this.container.addEventListener('click', () => {
+            window.location.href = `#product-page/${this.product.id}`;
+        })
+
         return this.container;
     }
 }
