@@ -23,6 +23,10 @@
     transition: all .3s cubic-bezier(0.4, 0, 0.2, 1) 0s;
 }
 
+.hide {
+    display: none;
+}
+
 .product_image {
     border-radius: 8px;
     width: auto;

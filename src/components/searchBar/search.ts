@@ -1,3 +1,5 @@
+import { Product } from '../../utils/types';
+import products from '../../utils/products';
 import './search.css';
 
 class SearchBar {
@@ -8,11 +10,21 @@ class SearchBar {
         this.container.className = 'search';
     }
 
+    private searchItems(param: string) {
+
+    }
+
     private createSearchBar() {
         const searchInput = document.createElement('input');
         searchInput.className = 'search__input';
-        searchInput.type = 'text';
+        searchInput.type = 'search';
         searchInput.placeholder = 'Search...';
+
+        searchInput.addEventListener('search', (e) => {
+            const searchParam = searchInput.value;
+            this.searchItems(searchParam);
+        })
+
         return searchInput; 
     }
 

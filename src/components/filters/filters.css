@@ -174,3 +174,21 @@ input[type="range"]::-ms-thumb {
     text-align: center;
     margin: 0 auto;
 }
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+::-webkit-scrollbar-track {
+    background: #efefef;
+    border-radius: 4px; 
+}
+   
+::-webkit-scrollbar-thumb {
+    background: #ffdd22;
+    border-radius: 4px;  
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #ffd700; 
+}

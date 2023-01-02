@@ -1,3 +1,4 @@
+import { Product } from '../../utils/types';
 import './header.css';
 
 class CartHeader {
@@ -29,7 +30,14 @@ class CartHeader {
         cartButton.className = 'header__button button_cart';
         const productsNum = document.createElement('div');
         productsNum.className = 'header__products-number';
-        productsNum.textContent = '0';
+        if(localStorage.cartItems) {
+            const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
+            productsNum.textContent = storageProducts.length.toString();
+        } else {
+            productsNum.textContent = '0';
+        }
+         
+        
         btnWrapper.appendChild(cartButton);
         btnWrapper.appendChild(productsNum);
         return btnWrapper;

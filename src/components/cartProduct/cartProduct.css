@@ -3,19 +3,24 @@
     display: flex;
     border-radius: 15px;
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+    padding: 10px;
+    margin-bottom: 5px;
 }
 
 .product-card__image-wrapper {
     width: 25%;
-    padding: 10px;
+    height: 160px;
+    border-radius: 15px;
+    overflow: hidden;
 }
 
 .product-card__image {
     display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
     margin: 0 auto;
     border-radius: 15px;
+    object-fit: contain;
 }
 
 .product-card__info {
@@ -94,4 +99,5 @@
 .product-card__price {
     font-size: 16px;
     font-weight: bold;
+    padding: 16px 0;
 }
