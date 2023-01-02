@@ -69,9 +69,6 @@ class CartProduct {
         leftButton.className = 'product-card__button button_minus';
         counter.append(leftButton);
 
-        const totalSum = document.querySelector('.summary__total-number');
-        console.log(totalSum)
-
         leftButton.addEventListener('click', (e) => {
             e.preventDefault();
             productsNumber.textContent = (Number(productsNumber.textContent) - 1).toString();
@@ -144,8 +141,13 @@ class CartProduct {
         const priceBlock = this.createPriceBlock();
         this.container.append(priceBlock);
 
-        this.container.addEventListener('click', () => {
-            window.location.href = `#product-page/${this.product.id}`;
+        this.container.addEventListener('click', (e) => {
+            const target = <HTMLElement>e.target;
+            if(target.classList.contains('product-card__button')) {
+                return;
+            } else {
+                window.location.href = `#product-page/${this.product.id}`;
+            }    
         })
 
         return this.container;
