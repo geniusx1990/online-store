@@ -14,10 +14,3 @@ abstract class Page {
 }
 
 export default Page;
-
-
-    // protected createPageTEST(text: string) {
-    //     const headerTitle = document.createElement('div');
-    //     headerTitle.innerText = text;
-    //     return headerTitle;
-    // }

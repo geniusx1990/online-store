@@ -3,12 +3,10 @@ import {Product} from '../../utils/types';
 
 class Card {
     private container: HTMLElement;
-    // cartItems: Product[] | null;
 
     constructor() {
         this.container = document.createElement('div');
         this.container.className = 'product_item';
-        // this.cartItems = [];
     }
 
     draw(product: Product) {
@@ -56,6 +54,10 @@ class Card {
 
         addCart.addEventListener('click', () => {
             this.addToCart(product);
+        })
+
+        this.container.addEventListener('click', () => {
+            window.location.href = `#product-page/${product.id}`
         })
 
         return this.container;

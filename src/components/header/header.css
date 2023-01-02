@@ -56,3 +56,8 @@
     display: flex;
     gap: 10px;
 }
+
+.logo__link {
+    text-decoration: none;
+    color: black;
+}
