@@ -7,7 +7,7 @@ import products from '../../utils/products';
 export enum Pages {
     MainPage = 'main-page',
     CartPage = 'cart-page',
-    ProductPage = 'product-page/1'/* `^/product-page/(\w+)` */
+    ProductPage = '^product-page\/(?<productId>[0-9]+)\/?',
 }
 
 class App {
@@ -19,6 +19,11 @@ class App {
     }
 
     static renderNewPage(idPage: string) {
+
+        const projectPageRegex = new RegExp(Pages.ProductPage);
+        const matches = idPage.match(projectPageRegex);
+        console.log(matches);
+
         App.container.innerHTML = '';
         let page: Page | null = null;
 
@@ -26,10 +31,10 @@ class App {
             page = new MainPage(idPage);
         }  else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
-        }  else if (idPage === Pages.ProductPage) {
-            page = new ProductPage(idPage);
+        }  else if (matches !== null && matches.groups !== undefined && matches.groups['productId']) {
+            page = new ProductPage(idPage, parseInt(matches.groups['productId']))
         } 
- 
+ console.log(idPage, 'idPage');
         if (page) {
             const pageHtml = page.draw();
             App.container.append(pageHtml);

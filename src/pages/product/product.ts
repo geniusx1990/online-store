@@ -6,13 +6,11 @@ import './product.css';
 class ProductPage extends Page {
     header: CartHeader;
     public id: number;
-    public url: string;
-    constructor(pageName: string) {
+    constructor(pageName: string, productId: number) {
         super(pageName);
         this.header = new CartHeader();
-        this.id = 1;
-
-        this.url = `product/${this.id}`;
+        this.id = productId;
+        console.log(productId);
     }
 
 
@@ -29,13 +27,14 @@ class ProductPage extends Page {
 
         const bigImage = document.createElement('img');
         bigImage.className = 'big-image';
-        bigImage.src = products.products[this.id].images[4];
+        bigImage.src = products.products.filter(x => x.id === this.id)[0].images[4];
         bigImageWrapper.append(bigImage);
 
-        for (let i = 0; i < products.products[this.id].images.length; i++) {
+        for (let i = 0; i < products.products.filter(x => x.id === this.id)[0].images.length; i++) {
             const image = document.createElement('img');
             image.className = 'slides';
-            image.src = products.products[this.id].images[i];
+            image.src = products.products.filter(x => x.id === this.id)[0].images[i];
+
             image.addEventListener('click', () => {
                 bigImage.src = image.src;
             })
@@ -57,7 +56,7 @@ class ProductPage extends Page {
 
 
         let arrayNamesTitles = [`Description:`, 'Discount Percentage:', 'Rating:', 'Stock:', 'Brand:', 'Category:']
-        let arraData = [products.products[this.id].description, products.products[this.id].discountPercentage, products.products[this.id].rating, products.products[this.id].stock, products.products[this.id].category]
+        let arraData = [products.products.filter(x => x.id === this.id)[0].description, products.products.filter(x => x.id === this.id)[0].discountPercentage, products.products.filter(x => x.id === this.id)[0].rating, products.products.filter(x => x.id === this.id)[0].stock, products.products.filter(x => x.id === this.id)[0].category]
         for (let i = 0; i < arrayNamesTitles.length; i++) {
             const item = document.createElement('div');
             item.className = 'product-detail-item';
@@ -82,7 +81,7 @@ class ProductPage extends Page {
 
         const priceTitle = document.createElement('h3');
         priceTitle.className = 'price-cart';
-        priceTitle.textContent = `${products.products[this.id].price} $`
+        priceTitle.textContent = `${products.products.filter(x => x.id === this.id)[0].price} $`
 
         const addToCartButton = document.createElement('button');
         addToCartButton.className = 'add-to-cart-button';
@@ -112,7 +111,7 @@ class ProductPage extends Page {
 
         const productTitle = document.createElement('div');
         productTitle.className = 'product-title';
-        productTitle.textContent = products.products[this.id].title;
+        productTitle.textContent = products.products.filter(x => x.id === this.id)[0].title;
         productDetail.append(productTitle);
 
 
