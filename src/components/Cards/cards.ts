@@ -1,5 +1,5 @@
 import './cards.css';
-import {Product} from '../../utils/types';
+import { Product } from '../../utils/types';
 
 class Cards {
     private container: HTMLElement;
@@ -11,7 +11,7 @@ class Cards {
         this.products = products;
     }
 
-    private drawContent() {  
+    private drawContent() {
         const cardItem = document.createElement('div');
         cardItem.className = 'cards';
 
@@ -63,6 +63,12 @@ class Cards {
             priceContent.append(addCart);
 
             productCard.append(priceContent);
+
+            productCard.addEventListener('click', () => {
+                console.log(product.id);
+                window.location.href = `#product-page/${product.id}`
+                console.log();
+            })
         }
 
         return cardItem;

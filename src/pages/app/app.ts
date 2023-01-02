@@ -7,7 +7,7 @@ import products from '../../utils/products';
 export enum Pages {
     MainPage = 'main-page',
     CartPage = 'cart-page',
-    ProductPage = 'product-page'
+    ProductPage = 'product-page/1'/* `^/product-page/(\w+)` */
 }
 
 class App {
@@ -26,6 +26,8 @@ class App {
             page = new MainPage(idPage);
         }  else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
+        }  else if (idPage === Pages.ProductPage) {
+            page = new ProductPage(idPage);
         } 
  
         if (page) {

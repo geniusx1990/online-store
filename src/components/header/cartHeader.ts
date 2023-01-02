@@ -12,9 +12,13 @@ class CartHeader {
         const logo = document.createElement('div');
         logo.className = ' logo header__logo';
         const logoText = document.createElement('h1');
+        const logoLink = document.createElement('a');
+        logoLink.className = 'logo__link';
         logoText.className = 'logo__text';
         logoText.textContent = logoName;
-        logo.appendChild(logoText);
+        logoLink.href = '#main-page';
+        logoLink.append(logoText);
+        logo.appendChild(logoLink);
         return logo;
     }
 
