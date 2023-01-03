@@ -9,23 +9,23 @@ import DualFilter from '../../components/filters/dualFilter';
 
 class MainPage extends Page {
     header: Header;
-    filterCategory: CheckboxFilter;
-    filterBrand: CheckboxFilter;
-    categoriesNames: string[];
-    brandsNames: string[];
-    priceSlider: DualFilter;
-    inStockSlider: DualFilter;
+    // filterCategory: CheckboxFilter;
+    // filterBrand: CheckboxFilter;
+    // categoriesNames: string[];
+    // brandsNames: string[];
+    // priceSlider: DualFilter;
+    // inStockSlider: DualFilter;
     cardsWrapper: HTMLDivElement;
     
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
-        this.categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
-        this.filterCategory = new CheckboxFilter('categories', this.categoriesNames);
-        this.brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
-        this.filterBrand = new CheckboxFilter('brands', this.brandsNames);
-        this.priceSlider = new DualFilter('price', '0', '2000');
-        this.inStockSlider = new DualFilter('stock', '0', '150');
+        // this.categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
+        // this.filterCategory = new CheckboxFilter('categories', this.categoriesNames);
+        // this.brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
+        // this.filterBrand = new CheckboxFilter('brands', this.brandsNames);
+        // this.priceSlider = new DualFilter('price', '0', '2000');
+        // this.inStockSlider = new DualFilter('stock', '0', '150');
         this.cardsWrapper = document.createElement('div');
         this.cardsWrapper.className = 'cards';
     }
@@ -69,7 +69,10 @@ class MainPage extends Page {
     }
 
     searchItems(value: string) {
-
+        const itemsFound = products.products.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
+        || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
+        || item.category.toLowerCase().includes(value.toLowerCase()));
+        this.drawCards(itemsFound);
     }
 
     createSorting() {
@@ -88,7 +91,6 @@ class MainPage extends Page {
 
         select.addEventListener('change', (e) => {
             const target = <HTMLOptionElement>e.target;
-            this.cardsWrapper.innerHTML = '';
             const newArr = this.sortItems(products.products, target.value);
             this.drawCards(newArr);
         })
@@ -130,6 +132,7 @@ class MainPage extends Page {
     }
 
     drawCards(products: Product[]) { 
+        this.cardsWrapper.innerHTML = '';
         products.forEach((item) => {
             const cardItem = new Card();
             const card = cardItem.draw(item);
@@ -154,17 +157,19 @@ class MainPage extends Page {
         title.textContent = 'Filters';
         filtersContainer.append(title);
 
-        const categories = this.filterCategory.draw();
-        filtersContainer.append(categories);
+        const categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
+        const categories = new CheckboxFilter('categories', categoriesNames);
+        filtersContainer.append(categories.draw());
 
-        const brands = this.filterBrand.draw();
-        filtersContainer.append(brands);
+        const brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
+        const brands = new CheckboxFilter('brands', brandsNames);
+        filtersContainer.append(brands.draw());
 
-        const prices = this.priceSlider.draw();
-        filtersContainer.append(prices);
+        const prices = new DualFilter('price', '0', '2000');;
+        filtersContainer.append(prices.draw());
 
-        const stock = this.inStockSlider.draw();
-        filtersContainer.append(stock);
+        const stock = new DualFilter('stock', '0', '150');;
+        filtersContainer.append(stock.draw());
 
         const filtersButtons = this.createFilterButtons();
         filtersContainer.append(filtersButtons);
@@ -197,6 +202,9 @@ class MainPage extends Page {
 
         content.append(this.cardsWrapper);
         this.drawCards(products.products);
+
+        const checkBoxes = document.querySelectorAll('.list-item__checkbox');
+        console.log(checkBoxes)
 
         return this.container;
     }
