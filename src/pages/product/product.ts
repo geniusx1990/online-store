@@ -1,18 +1,16 @@
-import CartHeader from "../../components/header/cartHeader";
+import Header from "../../components/header/header";
 import Page from "../../components/templates/page";
 import products from '../../utils/products';
 import './product.css';
 
 class ProductPage extends Page {
-    header: CartHeader;
+    header: Header;
     public id: number;
     constructor(pageName: string, productId: number) {
         super(pageName);
-        this.header = new CartHeader();
+        this.header = new Header();
         this.id = productId;
-        console.log(productId);
     }
-
 
     private createGallery() {
 
@@ -48,12 +46,10 @@ class ProductPage extends Page {
         return galleryImages;
     }
 
-
     private createProductInfo() {
 
         const productInfo = document.createElement('div');
         productInfo.className = 'product-info';
-
 
         let arrayNamesTitles = [`Description:`, 'Discount Percentage:', 'Rating:', 'Stock:', 'Brand:', 'Category:']
         let arraData = [products.products.filter(x => x.id === this.id)[0].description, products.products.filter(x => x.id === this.id)[0].discountPercentage, products.products.filter(x => x.id === this.id)[0].rating, products.products.filter(x => x.id === this.id)[0].stock, products.products.filter(x => x.id === this.id)[0].category]
@@ -74,7 +70,6 @@ class ProductPage extends Page {
 
     }
 
-
     private createPaymentBlock() {
         const addToCart = document.createElement('div');
         addToCart.className = 'add-to-cart-block';
@@ -93,7 +88,6 @@ class ProductPage extends Page {
 
         addToCart.append(priceTitle, addToCartButton, buyNow);
 
-
         return addToCart;
     }
 
@@ -103,7 +97,6 @@ class ProductPage extends Page {
     
             return arrayOfLinks;
         } */
-
 
     private createProductPage() {
         const productDetail = document.createElement('div');
@@ -127,7 +120,6 @@ class ProductPage extends Page {
         console.log(window.location.href);
         return productDetail;
     }
-
 
     draw() {
         const cartHeader = this.header.draw();

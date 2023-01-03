@@ -1,16 +1,15 @@
 import Page from "../../components/templates/page";
-import CartHeader from '../../components/header/cartHeader';
+import Header from '../../components/header/header';
 import CartProduct from '../../components/cartProduct/cartProduct';
-import products from '../../utils/products';
 import {Product} from '../../utils/types';
 import './cart.css';
 
 class CartPage extends Page {
-    header: CartHeader;
+    header: Header;
   
     constructor(pageName: string) {
         super(pageName);
-        this.header = new CartHeader();
+        this.header = new Header();
     }
 
     private createProductsCounter() {
