@@ -52,12 +52,18 @@ class Card {
         addCart.className = 'add-to-cart';
         priceContent.append(addCart);
 
-        addCart.addEventListener('click', () => {
-            this.addToCart(product);
-        })
+        // addCart.addEventListener('click', () => {
+        //     this.addToCart(product);
+        // })
 
-        this.container.addEventListener('click', () => {
-            window.location.href = `#product-page/${product.id}`
+        this.container.addEventListener('click', (e) => {
+            console.log(e.target)
+            const target = <HTMLElement>e.target;
+            if(target.classList.contains('add-to-cart')) {
+                this.addToCart(product)
+            } else {
+                window.location.href = `#product-page/${product.id}`;
+            } 
         })
 
         return this.container;

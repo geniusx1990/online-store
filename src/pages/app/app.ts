@@ -23,7 +23,6 @@ class App {
 
         const projectPageRegex = new RegExp(Pages.ProductPage);
         const matches = idPage.match(projectPageRegex);
-        console.log(matches);
 
         App.container.innerHTML = '';
         let page: Page | null = null;
@@ -36,7 +35,7 @@ class App {
         }  else if (matches !== null && matches.groups !== undefined && matches.groups['productId']) {
             page = new ProductPage(idPage, parseInt(matches.groups['productId']))
         } 
-        console.log(idPage, 'idPage');
+
         if (page) {
             const pageHtml = page.draw();
             App.container.append(pageHtml);
