@@ -365,6 +365,11 @@ class MainPage extends Page {
         resetButton.className = 'filters__button button_reset';
         resetButton.textContent = 'Reset Filters';
 
+        resetButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '#main-page';
+        })
+
         const linkButton = document.createElement('button');
         linkButton.className = 'filters__button button_link';
         linkButton.textContent = 'Copy Link';
