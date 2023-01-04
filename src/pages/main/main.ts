@@ -9,6 +9,9 @@ class MainPage extends Page {
     header: Header;
     cardsWrapper: HTMLDivElement;
     filtersContainer: HTMLDivElement;
+    pickedCategories: string[];
+    pickedBrands: string[];
+    pickedItems: Product[];
     
     constructor(pageName: string) {
         super(pageName);
@@ -17,6 +20,63 @@ class MainPage extends Page {
         this.filtersContainer.className = 'main__filters filters';
         this.cardsWrapper = document.createElement('div');
         this.cardsWrapper.className = 'cards';
+        this.pickedCategories = [];
+        this.pickedBrands = [];
+        this.pickedItems = [];
+    }
+
+    getPickedItems() {
+        const pickedProducts: Product[] = [];
+        for(let category of this.pickedCategories) {
+            for(let product of products.products) {
+                if(product.category === category) {
+                    pickedProducts.push(product);
+                }
+            }
+        }
+        console.log(pickedProducts)
+
+        if(this.pickedBrands.length === 0) {
+            for(let item of pickedProducts) {
+                this.pickedItems.push(item);
+            }
+        } else {
+            for(let brand of this.pickedBrands) {
+                for(let prod of pickedProducts) {
+                    if(prod.brand === brand) {
+                        this.pickedItems.push(prod);
+                    }
+                }
+            }
+        }
+        console.log(this.pickedItems)
+
+        this.drawCards(this.pickedItems);
+
+    }
+
+    getProductsFromCategories() {
+        const pickedProducts: Product[] = [];
+        for(let category of this.pickedCategories) {
+            for(let product of products.products) {
+                if(product.category === category) {
+                    pickedProducts.push(product);
+                }
+            }
+        }
+        return pickedProducts;                
+    }
+
+    getProductsFromBrands() {
+        const pickedProducts: Product[] = [];
+        for(let brand of this.pickedBrands) {
+            for(let product of products.products) {
+                if(product.brand === brand) {
+                    pickedProducts.push(product);
+                }
+            }
+        }
+        return pickedProducts;                
     }
 
     createCheckboxFilter(filterName: string, listItems: string[]) {
@@ -42,17 +102,41 @@ class MainPage extends Page {
             checkBox.id = item;
 
             checkBox.addEventListener('change', (e) => {
-                const pickedProducts = products.products.filter((el) => el.category === item);
-                this.drawCards(pickedProducts);
-                // if(this.activeItems.includes(item)) {
-                //     this.activeItems = this.activeItems.filter((el) => el !== item);
-                    
-                    // remove active
-                // } else {
-                //     this.activeItems.push(item);           
-                //     // add class active
-                // }
-      
+                if(filterName === 'categories') {
+                    if(this.pickedCategories.includes(item)) {
+                        this.pickedCategories = this.pickedCategories.filter((el) => el !== item);
+                        if(this.pickedCategories.length === 0) {
+                            this.drawCards(products.products);
+                            this.getNumberItems(products.products.length);
+                            
+                        } else {
+                            this.drawCards(this.getProductsFromCategories());
+                            this.getNumberItems(this.getProductsFromCategories().length);
+                        }
+                        
+                    } else {
+                        this.pickedCategories.push(item);
+                        this.drawCards(this.getProductsFromCategories());
+                        this.getNumberItems(this.getProductsFromCategories().length); 
+                    }
+                }
+                if(filterName === 'brands') {
+                    if(this.pickedBrands.includes(item)) {
+                        this.pickedBrands = this.pickedBrands.filter((el) => el !== item);
+                        if(this.pickedBrands.length === 0) {
+                            this.drawCards(products.products);
+                            this.getNumberItems(products.products.length);
+                        } else {
+                            this.drawCards(this.getProductsFromBrands());
+                            this.getNumberItems(this.getProductsFromBrands().length); 
+                        }
+                    } else {
+                        this.pickedBrands.push(item);
+                        this.drawCards(this.getProductsFromBrands());
+                        this.getNumberItems(this.getProductsFromBrands().length); 
+                    }
+
+                }
             })
 
             const boxLabel = document.createElement('label');
@@ -133,14 +217,68 @@ class MainPage extends Page {
 
         firstInput.addEventListener('input', () => {
             this.slidePricesOne(firstInput, secondInput, 0, valueOne, maxValue, track);
+
         })
 
         secondInput.addEventListener('input', () => {
             this.slidePricesTwo(firstInput, secondInput, 0, valueTwo, maxValue, track);
         })
 
+        firstInput.addEventListener('mouseup', () => {
+            if(title === 'price') {
+                const valueOne = <HTMLSpanElement>document.querySelector('.price-slider__value-one');
+                const val1 = valueOne.textContent;
+                const valueTwo = <HTMLSpanElement>document.querySelector('.price-slider__value-two');
+                const val2 = valueTwo.textContent;
+                if(val1 !== null && val2 !== null) {
+                    const pickedProducts = products.products.filter((item: Product) => +item.price >= +val1 && +item.price <= +val2);
+                    this.drawCards(pickedProducts);
+                    this.getNumberItems(pickedProducts.length);
+                }   
+            }
+
+            if(title === 'stock') {
+                const valueOne = <HTMLSpanElement>document.querySelector('.stock-slider__value-one');
+                const val1 = valueOne.textContent;
+                const valueTwo = <HTMLSpanElement>document.querySelector('.stock-slider__value-two');
+                const val2 = valueTwo.textContent;
+                if(val1 !== null && val2 !== null) {
+                    const pickedProducts = products.products.filter((item: Product) => +item.stock >= +val1 && +item.stock <= +val2);
+                    this.drawCards(pickedProducts);
+                    this.getNumberItems(pickedProducts.length);
+                }   
+            } 
+        })
+
+        secondInput.addEventListener('mouseup', () => {
+            if(title === 'price') {
+                const valueOne = <HTMLSpanElement>document.querySelector('.price-slider__value-one');
+                const val1 = valueOne.textContent;
+                const valueTwo = <HTMLSpanElement>document.querySelector('.price-slider__value-two');
+                const val2 = valueTwo.textContent;
+                if(val1 !== null && val2 !== null) {
+                    const pickedProducts = products.products.filter((item: Product) => +item.price >= +val1 && +item.price <= +val2);
+                    this.drawCards(pickedProducts);
+                    this.getNumberItems(pickedProducts.length); 
+                }   
+            }
+
+            if(title === 'stock') {
+                const valueOne = <HTMLSpanElement>document.querySelector('.stock-slider__value-one');
+                const val1 = valueOne.textContent;
+                const valueTwo = <HTMLSpanElement>document.querySelector('.stock-slider__value-two');
+                const val2 = valueTwo.textContent;
+                if(val1 !== null && val2 !== null) {
+                    const pickedProducts = products.products.filter((item: Product) => +item.stock >= +val1 && +item.stock <= +val2);
+                    this.drawCards(pickedProducts);
+                    this.getNumberItems(pickedProducts.length);
+                }   
+            } 
+        })
+
         this.filtersContainer.append(filterWrapper);  
     }
+
 
     slidePricesOne(sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, gap: number, valueOne: HTMLSpanElement, maxValue: string, sliderTrack: HTMLDivElement) {
         if((parseInt(sliderTwo.value) - parseInt(sliderOne.value)) <= gap) {
@@ -244,7 +382,7 @@ class MainPage extends Page {
         }
         else if(value === 'Sort by brand, Z-A') {
             items.sort((item1, item2) => item2.brand.localeCompare(item1.brand));
-        }
+        } 
         return items;
     }
 
@@ -275,6 +413,11 @@ class MainPage extends Page {
         })   
     }
 
+    getNumberItems(num: number) {
+        const numberCards = <HTMLSpanElement>document.querySelector('.items-found__number');
+        numberCards.textContent = `${num}`;
+    }
+
     draw() {
         const mainHeader = this.header.draw();
         this.container.append(mainHeader);
@@ -298,7 +441,7 @@ class MainPage extends Page {
 
         this.createDualFilter('price', '0', '2000');
 
-        this.createDualFilter('stock', '0', '150');
+        this.createDualFilter('stock', '0', '160');
 
         const filtersButtons = this.createFilterButtons();
         this.filtersContainer.append(filtersButtons);
@@ -317,14 +460,17 @@ class MainPage extends Page {
         const search = this.createSearchBar();
         sortingWrapper.append(search);
 
-        // const itemsFound = document.createElement('div');
-        // itemsFound.className = 'items-found';
-        // itemsFound.textContent = `Items found: `;
-        // sortingWrapper.append(itemsFound);
+        const itemsFound = document.createElement('div');
+        itemsFound.className = 'items-found';
+        itemsFound.textContent = `Items found: `;
+        content.append(itemsFound);
 
-        // const numberItems = document.createElement('span');
-        // numberItems.className = 'items-found__number';
-        // itemsFound.append(numberItems);
+        const numberItems = document.createElement('span');
+        numberItems.className = 'items-found__number';
+        if(numberItems !== null) {
+            numberItems.textContent = `${products.products.length}`;
+        }
+        itemsFound.append(numberItems);
 
         const layoutButtons = this.createLayoutButtons();
         sortingWrapper.append(layoutButtons);

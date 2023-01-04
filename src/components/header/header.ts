@@ -28,6 +28,7 @@ class Header {
         btnWrapper.className = 'header__button-wrapper';
         const cartButton = document.createElement('a');
         cartButton.className = 'header__button button_cart';
+        cartButton.href = '#cart-page';
         const productsNum = document.createElement('div');
         productsNum.className = 'header__products-number';
         if(localStorage.cartItems) {
