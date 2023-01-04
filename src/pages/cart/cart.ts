@@ -6,10 +6,13 @@ import './cart.css';
 
 class CartPage extends Page {
     header: Header;
+    summary: HTMLDivElement;
   
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
+        this.summary = document.createElement('div');
+        this.summary.className = 'main__summary';
     }
 
     private createProductsCounter() {
@@ -125,8 +128,118 @@ class CartPage extends Page {
         buyButton.className = 'summary__button';
         buyButton.textContent = 'BUY NOW';
         summary.append(buyButton);
+        
+        buyButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.createCardModule();
+            const module = <HTMLElement>document.querySelector('.module-layer');
+            module.style.display = 'flex';  
+        })
 
-        return summary;
+        this.summary.append(summary);
+    }
+
+    createCardModule() {
+        const moduleLayer = document.createElement('div');
+        moduleLayer.className = 'module-layer';
+        document.body.append(moduleLayer);
+
+        const formContainer = document.createElement('form');
+        formContainer.className = 'form';
+        moduleLayer.append(formContainer);
+
+        const detailsTitle = document.createElement('h3');
+        detailsTitle.className = 'form__title';
+        detailsTitle.textContent = 'Personal details';
+        formContainer.append(detailsTitle);
+
+        const nameInput = document.createElement('input');
+        nameInput.className = 'form__name';
+        nameInput.type = 'text';
+        nameInput.placeholder = 'Name';
+        nameInput.required = true;
+        formContainer.append(nameInput);
+        
+        const phoneInput = document.createElement('input');
+        phoneInput.className = 'form__phone';
+        phoneInput.type = 'tel';
+        phoneInput.placeholder = 'Phone number';
+        phoneInput.required = true;
+        formContainer.append(phoneInput);
+        
+        const addressInput = document.createElement('input');
+        addressInput.className = 'form__address';
+        addressInput.type = 'text';
+        addressInput.placeholder = 'Delivery address';
+        addressInput.required = true;
+        formContainer.append(addressInput);
+        
+        const emailInput = document.createElement('input');
+        emailInput.className = 'form__email';
+        emailInput.type = 'email';
+        emailInput.placeholder = 'E-mail';
+        emailInput.required = true;
+        formContainer.append(emailInput);
+
+        const cardTitle = document.createElement('h3');
+        cardTitle.className = 'form__card-title';
+        cardTitle.textContent = 'Credit card details';
+        formContainer.append(cardTitle);
+
+        const cardInfo = document.createElement('div');
+        cardInfo.className = 'form__card-info card-info';
+        formContainer.append(cardInfo);
+
+        const labelNumber = document.createElement('label');
+        labelNumber.htmlFor = 'card-number';
+        labelNumber.textContent = 'Card\'s number:';
+        cardInfo.append(labelNumber);
+
+        const cardNumberInput = document.createElement('input');
+        cardNumberInput.id = 'card-number';
+        cardNumberInput.type = 'number';
+        cardNumberInput.required = true;
+        cardInfo.append(cardNumberInput);
+
+        const cardsAdd = document.createElement('div');
+        cardsAdd.className = 'card-info__add';
+        cardInfo.append(cardsAdd);
+
+        const labelValid = document.createElement('label');
+        labelValid.htmlFor = 'valid';
+        labelValid.textContent = 'Valid:';
+        cardsAdd.append(labelValid);
+
+        const cardValidInput = document.createElement('input');
+        cardValidInput.id = 'valid';
+        cardValidInput.type = 'date';
+        cardValidInput.required = true;
+        cardsAdd.append(cardValidInput);
+
+        const labelCvv = document.createElement('label');
+        labelCvv.htmlFor = 'cvv';
+        labelCvv.textContent = 'CVV:';
+        cardsAdd.append(labelCvv);
+
+        const cardCvvInput = document.createElement('input');
+        cardCvvInput.id = 'cvv';
+        cardCvvInput.type = 'number';
+        cardCvvInput.required = true;
+        cardsAdd.append(cardCvvInput);
+
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.className = 'form__button button_submit';
+        submitButton.textContent = 'Submit';
+        formContainer.append(submitButton);
+
+        window.addEventListener('click', (e) => {
+            const target = <HTMLElement>e.target;
+            if(target.classList.contains('module-layer')) {
+                moduleLayer.style.display = 'none';
+            }
+        })
+
     }
 
     getLocalStorage() {
@@ -158,12 +271,12 @@ class CartPage extends Page {
             products.append(productCard)
         });
       
-        const summary = document.createElement('div');
-        summary.className = 'main__summary';
-        main.append(summary);
 
-        const summaryBlock = this.createSummary();
-        summary.append(summaryBlock);
+        main.append(this.summary);
+
+        this.createSummary();
+
+        this.createCardModule();
 
         return this.container;
 

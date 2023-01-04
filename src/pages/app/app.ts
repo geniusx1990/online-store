@@ -56,7 +56,7 @@ class App {
             localStorage.setItem("cartItems", JSON.stringify(cartItems));
         }
 
-        App.renderNewPage(Pages.MainPage);
+        App.renderNewPage(Pages.MainPage); // MainPage
         this.enableRouteChangee();
     }
 }
