@@ -25,36 +25,6 @@ class MainPage extends Page {
         this.pickedItems = [];
     }
 
-    getPickedItems() {
-        const pickedProducts: Product[] = [];
-        for(let category of this.pickedCategories) {
-            for(let product of products.products) {
-                if(product.category === category) {
-                    pickedProducts.push(product);
-                }
-            }
-        }
-        console.log(pickedProducts)
-
-        if(this.pickedBrands.length === 0) {
-            for(let item of pickedProducts) {
-                this.pickedItems.push(item);
-            }
-        } else {
-            for(let brand of this.pickedBrands) {
-                for(let prod of pickedProducts) {
-                    if(prod.brand === brand) {
-                        this.pickedItems.push(prod);
-                    }
-                }
-            }
-        }
-        console.log(this.pickedItems)
-
-        this.drawCards(this.pickedItems);
-
-    }
-
     getProductsFromCategories() {
         const pickedProducts: Product[] = [];
         for(let category of this.pickedCategories) {
@@ -346,6 +316,7 @@ class MainPage extends Page {
         || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
         || item.category.toLowerCase().includes(value.toLowerCase()));
         this.drawCards(itemsFound);
+        this.getNumberItems(itemsFound.length);
     }
 
     createSorting() {
