@@ -105,10 +105,10 @@ class MainPage extends Page {
             items.sort((item1, item2) => item2.price - item1.price);
         }
         else if(value === 'Sort by brand, A-Z') {
-            items.sort((item1, item2) => item1.title.localeCompare(item2.title));
+            items.sort((item1, item2) => item1.brand.localeCompare(item2.brand));
         }
         else if(value === 'Sort by brand, Z-A') {
-            items.sort((item1, item2) => item2.title.localeCompare(item1.title));
+            items.sort((item1, item2) => item2.brand.localeCompare(item1.brand));
         }
         return items;
     }
