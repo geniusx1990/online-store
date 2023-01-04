@@ -28,11 +28,13 @@ class Header {
         btnWrapper.className = 'header__button-wrapper';
         const cartButton = document.createElement('a');
         cartButton.className = 'header__button button_cart';
+        cartButton.href = '#cart-page';
         const productsNum = document.createElement('div');
         productsNum.className = 'header__products-number';
         if(localStorage.cartItems) {
             const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
             productsNum.textContent = storageProducts.length.toString();
+            console.log(productsNum.textContent);
         } else {
             productsNum.textContent = '0';
         }     

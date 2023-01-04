@@ -58,9 +58,9 @@ class CartProduct {
 
         const stockNumber = document.createElement('span');
         stockNumber.className = 'product-card__stock-number';
-        stockNumber.textContent = ` ${this.product.stock}`;
+        stockNumber.textContent = ` ${this.product.stock - 1}`;
         stockBlock.append(stockNumber);
-       
+
         const counter = document.createElement('div');
         counter.className = 'product-card__counter';
         priceBlock.append(counter);
@@ -69,9 +69,22 @@ class CartProduct {
         leftButton.className = 'product-card__button button_minus';
         counter.append(leftButton);
 
+        let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+        localStorage.cartItems = JSON.stringify(itemsInStorage)
+
+
         leftButton.addEventListener('click', (e) => {
             e.preventDefault();
             productsNumber.textContent = (Number(productsNumber.textContent) - 1).toString();
+            console.log(productsNumber.textContent)
+
+            if (productsNumber.textContent == '0') {
+                this.container.remove();
+
+                let newItemStorage = itemsInStorage.filter((item: Product) => item.id !== this.product.id);
+                localStorage.removeItem('cartItems')
+                localStorage.cartItems = JSON.stringify(newItemStorage);
+            }
             // if(productsNumber.textContent == '1') {
             //     leftButton.disabled = true;
             // } else {
@@ -143,11 +156,11 @@ class CartProduct {
 
         this.container.addEventListener('click', (e) => {
             const target = <HTMLElement>e.target;
-            if(target.classList.contains('product-card__button')) {
+            if (target.classList.contains('product-card__button')) {
                 return;
             } else {
                 window.location.href = `#product-page/${this.product.id}`;
-            }    
+            }
         })
 
         return this.container;

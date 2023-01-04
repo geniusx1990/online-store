@@ -60,6 +60,7 @@ class Card {
             console.log(e.target)
             const target = <HTMLElement>e.target;
             if(target.classList.contains('add-to-cart')) {
+                target.classList.add('added-to-cart');
                 this.addToCart(product)
             } else {
                 window.location.href = `#product-page/${product.id}`;
@@ -71,7 +72,6 @@ class Card {
 
     addToCart(product: Product) {
         const productsCounter = <HTMLDivElement>document.querySelector('.header__products-number');
-
         let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
         if(itemsInStorage.some((item: Product) => item.id === product.id)) {
             return;
