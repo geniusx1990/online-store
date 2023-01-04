@@ -52,20 +52,20 @@ class Header {
         const logo = this.createLogo('Online Store');
         headerWrapper.appendChild(logo);
 
-        // const cartTotal = document.createElement('div');
-        // cartTotal.className = 'header__total';
+        const cartTotal = document.createElement('div');
+        cartTotal.className = 'header__total';
 
-        // const totalText = document.createElement('span');
-        // totalText.className = 'header__total-text';
-        // totalText.textContent = 'Cart total: ';
+        const totalText = document.createElement('span');
+        totalText.className = 'header__total-text';
+        totalText.textContent = 'Cart total: ';
 
-        // const totalSum = document.createElement('span');
-        // totalSum.className = 'header__total-sum';
-        // totalSum.textContent = '';
+        const totalSum = document.createElement('span');
+        totalSum.className = 'header__total-sum';
+        totalSum.textContent = '';
 
-        // cartTotal.appendChild(totalText);
-        // cartTotal.appendChild(totalSum);
-        // headerWrapper.appendChild(cartTotal);
+        cartTotal.appendChild(totalText);
+        cartTotal.appendChild(totalSum);
+        headerWrapper.appendChild(cartTotal);
 
         const cartBtn = this.createCartButton();
         headerWrapper.appendChild(cartBtn);

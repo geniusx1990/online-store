@@ -301,12 +301,13 @@ class MainPage extends Page {
         const searchButton = document.createElement('button');
         searchButton.type = 'submit';
         searchButton.className = 'search__button';
-        searchWrapper.append(searchButton)
+        searchWrapper.append(searchButton);
 
-        searchInput.addEventListener('search', (e) => {
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
             const searchParam = searchInput.value;
             this.searchItems(searchParam);
-        })
+        });
 
         return searchWrapper; 
     }
@@ -453,9 +454,6 @@ class MainPage extends Page {
 
         content.append(this.cardsWrapper);
         this.drawCards(products.products);
-
-        const checkBoxes = document.querySelectorAll('.list-item__checkbox');
-        console.log(checkBoxes)
 
         return this.container;
     }
