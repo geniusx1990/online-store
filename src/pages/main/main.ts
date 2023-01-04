@@ -4,31 +4,166 @@ import Card from "../../components/card/card";
 import Header from "../../components/header/header";
 import products from '../../utils/products';
 import { Product } from '../../utils/types';
-import CheckboxFilter from '../../components/filters/checkboxFilter';
-import DualFilter from '../../components/filters/dualFilter';
 
 class MainPage extends Page {
     header: Header;
-    // filterCategory: CheckboxFilter;
-    // filterBrand: CheckboxFilter;
-    // categoriesNames: string[];
-    // brandsNames: string[];
-    // priceSlider: DualFilter;
-    // inStockSlider: DualFilter;
     cardsWrapper: HTMLDivElement;
+    filtersContainer: HTMLDivElement;
     
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
-        // this.categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
-        // this.filterCategory = new CheckboxFilter('categories', this.categoriesNames);
-        // this.brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
-        // this.filterBrand = new CheckboxFilter('brands', this.brandsNames);
-        // this.priceSlider = new DualFilter('price', '0', '2000');
-        // this.inStockSlider = new DualFilter('stock', '0', '150');
+        this.filtersContainer = document.createElement('div');
+        this.filtersContainer.className = 'main__filters filters';
         this.cardsWrapper = document.createElement('div');
         this.cardsWrapper.className = 'cards';
     }
+
+    createCheckboxFilter(filterName: string, listItems: string[]) {
+        const filterWrapper = document.createElement('div');
+        filterWrapper.className = `${filterName}`;
+
+        const title = document.createElement('h3');
+        title.className = `${filterName}__title`;;
+        title.textContent = `${filterName}`;
+        filterWrapper.append(title);
+
+        const itemsList = document.createElement('div');
+        itemsList.className = `${filterName}__list`;
+        filterWrapper.append(itemsList);
+
+        listItems.forEach(item => {
+            const checkItem = document.createElement('div');
+            checkItem.className = `${filterName}__list-item list-item`;
+
+            const checkBox = document.createElement('input');
+            checkBox.type = 'checkbox';
+            checkBox.className = 'list-item__checkbox';
+            checkBox.id = item;
+
+            checkBox.addEventListener('change', (e) => {
+                const pickedProducts = products.products.filter((el) => el.category === item);
+                this.drawCards(pickedProducts);
+                // if(this.activeItems.includes(item)) {
+                //     this.activeItems = this.activeItems.filter((el) => el !== item);
+                    
+                    // remove active
+                // } else {
+                //     this.activeItems.push(item);           
+                //     // add class active
+                // }
+      
+            })
+
+            const boxLabel = document.createElement('label');
+            boxLabel.className = 'list-item__label'
+            boxLabel.htmlFor = item;
+            boxLabel.textContent = item;
+
+            let numItems;
+            if(filterName === 'categories') {
+                numItems = products.products.filter(el => el.category === item).length;
+            } else if(filterName === 'brands') {
+                numItems = products.products.filter(el => el.brand === item).length;
+            }
+  
+            const numberItems = document.createElement('span');
+            numberItems.className = 'list-item__number'
+            numberItems.textContent = `(${numItems})`;
+
+            checkItem.append(checkBox);
+            checkItem.append(boxLabel);
+            checkItem.append(numberItems);
+            itemsList.append(checkItem);
+        })
+
+        this.filtersContainer.append(filterWrapper);
+    }
+
+    createDualFilter(title: string, minValue: string, maxValue: string) {
+        const filterWrapper = document.createElement('div');
+        filterWrapper.className = `filters__${title}-slider-container`;
+
+        const sliderTitle = document.createElement('h3');
+        sliderTitle.className = `${title}__title`;
+        sliderTitle.textContent = title;
+        filterWrapper.append(sliderTitle);
+
+        const values = document.createElement('div');
+        values.className = `${title}-slider__values`;
+        filterWrapper.append(values);
+
+        const valueOne = document.createElement('span');
+        valueOne.className = `${title}-slider__value-one`;
+        valueOne.textContent = `${minValue}`;
+        values.append(valueOne);
+        
+        const dash = document.createElement('span');
+        dash.textContent = ' - ';
+        values.append(dash);
+
+        const valueTwo = document.createElement('span');
+        valueTwo.className = `${title}-slider__value-two`;
+        valueTwo.textContent = ` ${maxValue}`;
+        values.append(valueTwo);
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = `filters__${title}-slider slider`;
+        filterWrapper.append(sliderWrapper);
+
+        const track = document.createElement('div');
+        track.className = `${title}-slider__track`;
+        sliderWrapper.append(track);
+
+        const firstInput = document.createElement('input');
+        firstInput.type = 'range';
+        firstInput.min = minValue;
+        firstInput.max = maxValue;
+        firstInput.value = minValue;
+        firstInput.className = `${title}-slider__input ${title}-input_first`;
+        sliderWrapper.append(firstInput);
+
+        const secondInput = document.createElement('input');
+        secondInput.type = 'range';
+        secondInput.min = minValue;
+        secondInput.max = maxValue;
+        secondInput.value = maxValue;
+        secondInput.className = `${title}-slider__input ${title}-input_second`;
+        sliderWrapper.append(secondInput);
+
+        firstInput.addEventListener('input', () => {
+            this.slidePricesOne(firstInput, secondInput, 0, valueOne, maxValue, track);
+        })
+
+        secondInput.addEventListener('input', () => {
+            this.slidePricesTwo(firstInput, secondInput, 0, valueTwo, maxValue, track);
+        })
+
+        this.filtersContainer.append(filterWrapper);  
+    }
+
+    slidePricesOne(sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, gap: number, valueOne: HTMLSpanElement, maxValue: string, sliderTrack: HTMLDivElement) {
+        if((parseInt(sliderTwo.value) - parseInt(sliderOne.value)) <= gap) {
+            sliderOne.value = (parseInt(sliderTwo.value) - gap).toString();
+        }
+        valueOne.textContent = sliderOne.value;
+        this.fillWithColor(sliderOne, sliderTwo, maxValue, sliderTrack);
+    }
+
+    slidePricesTwo(sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, gap: number, valueTwo: HTMLSpanElement, maxValue: string, sliderTrack: HTMLDivElement) {
+        if((parseInt(sliderTwo.value) - parseInt(sliderOne.value)) <= gap) {
+            sliderTwo.value = (parseInt(sliderOne.value) + gap).toString();
+        }
+        valueTwo.textContent = sliderTwo.value;
+        this.fillWithColor(sliderOne, sliderTwo, maxValue, sliderTrack);
+    }
+
+    fillWithColor(sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, maxValue: string, sliderTrack: HTMLDivElement) {
+        let percentOne = (parseInt(sliderOne.value) / parseInt(maxValue)) * 100;
+        let percentTwo = (parseInt(sliderTwo.value) / parseInt(maxValue)) * 100;
+        sliderTrack.style.background = `linear-gradient(to right, #efefef ${percentOne}%, #333e48 ${percentOne}%, #333e48 ${percentTwo}%, #efefef ${percentTwo}%)`;
+    }
+
 
     private createLayoutButtons() {
         const buttonWrapper = document.createElement('div');
@@ -148,31 +283,25 @@ class MainPage extends Page {
         main.className = 'main';
         this.container.append(main);
 
-        const filtersContainer = document.createElement('div');
-        filtersContainer.className = 'main__filters filters';
-        main.append(filtersContainer);
+        main.append(this.filtersContainer);
 
         const title = document.createElement('h2');
         title.className = 'filters__title';
         title.textContent = 'Filters';
-        filtersContainer.append(title);
+        this.filtersContainer.append(title);
 
         const categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
-        const categories = new CheckboxFilter('categories', categoriesNames);
-        filtersContainer.append(categories.draw());
+        this.createCheckboxFilter('categories', categoriesNames);
 
         const brandsNames = Array.from(new Set(products.products.map(item => item.brand)));
-        const brands = new CheckboxFilter('brands', brandsNames);
-        filtersContainer.append(brands.draw());
+        this.createCheckboxFilter('brands', brandsNames);
 
-        const prices = new DualFilter('price', '0', '2000');;
-        filtersContainer.append(prices.draw());
+        this.createDualFilter('price', '0', '2000');
 
-        const stock = new DualFilter('stock', '0', '150');;
-        filtersContainer.append(stock.draw());
+        this.createDualFilter('stock', '0', '150');
 
         const filtersButtons = this.createFilterButtons();
-        filtersContainer.append(filtersButtons);
+        this.filtersContainer.append(filtersButtons);
 
         const content = document.createElement('div');
         content.className = 'content';
