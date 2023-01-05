@@ -12,6 +12,9 @@ class MainPage extends Page {
     pickedCategories: string[];
     pickedBrands: string[];
     pickedItems: Product[];
+    pickedPrice: { min: string; max: string; };
+    pickedStock: { min: string; max: string; };
+    params: { categories: string[]; brands: string[]; price: { min: string; max: string; }; stock: { min: string; max: string; }; };
     
     constructor(pageName: string) {
         super(pageName);
@@ -23,30 +26,51 @@ class MainPage extends Page {
         this.pickedCategories = [];
         this.pickedBrands = [];
         this.pickedItems = [];
+        this.pickedPrice = {min: '0', max: '2000'};
+        this.pickedStock = {min: '0', max: '160'};
+        this.params = {
+            categories: this.pickedCategories,
+            brands: this.pickedBrands,
+            price: this.pickedPrice,
+            stock: this.pickedStock
+        }
     }
 
-    getProductsFromCategories() {
-        const pickedProducts: Product[] = [];
-        for(let category of this.pickedCategories) {
-            for(let product of products.products) {
-                if(product.category === category) {
-                    pickedProducts.push(product);
-                }
-            }
+    getFilteredItems() {
+        const prods: Product[] = [...products.products];
+        let res: Product[] = [];
+        if(this.pickedCategories.length === 0) {
+            res = [...prods];
         }
-        return pickedProducts;                
-    }
+        this.pickedCategories.forEach((category: string) => {
+            prods.forEach((item) => {
+                if(item.category === category) {
+                    res.push(item);
+                }
+            })
+        })
 
-    getProductsFromBrands() {
-        const pickedProducts: Product[] = [];
-        for(let brand of this.pickedBrands) {
-            for(let product of products.products) {
-                if(product.brand === brand) {
-                    pickedProducts.push(product);
-                }
-            }
+        let picked: Product[] = [];
+        if(this.pickedBrands.length === 0) {
+            picked = [... res];
         }
-        return pickedProducts;                
+        this.pickedBrands.forEach((brand: string) => {
+            res.forEach((item) => {
+                if(item.brand === brand) {
+                    picked.push(item);
+                }
+            })
+        })
+
+        const minPrice = this.pickedPrice.min;
+        const maxPrice = this.pickedPrice.max;
+        picked = picked.filter((item) => +item.price >= +minPrice && +item.price <= +maxPrice);
+
+        const minStock = this.pickedStock.min;
+        const maxStock = this.pickedStock.max;
+        picked = picked.filter((item) => +item.stock >= +minStock && +item.stock <= +maxStock);
+
+        return picked;
     }
 
     createCheckboxFilter(filterName: string, listItems: string[]) {
@@ -75,37 +99,28 @@ class MainPage extends Page {
                 if(filterName === 'categories') {
                     if(this.pickedCategories.includes(item)) {
                         this.pickedCategories = this.pickedCategories.filter((el) => el !== item);
-                        if(this.pickedCategories.length === 0) {
-                            this.drawCards(products.products);
-                            this.getNumberItems(products.products.length);
-                            
-                        } else {
-                            this.drawCards(this.getProductsFromCategories());
-                            this.getNumberItems(this.getProductsFromCategories().length);
-                        }
-                        
+                        const chosenItems = this.getFilteredItems();
+                        this.drawCards(chosenItems);
+                        this.getNumberItems(chosenItems.length);        
                     } else {
                         this.pickedCategories.push(item);
-                        this.drawCards(this.getProductsFromCategories());
-                        this.getNumberItems(this.getProductsFromCategories().length); 
+                        const chosenItems = this.getFilteredItems();
+                        this.drawCards(chosenItems);
+                        this.getNumberItems(chosenItems.length);  
                     }
                 }
                 if(filterName === 'brands') {
                     if(this.pickedBrands.includes(item)) {
                         this.pickedBrands = this.pickedBrands.filter((el) => el !== item);
-                        if(this.pickedBrands.length === 0) {
-                            this.drawCards(products.products);
-                            this.getNumberItems(products.products.length);
-                        } else {
-                            this.drawCards(this.getProductsFromBrands());
-                            this.getNumberItems(this.getProductsFromBrands().length); 
-                        }
+                        const chosenItems = this.getFilteredItems();
+                        this.drawCards(chosenItems);
+                        this.getNumberItems(chosenItems.length);  
                     } else {
                         this.pickedBrands.push(item);
-                        this.drawCards(this.getProductsFromBrands());
-                        this.getNumberItems(this.getProductsFromBrands().length); 
+                        const chosenItems = this.getFilteredItems();
+                        this.drawCards(chosenItems);
+                        this.getNumberItems(chosenItems.length);  
                     }
-
                 }
             })
 
@@ -187,7 +202,6 @@ class MainPage extends Page {
 
         firstInput.addEventListener('input', () => {
             this.slidePricesOne(firstInput, secondInput, 0, valueOne, maxValue, track);
-
         })
 
         secondInput.addEventListener('input', () => {
@@ -201,9 +215,10 @@ class MainPage extends Page {
                 const valueTwo = <HTMLSpanElement>document.querySelector('.price-slider__value-two');
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
-                    const pickedProducts = products.products.filter((item: Product) => +item.price >= +val1 && +item.price <= +val2);
-                    this.drawCards(pickedProducts);
-                    this.getNumberItems(pickedProducts.length);
+                    this.pickedPrice.min = val1;
+                    const chosenItems = this.getFilteredItems();
+                    this.drawCards(chosenItems);
+                    this.getNumberItems(chosenItems.length);
                 }   
             }
 
@@ -213,9 +228,10 @@ class MainPage extends Page {
                 const valueTwo = <HTMLSpanElement>document.querySelector('.stock-slider__value-two');
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
-                    const pickedProducts = products.products.filter((item: Product) => +item.stock >= +val1 && +item.stock <= +val2);
-                    this.drawCards(pickedProducts);
-                    this.getNumberItems(pickedProducts.length);
+                    this.pickedStock.min = val1;
+                    const chosenItems = this.getFilteredItems();
+                    this.drawCards(chosenItems);
+                    this.getNumberItems(chosenItems.length);
                 }   
             } 
         })
@@ -227,9 +243,10 @@ class MainPage extends Page {
                 const valueTwo = <HTMLSpanElement>document.querySelector('.price-slider__value-two');
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
-                    const pickedProducts = products.products.filter((item: Product) => +item.price >= +val1 && +item.price <= +val2);
-                    this.drawCards(pickedProducts);
-                    this.getNumberItems(pickedProducts.length); 
+                    this.pickedPrice.max = val2;
+                    const chosenItems = this.getFilteredItems();
+                    this.drawCards(chosenItems);
+                    this.getNumberItems(chosenItems.length); 
                 }   
             }
 
@@ -239,16 +256,16 @@ class MainPage extends Page {
                 const valueTwo = <HTMLSpanElement>document.querySelector('.stock-slider__value-two');
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
-                    const pickedProducts = products.products.filter((item: Product) => +item.stock >= +val1 && +item.stock <= +val2);
-                    this.drawCards(pickedProducts);
-                    this.getNumberItems(pickedProducts.length);
+                    this.pickedStock.max = val2;
+                    const chosenItems = this.getFilteredItems();
+                    this.drawCards(chosenItems);
+                    this.getNumberItems(chosenItems.length);
                 }   
             } 
         })
 
         this.filtersContainer.append(filterWrapper);  
     }
-
 
     slidePricesOne(sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, gap: number, valueOne: HTMLSpanElement, maxValue: string, sliderTrack: HTMLDivElement) {
         if((parseInt(sliderTwo.value) - parseInt(sliderOne.value)) <= gap) {
@@ -313,9 +330,11 @@ class MainPage extends Page {
     }
 
     searchItems(value: string) {
-        const itemsFound = products.products.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
+        const chosenItems = this.getFilteredItems();
+        const itemsFound = chosenItems.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
         || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
-        || item.category.toLowerCase().includes(value.toLowerCase()));
+        || item.category.toLowerCase().includes(value.toLowerCase()) || item.price.toString().includes(value.toLowerCase())
+        || item.stock.toString().includes(value.toLowerCase()));
         this.drawCards(itemsFound);
         this.getNumberItems(itemsFound.length);
     }
@@ -336,7 +355,8 @@ class MainPage extends Page {
 
         select.addEventListener('change', (e) => {
             const target = <HTMLOptionElement>e.target;
-            const newArr = this.sortItems(products.products, target.value);
+            const chosenItems = this.getFilteredItems();
+            const newArr = this.sortItems(chosenItems, target.value);
             this.drawCards(newArr);
         })
         return select;
