@@ -330,11 +330,17 @@ class MainPage extends Page {
     }
 
     searchItems(value: string) {
+        if(value.length === 0) {
+            this.hideNotFound();
+        }
         const chosenItems = this.getFilteredItems();
         const itemsFound = chosenItems.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
         || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
         || item.category.toLowerCase().includes(value.toLowerCase()) || item.price.toString().includes(value.toLowerCase())
         || item.stock.toString().includes(value.toLowerCase()));
+        if(itemsFound.length === 0) {
+            this.showNotFound();
+        }
         this.drawCards(itemsFound);
         this.getNumberItems(itemsFound.length);
     }
@@ -415,6 +421,16 @@ class MainPage extends Page {
         numberCards.textContent = `${num}`;
     }
 
+    showNotFound() {
+        const notFound = <HTMLHeadingElement>document.querySelector('.not-found');
+        notFound.style.display = 'block';
+    }
+
+    hideNotFound() {
+        const notFound = <HTMLHeadingElement>document.querySelector('.not-found');
+        notFound.style.display = 'none';
+    }
+
     draw() {
         const mainHeader = this.header.draw();
         this.container.append(mainHeader);
@@ -468,6 +484,11 @@ class MainPage extends Page {
             numberItems.textContent = `${products.products.length}`;
         }
         itemsFound.append(numberItems);
+
+        const notFound = document.createElement('h3');
+        notFound.className = 'not-found';
+        notFound.textContent = 'No items found';
+        content.append(notFound);
 
         const layoutButtons = this.createLayoutButtons();
         sortingWrapper.append(layoutButtons);

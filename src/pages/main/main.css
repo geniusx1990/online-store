@@ -294,3 +294,10 @@ input[type="range"]::-ms-thumb {
 ::-webkit-scrollbar-thumb:hover {
     background: #ffd700; 
 }
+
+.not-found {
+    display: none;
+    font-size: 28px;
+    margin-top: 20px;
+    text-align: center;
+}
