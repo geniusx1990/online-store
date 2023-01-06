@@ -16,9 +16,6 @@ class MainPage extends Page {
     pickedPrice: { min: string; max: string; };
     pickedStock: { min: string; max: string; };
     layout: string;
-    searchParam: string;
-    sortParam: string;
-    params: { categories: string[]; brands: string[]; sort: string; search: string; layout: string; };
     
     constructor(pageName: string) {
         super(pageName);
@@ -32,17 +29,7 @@ class MainPage extends Page {
         this.pickedItems = [];
         this.pickedPrice = {min: '0', max: '2000'};
         this.pickedStock = {min: '0', max: '160'};
-        this.searchParam = '';
-        this.sortParam = '';
-        this.layout = 'squares';
-        this.params = {
-            categories: this.pickedCategories,
-            brands: this.pickedBrands,
-            sort: this.sortParam,
-            search: this.searchParam,
-            layout: this.layout
-        }
-        
+        this.layout = 'squares';   
     }
 
 
@@ -87,8 +74,6 @@ class MainPage extends Page {
             this.showNotFound();
         }
 
-        this.getParams()
-        // console.log(window.location.href)
         return picked;
     }
 
@@ -113,36 +98,36 @@ class MainPage extends Page {
         }
     }
 
-    getParams() {
-        const urlStr = window.location.pathname;
+    // getParams() {
+    //     const urlStr = window.location.pathname;
 
-        const url = urlStr.split('?')[0];
+    //     const url = urlStr.split('?')[0];
 
-        const paramsArr = Object.entries(this.params);
+    //     const paramsArr = Object.entries(this.params);
 
-        let resArr = paramsArr.map((item) => {
-            const [param, values] = item;
-            let resultValues;
-            if(values.length === 0) {
-                return '';
-            }
+    //     let resArr = paramsArr.map((item) => {
+    //         const [param, values] = item;
+    //         let resultValues;
+    //         if(values.length === 0) {
+    //             return '';
+    //         }
 
-            if(Array.isArray(values)) {
-                resultValues = values.join(',')
-            }else {
-                resultValues = values;
-            }
-            return `${param}=${values}`;
-        })
+    //         if(Array.isArray(values)) {
+    //             resultValues = values.join(',')
+    //         }else {
+    //             resultValues = values;
+    //         }
+    //         return `${param}=${values}`;
+    //     })
 
-        resArr = resArr.filter((item) => item.length !== 0); 
+    //     resArr = resArr.filter((item) => item.length !== 0); 
 
-        const paramsUrl = `?${resArr.join('&')}`;
+    //     const paramsUrl = `?${resArr.join('&')}`;
 
-        const endUrl = url + paramsUrl;
+    //     const endUrl = url + paramsUrl;
         
-        window.history.pushState({}, '', endUrl);
-    }
+    //     window.history.pushState({}, '', endUrl);
+    // }
 
     drawChosenItems() {
         const chosenItems = this.getFilteredItems();
@@ -150,7 +135,31 @@ class MainPage extends Page {
         this.getNumberItems(chosenItems.length);
     }
 
-    // Filters' block
+    private addParamsForCheckboxFilters(name: string, item: string) {
+        const url = new URL(window.location.href);
+        const param: string = url.searchParams.get(name) || '';
+        if(param) {
+            url.searchParams.append(name, item);
+        } else {
+            url.searchParams.set(name, item);
+        }
+        window.history.pushState(null, '', url);
+    }
+
+     // Filters' block
+    private removeParamForCheckboxFilters(name: string, item: string) {
+        const url = new URL(window.location.href);
+        const allParams = url.searchParams.getAll(name);
+        const leftItems = allParams.filter((el) => el !== item);
+        url.searchParams.delete(name);
+        if(leftItems.length) {
+            leftItems.forEach((param) => {
+                url.searchParams.append(name, param);
+            })
+        }
+        window.history.pushState(null, '', url);
+    }
+
     private createCheckboxFilter(filterName: string, listItems: string[]) {
         const filterWrapper = document.createElement('div');
         filterWrapper.className = `${filterName}`;
@@ -177,18 +186,22 @@ class MainPage extends Page {
                 if(filterName === 'categories') {
                     if(this.pickedCategories.includes(item)) {
                         this.pickedCategories = this.pickedCategories.filter((el) => el !== item);
+                        this.removeParamForCheckboxFilters('category', item);
                         this.drawChosenItems();      
                     } else {
                         this.pickedCategories.push(item);
+                        this.addParamsForCheckboxFilters('category', item);
                         this.drawChosenItems();
                     }
                 }
                 if(filterName === 'brands') {
                     if(this.pickedBrands.includes(item)) {
                         this.pickedBrands = this.pickedBrands.filter((el) => el !== item);
+                        this.removeParamForCheckboxFilters('brand', item);
                         this.drawChosenItems();
                     } else {
                         this.pickedBrands.push(item);
+                        this.addParamsForCheckboxFilters('brand', item);
                         this.drawChosenItems();
                     }
                 }
@@ -217,6 +230,19 @@ class MainPage extends Page {
         })
 
         this.filtersContainer.append(filterWrapper);
+    }
+
+    private addParamsForSliderFilters(name: string, min: string, max: string) {
+        const url = new URL(window.location.href);
+
+        const param: string = url.searchParams.get(name) || '';
+        if(param) {
+            url.searchParams.delete(name);
+            url.searchParams.append(name, `${min},${max}`);
+        } else {
+            url.searchParams.set(name, `${min},${max}`);
+        }
+        window.history.pushState(null, '', url);
     }
 
     private createDualFilter(title: string, minValue: string, maxValue: string) {
@@ -286,6 +312,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedPrice.min = val1;
+                    this.addParamsForSliderFilters('price', val1, val2);
                     this.drawChosenItems();
                 }   
             }
@@ -296,6 +323,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedStock.min = val1;
+                    this.addParamsForSliderFilters('stock', val1, val2);
                     this.drawChosenItems();
                 }   
             } 
@@ -309,6 +337,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedPrice.max = val2;
+                    this.addParamsForSliderFilters('price', val1, val2);
                     this.drawChosenItems();
                 }   
             }
@@ -319,6 +348,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedStock.max = val2;
+                    this.addParamsForSliderFilters('stock', val1, val2);
                     this.drawChosenItems();
                 }   
             } 
@@ -373,6 +403,23 @@ class MainPage extends Page {
     }
 
     // Search block
+    private addParamsForSearch(value: string) {
+        const url = new URL(window.location.href);
+
+        const param: string = url.searchParams.get('search') || '';
+        if(param) {
+            if(value.length === 0){
+                url.searchParams.delete('search');
+            } else {
+                url.searchParams.delete('search');
+                url.searchParams.append('search', value);
+            }
+        } else {
+            url.searchParams.set('search', value);
+        }
+        window.history.pushState(null, '', url);
+    }
+
     private createSearchBar() {
         const searchWrapper = document.createElement('form');
         searchWrapper.className = 'search';
@@ -391,7 +438,7 @@ class MainPage extends Page {
         searchButton.addEventListener('click', (e) => {
             e.preventDefault();
             const searchValue = searchInput.value;
-            this.searchParam = searchValue;
+            this.addParamsForSearch(searchValue);
             this.searchItems(searchValue);
         });
 
@@ -414,8 +461,22 @@ class MainPage extends Page {
         this.getNumberItems(itemsFound.length);
     }
 
+    private addParamsForSorting(value: string) {
+        const url = new URL(window.location.href);
+
+        const param: string = url.searchParams.get('sort') || '';
+        if(param) {
+            url.searchParams.delete('sort');
+            url.searchParams.append('sort', value);
+        } else {
+            url.searchParams.set('sort', value);
+        }
+        window.history.pushState(null, '', url);
+    }
+
     private createSorting() {
         const sortOptions = ['Select sorting options','Sort by price ascending', 'Sort by price descending', 'Sort by brand, A-Z', 'Sort by brand, Z-A'];
+        const sortAbbr = ['ASC', 'DES', 'A-Z', 'Z-A'];
         const select = document.createElement('select');
         select.className = 'sorting';
         select.name = 'sort';
@@ -432,6 +493,13 @@ class MainPage extends Page {
             const target = <HTMLOptionElement>e.target;
             const chosenItems = this.getFilteredItems();
             const newArr = this.sortItems(chosenItems, target.value);
+            let abbrIndex: number = 0;
+            sortOptions.forEach((item, index) => {
+                if(target.value === item) {
+                    abbrIndex = index;
+                }
+            })
+            this.addParamsForSorting(sortAbbr[abbrIndex - 1]);
             this.drawCards(newArr);
         })
         return select;
@@ -440,21 +508,30 @@ class MainPage extends Page {
     sortItems(items: Product[], value: string) {
         if(value === 'Sort by price ascending') {
             items.sort((item1, item2) => item1.price - item2.price);
-            this.sortParam = 'ASC';
         }
         else if(value === 'Sort by price descending') {
             items.sort((item1, item2) => item2.price - item1.price);
-            this.sortParam = 'DES';
         }
         else if(value === 'Sort by brand, A-Z') {
             items.sort((item1, item2) => item1.brand.localeCompare(item2.brand));
-            this.sortParam = 'A-Z';
         }
         else if(value === 'Sort by brand, Z-A') {
             items.sort((item1, item2) => item2.brand.localeCompare(item1.brand));
-            this.sortParam = 'Z-A';
         } 
         return items;
+    }
+
+    private addParamsForLayout(value: string) {
+        const url = new URL(window.location.href);
+
+        const param: string = url.searchParams.get('layout') || '';
+        if(param) {
+            url.searchParams.delete('layout');
+            url.searchParams.append('layout', value);
+        } else {
+            url.searchParams.set('layout', value);
+        }
+        window.history.pushState(null, '', url);
     }
 
     private createLayoutButtons() {
@@ -478,6 +555,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonLines.classList.remove('active-layout');
             this.layout = 'squares';
+            this. addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })
@@ -491,6 +569,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonSquares.classList.remove('active-layout');
             this.layout = 'lines';
+            this. addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })

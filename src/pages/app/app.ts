@@ -2,7 +2,6 @@ import MainPage from '../main/main';
 import CartPage from '../cart/cart';
 import ProductPage from '../product/product';
 import Page from '../../components/templates/page';
-import products from '../../utils/products';
 import { Product } from '../../utils/types';
 
 export enum Pages {
@@ -32,7 +31,8 @@ class App {
         }  
         else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
-        }  else if (matches !== null && matches.groups !== undefined && matches.groups['productId']) {
+        }  
+        else if (matches !== null && matches.groups !== undefined && matches.groups['productId']) {
             page = new ProductPage(idPage, parseInt(matches.groups['productId']))
         } 
 
@@ -42,7 +42,7 @@ class App {
         }
     }
 
-    private enableRouteChangee() {
+    private enableRouteChange() {
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.slice(1);
             console.log(hash);
@@ -57,7 +57,7 @@ class App {
         }
 
         App.renderNewPage(Pages.MainPage); // MainPage
-        this.enableRouteChangee();
+        this.enableRouteChange();
     }
 }
 
