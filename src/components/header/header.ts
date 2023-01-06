@@ -31,14 +31,23 @@ class Header {
         cartButton.href = '#cart-page';
         const productsNum = document.createElement('div');
         productsNum.className = 'header__products-number';
-        if(localStorage.cartItems) {
+        if (localStorage.cartItems) {
             const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
-            productsNum.textContent = storageProducts.length.toString();
+            let test = JSON.parse(localStorage.cartItems);
+            let sumOfItems = 0;
+            for (let i = 0; i < test.length; i++) {
+                if (test[i]['count'] == undefined) {
+                    test[i]['count'] = 1;
+                }
+                sumOfItems += test[i]['count'];
+                console.log(test[i]['count'])
+            }
+            productsNum.textContent = `${sumOfItems}`;
             console.log(productsNum.textContent);
         } else {
             productsNum.textContent = '0';
-        }     
-        
+        }
+
         btnWrapper.appendChild(cartButton);
         btnWrapper.appendChild(productsNum);
         return btnWrapper;
@@ -71,7 +80,7 @@ class Header {
         headerWrapper.appendChild(cartBtn);
 
         return this.container;
-    }    
+    }
 }
 
 export default Header;

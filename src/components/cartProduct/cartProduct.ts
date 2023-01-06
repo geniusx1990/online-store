@@ -69,39 +69,68 @@ class CartProduct {
         leftButton.className = 'product-card__button button_minus';
         counter.append(leftButton);
 
-        let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
-        localStorage.cartItems = JSON.stringify(itemsInStorage)
 
+        let count: number;
 
         leftButton.addEventListener('click', (e) => {
+            count = Number(productsNumber.textContent);
+            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number')
+            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number')
+            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number')
+
             e.preventDefault();
-            productsNumber.textContent = (Number(productsNumber.textContent) - 1).toString();
-            console.log(productsNumber.textContent)
+
+            count = count - 1;
+            let test = JSON.parse(localStorage.cartItems);
+            for (let i = 0; i < test.length; i++) {
+                if (test[i].id == this.product.id) {
+                    JSON.stringify(test[i]['count'] = count);
+                }
+                localStorage.cartItems = JSON.stringify(test);
+            }
+            let countNumberDisplay = JSON.parse(localStorage.cartItems);
+            productsNumber.textContent = countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count;
 
             if (productsNumber.textContent == '0') {
                 this.container.remove();
-
+                let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+                localStorage.cartItems = JSON.stringify(itemsInStorage)
                 let newItemStorage = itemsInStorage.filter((item: Product) => item.id !== this.product.id);
                 localStorage.removeItem('cartItems')
                 localStorage.cartItems = JSON.stringify(newItemStorage);
             }
-            // if(productsNumber.textContent == '1') {
-            //     leftButton.disabled = true;
-            // } else {
-            //     leftButton.disabled = false;
-            // }
-            priceSum.textContent = (Number(priceSum.textContent) - this.product.price).toString();
+
+            let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+            let sum = 0;
+            let sumCount = 0;
+            for (let i = 0; i < finalSumLocalStorage.length; i++) {
+                if (finalSumLocalStorage[i]['count'] == undefined) {
+                    finalSumLocalStorage[i]['count'] = 1;
+                }
+                sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+                sumCount += finalSumLocalStorage[i]['count'];
+
+            }
+            finalSum.textContent = `$ ${sum}`;
+            sumCountDisplay.textContent = `${sumCount}`
+            sumCountDisplayHeader.textContent = `${sumCount}`;
+            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
+
             stockNumber.textContent = (Number(stockNumber.textContent) + 1).toString();
-            // if(stockNumber.textContent == `${this.product.stock}`) {
-            //     leftButton.disabled = true;
-            // } else {
-            //     leftButton.disabled = false;
-            // }
+
         })
 
         const productsNumber = document.createElement('span');
         productsNumber.className = 'product-card__products-number';
-        productsNumber.textContent = '1';
+
+        let countNumberDisplay = JSON.parse(localStorage.cartItems);
+        if (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count == null) {
+            productsNumber.textContent = '1';
+
+        } else {
+            productsNumber.textContent = countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count;
+
+        }
         counter.append(productsNumber);
 
         const rightButton = document.createElement('button');
@@ -109,15 +138,44 @@ class CartProduct {
         counter.append(rightButton);
 
         rightButton.addEventListener('click', (e) => {
+
             e.preventDefault();
-            productsNumber.textContent = (Number(productsNumber.textContent) + 1).toString();
-            priceSum.textContent = (Number(priceSum.textContent) + this.product.price).toString();
+            count = Number(productsNumber.textContent);
+            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number')
+            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number')
+            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number')
+
+            count = count + 1;
+            let test = JSON.parse(localStorage.cartItems);
+            for (let i = 0; i < test.length; i++) {
+                if (test[i].id == this.product.id) {
+                    JSON.stringify(test[i]['count'] = count);
+                }
+                localStorage.cartItems = JSON.stringify(test);
+            }
+
+            let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+            let sum = 0;
+            let sumCount = 0;
+            for (let i = 0; i < finalSumLocalStorage.length; i++) {
+                if (finalSumLocalStorage[i]['count'] == undefined) {
+                    finalSumLocalStorage[i]['count'] = 1;
+                }
+                sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+                sumCount += finalSumLocalStorage[i]['count'];
+
+
+            }
+            finalSum.textContent = `$ ${sum}`;
+            sumCountDisplay.textContent = `${sumCount}`
+            sumCountDisplayHeader.textContent = `${sumCount}`;
+
+
+            let countNumberDisplay = JSON.parse(localStorage.cartItems)
+            productsNumber.textContent = countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count /* countNumberDisplay.filter((item: Product) => item.id === this.product.id)[count] */ // (Number(productsNumber.textContent) + 1).toString();
+            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
             stockNumber.textContent = (Number(stockNumber.textContent) - 1).toString();
-            // if(stockNumber.textContent == '0') {
-            //     rightButton.disabled = true;
-            // } else {
-            //     rightButton.disabled = false;
-            // }
+
         })
 
         const price = document.createElement('div');
@@ -131,7 +189,14 @@ class CartProduct {
 
         const priceSum = document.createElement('span');
         priceSum.className = `product-card__price-sum`;
-        priceSum.textContent = `${this.product.price}`;
+        if (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count == null) {
+            countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count = 1;
+            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
+
+        } else {
+            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
+        }
+
         price.append(priceSum);
 
         return priceBlock;
