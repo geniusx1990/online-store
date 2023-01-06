@@ -10,7 +10,7 @@ class Card {
     }
 
     draw(product: Product) {
-        const title = document.createElement('p');
+        const title = document.createElement('h2');
         title.className = 'product_title';
         title.textContent = product.title;
         this.container.append(title);
@@ -23,25 +23,40 @@ class Card {
         const cardInfo = document.createElement('div');
         cardInfo.className = 'card-description';
 
-        const branName = document.createElement('p');
+        const category = document.createElement('h4');
+        category.className = 'category';
+        category.textContent = `Category: ${product.category}`;
+        cardInfo.append(category);
+
+        const branName = document.createElement('h4');
         branName.className = 'brand-name';
-        branName.textContent = `Brand name: ${product.brand}`;
+        branName.textContent = `Brand: ${product.brand}`;
         cardInfo.append(branName);
 
-        const cardDescription = document.createElement('p');
-        cardDescription.className = 'description';
-        cardDescription.textContent = product.description;
-        cardInfo.append(cardDescription);
+        const price = document.createElement('h4');
+        price.className = 'price';
+        price.textContent = `Price: $${product.price}`;
+        cardInfo.append(price);
+
+        const discount = document.createElement('h4');
+        discount.className = 'discount';
+        discount.textContent = `Discount: ${product.discountPercentage}%`;
+        cardInfo.append(discount);
+
+        const rating = document.createElement('h4');
+        rating.className = 'rating';
+        rating.textContent = `Rating: ${product.rating}`;
+        cardInfo.append(rating);
+
+        // const cardDescription = document.createElement('p');
+        // cardDescription.className = 'description';
+        // cardDescription.textContent = product.description;
+        // cardInfo.append(cardDescription);
         this.container.append(cardInfo);
 
         const priceContent = document.createElement('div');
         priceContent.className = 'card-price-container';
         this.container.append(priceContent);
-
-        const priceCard = document.createElement('h2');
-        priceCard.className = 'price';
-        priceCard.textContent = `${product.price} $`;
-        priceContent.append(priceCard);
 
         const stockCard = document.createElement('p');
         stockCard.className = 'card-in-stock';

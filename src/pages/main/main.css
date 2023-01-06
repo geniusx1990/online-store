@@ -73,6 +73,7 @@
 .items-found {
     font-size: 18px;
     font-weight: bold;
+    margin-bottom: 10px;
 }
 
 .layout {
@@ -90,6 +91,10 @@
     border-radius: 5px;
 }
 
+.active-layout {
+    box-shadow: none;
+}
+
 .button_squares {
     background: url('../../assets/svg/layout_squares.png');
     background-size: 80%;
@@ -103,6 +108,19 @@
     background-size: 70%;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.cards {
+    padding: 20px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 12px;
+    position: relative;
+}
+
+.long-cards {
+    display: flex;
+    flex-direction: column;
 }
 
 .filters__title {

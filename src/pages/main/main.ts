@@ -1,6 +1,7 @@
 import './main.css';
 import Page from '../../components/templates/page'
 import Card from "../../components/card/card";
+import CardLong from '../../components/cardLong/cardLong';
 import Header from "../../components/header/header";
 import products from '../../utils/products';
 import { Product } from '../../utils/types';
@@ -15,6 +16,7 @@ class MainPage extends Page {
     pickedPrice: { min: string; max: string; };
     pickedStock: { min: string; max: string; };
     params: { categories: string[]; brands: string[]; price: { min: string; max: string; }; stock: { min: string; max: string; }; };
+    layout: string;
     
     constructor(pageName: string) {
         super(pageName);
@@ -34,6 +36,7 @@ class MainPage extends Page {
             price: this.pickedPrice,
             stock: this.pickedStock
         }
+        this.layout = 'squares';
     }
 
     getFilteredItems() {
@@ -70,7 +73,29 @@ class MainPage extends Page {
         const maxStock = this.pickedStock.max;
         picked = picked.filter((item) => +item.stock >= +minStock && +item.stock <= +maxStock);
 
+        // this.getParams()
+        // console.log(window.location.href)
         return picked;
+    }
+
+    getParams() {
+        const url = new URL(window.location.href);
+
+        if(this.pickedCategories.length > 0) {
+            url.searchParams.set('category', this.pickedCategories.join(','));
+        }
+
+        if(this.pickedBrands.length > 0) {
+            url.searchParams.set('brand', this.pickedBrands.join(','));
+        }
+        
+        window.history.pushState({}, '', url);
+    }
+
+    drawChosenItems() {
+        const chosenItems = this.getFilteredItems();
+        this.drawCards(chosenItems);
+        this.getNumberItems(chosenItems.length);
     }
 
     createCheckboxFilter(filterName: string, listItems: string[]) {
@@ -99,27 +124,19 @@ class MainPage extends Page {
                 if(filterName === 'categories') {
                     if(this.pickedCategories.includes(item)) {
                         this.pickedCategories = this.pickedCategories.filter((el) => el !== item);
-                        const chosenItems = this.getFilteredItems();
-                        this.drawCards(chosenItems);
-                        this.getNumberItems(chosenItems.length);        
+                        this.drawChosenItems();      
                     } else {
                         this.pickedCategories.push(item);
-                        const chosenItems = this.getFilteredItems();
-                        this.drawCards(chosenItems);
-                        this.getNumberItems(chosenItems.length);  
+                        this.drawChosenItems();
                     }
                 }
                 if(filterName === 'brands') {
                     if(this.pickedBrands.includes(item)) {
                         this.pickedBrands = this.pickedBrands.filter((el) => el !== item);
-                        const chosenItems = this.getFilteredItems();
-                        this.drawCards(chosenItems);
-                        this.getNumberItems(chosenItems.length);  
+                        this.drawChosenItems();
                     } else {
                         this.pickedBrands.push(item);
-                        const chosenItems = this.getFilteredItems();
-                        this.drawCards(chosenItems);
-                        this.getNumberItems(chosenItems.length);  
+                        this.drawChosenItems();
                     }
                 }
             })
@@ -216,9 +233,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedPrice.min = val1;
-                    const chosenItems = this.getFilteredItems();
-                    this.drawCards(chosenItems);
-                    this.getNumberItems(chosenItems.length);
+                    this.drawChosenItems();
                 }   
             }
 
@@ -229,9 +244,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedStock.min = val1;
-                    const chosenItems = this.getFilteredItems();
-                    this.drawCards(chosenItems);
-                    this.getNumberItems(chosenItems.length);
+                    this.drawChosenItems();
                 }   
             } 
         })
@@ -244,9 +257,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedPrice.max = val2;
-                    const chosenItems = this.getFilteredItems();
-                    this.drawCards(chosenItems);
-                    this.getNumberItems(chosenItems.length); 
+                    this.drawChosenItems();
                 }   
             }
 
@@ -257,9 +268,7 @@ class MainPage extends Page {
                 const val2 = valueTwo.textContent;
                 if(val1 !== null && val2 !== null) {
                     this.pickedStock.max = val2;
-                    const chosenItems = this.getFilteredItems();
-                    this.drawCards(chosenItems);
-                    this.getNumberItems(chosenItems.length);
+                    this.drawChosenItems();
                 }   
             } 
         })
@@ -289,18 +298,43 @@ class MainPage extends Page {
         sliderTrack.style.background = `linear-gradient(to right, #efefef ${percentOne}%, #333e48 ${percentOne}%, #333e48 ${percentTwo}%, #efefef ${percentTwo}%)`;
     }
 
-
     private createLayoutButtons() {
         const buttonWrapper = document.createElement('div');
         buttonWrapper.className = 'layout';
 
         const buttonSquares = document.createElement('button');
-        buttonSquares.className = 'layout__button button_squares';
+        buttonSquares.className = 'layout__button button_squares active-layout';
         buttonWrapper.append(buttonSquares);
 
         const buttonLines = document.createElement('button');
         buttonLines.className = 'layout__button button_lines';
         buttonWrapper.append(buttonLines);
+
+        buttonSquares.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = <HTMLButtonElement>e.target; 
+            if(target.classList.contains('active-layout')) {
+                return;
+            }
+            target.classList.add('active-layout');
+            buttonLines.classList.remove('active-layout');
+            this.layout = 'squares';
+            const pickedItems = this.getFilteredItems();
+            this.drawCards(pickedItems);
+        })
+
+        buttonLines.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = <HTMLButtonElement>e.target; 
+            if(target.classList.contains('active-layout')) {
+                return;
+            }
+            target.classList.add('active-layout');
+            buttonSquares.classList.remove('active-layout');
+            this.layout = 'lines';
+            const pickedItems = this.getFilteredItems();
+            this.drawCards(pickedItems);
+        })
 
         return buttonWrapper;
     }
@@ -392,10 +426,10 @@ class MainPage extends Page {
         resetButton.className = 'filters__button button_reset';
         resetButton.textContent = 'Reset Filters';
 
-        resetButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            window.location.href = '#main-page';
-        })
+        // resetButton.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     window.location.href = '#main-page';
+        // })
 
         const linkButton = document.createElement('button');
         linkButton.className = 'filters__button button_link';
@@ -404,16 +438,28 @@ class MainPage extends Page {
         filterButtons.append(resetButton);
         filterButtons.append(linkButton);
         
-        return filterButtons;
+        this.filtersContainer.append(filterButtons);
     }
 
     drawCards(products: Product[]) { 
         this.cardsWrapper.innerHTML = '';
-        products.forEach((item) => {
-            const cardItem = new Card();
-            const card = cardItem.draw(item);
-            this.cardsWrapper.append(card);
-        })   
+        if(this.layout === 'lines') {
+            this.cardsWrapper.classList.add('long-cards');
+            products.forEach((item) => {
+                const cardItem = new CardLong();
+                const card = cardItem.draw(item);
+                this.cardsWrapper.append(card);
+            })
+        } else {
+            if(this.cardsWrapper.classList.contains('long-cards')) {
+                this.cardsWrapper.classList.remove('long-cards');
+            }
+            products.forEach((item) => {
+                const cardItem = new Card();
+                const card = cardItem.draw(item);
+                this.cardsWrapper.append(card);
+            })   
+        }
     }
 
     getNumberItems(num: number) {
@@ -456,8 +502,7 @@ class MainPage extends Page {
 
         this.createDualFilter('stock', '0', '160');
 
-        const filtersButtons = this.createFilterButtons();
-        this.filtersContainer.append(filtersButtons);
+        this.createFilterButtons();
 
         const content = document.createElement('div');
         content.className = 'content';
