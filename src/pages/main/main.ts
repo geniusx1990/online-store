@@ -98,37 +98,6 @@ class MainPage extends Page {
         }
     }
 
-    // getParams() {
-    //     const urlStr = window.location.pathname;
-
-    //     const url = urlStr.split('?')[0];
-
-    //     const paramsArr = Object.entries(this.params);
-
-    //     let resArr = paramsArr.map((item) => {
-    //         const [param, values] = item;
-    //         let resultValues;
-    //         if(values.length === 0) {
-    //             return '';
-    //         }
-
-    //         if(Array.isArray(values)) {
-    //             resultValues = values.join(',')
-    //         }else {
-    //             resultValues = values;
-    //         }
-    //         return `${param}=${values}`;
-    //     })
-
-    //     resArr = resArr.filter((item) => item.length !== 0); 
-
-    //     const paramsUrl = `?${resArr.join('&')}`;
-
-    //     const endUrl = url + paramsUrl;
-        
-    //     window.history.pushState({}, '', endUrl);
-    // }
-
     drawChosenItems() {
         const chosenItems = this.getFilteredItems();
         this.drawCards(chosenItems);
@@ -387,14 +356,24 @@ class MainPage extends Page {
         resetButton.className = 'filters__button button_reset';
         resetButton.textContent = 'Reset Filters';
 
-        // resetButton.addEventListener('click', (e) => {
-        //     e.preventDefault();
-        //     window.location.href = '#main-page';
-        // })
+        resetButton.addEventListener('click', (e) => {
+            e.preventDefault();
+
+        })
 
         const linkButton = document.createElement('button');
         linkButton.className = 'filters__button button_link';
         linkButton.textContent = 'Copy Link';
+
+        linkButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = window.location.href;
+            localStorage.pathName = JSON.stringify(url);
+            linkButton.textContent = 'Copied!';
+            setTimeout(() => {
+                linkButton.textContent = 'Copy Link';
+            }, 1000)
+        })
 
         filterButtons.append(resetButton);
         filterButtons.append(linkButton);
@@ -591,6 +570,10 @@ class MainPage extends Page {
     hideNotFound() {
         const notFound = <HTMLHeadingElement>document.querySelector('.not-found');
         notFound.style.display = 'none';
+    }
+
+    restoreSavedParameters() {
+
     }
 
     draw() {
