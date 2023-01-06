@@ -85,10 +85,22 @@ class CartPage extends Page {
         productsTitle.textContent = 'Products: ';
         productsCounter.append(productsTitle);
 
+        let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+        let sum = 0;
+        let sumCount = 0;
+        for (let i = 0; i < finalSumLocalStorage.length; i++) {
+            if (finalSumLocalStorage[i]['count'] == undefined) {
+                finalSumLocalStorage[i]['count'] = 1;
+            }
+            sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+            sumCount += finalSumLocalStorage[i]['count'];
+        }
+
         const productsNumber = document.createElement('span');
         productsNumber.className = 'summary__products-number';
         const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
-        productsNumber.textContent = storageProducts.length.toString() || '0';
+        
+        productsNumber.textContent = `${sumCount}`;
         productsCounter.append(productsNumber);
 
         const total = document.createElement('div');
@@ -103,7 +115,10 @@ class CartPage extends Page {
         const totalNumber = document.createElement('span');
         totalNumber.className = 'summary__total-number';
         const storageSum: number = storageProducts.reduce((sum: number, el: Product) => sum + el.price, 0);
-        totalNumber.textContent = `$${storageSum}` || '$0';
+
+
+
+        totalNumber.textContent = `$${sum}` || '$0';
         total.append(totalNumber);
 
         const promo = document.createElement('div');

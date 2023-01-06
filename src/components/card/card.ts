@@ -78,7 +78,19 @@ class Card {
         } else {
             itemsInStorage.push(product);
             localStorage.cartItems = JSON.stringify(itemsInStorage);
-            productsCounter.textContent = itemsInStorage.length.toString();
+
+            let test = JSON.parse(localStorage.cartItems);
+            let sumOfItems = 0;
+            for (let i = 0; i < test.length; i++) {
+                if (test[i]['count'] == undefined) {
+                    test[i]['count'] = 1;
+                }
+                sumOfItems += test[i]['count'];
+                console.log(test[i]['count'])
+            }
+            productsCounter.textContent = `${sumOfItems}`;
+
+            //productsCounter.textContent = itemsInStorage.length.toString();
         }
        
     }
