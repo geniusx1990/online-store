@@ -48,10 +48,6 @@ class Card {
         rating.textContent = `Rating: ${product.rating}`;
         cardInfo.append(rating);
 
-        // const cardDescription = document.createElement('p');
-        // cardDescription.className = 'description';
-        // cardDescription.textContent = product.description;
-        // cardInfo.append(cardDescription);
         this.container.append(cardInfo);
 
         const priceContent = document.createElement('div');
@@ -66,10 +62,6 @@ class Card {
         const addCart = document.createElement('span');
         addCart.className = 'add-to-cart';
         priceContent.append(addCart);
-
-        // addCart.addEventListener('click', () => {
-        //     this.addToCart(product);
-        // })
 
         this.container.addEventListener('click', (e) => {
             console.log(e.target)
@@ -94,8 +86,7 @@ class Card {
             itemsInStorage.push(product);
             localStorage.cartItems = JSON.stringify(itemsInStorage);
             productsCounter.textContent = itemsInStorage.length.toString();
-        }
-       
+        }  
     }
 
 }

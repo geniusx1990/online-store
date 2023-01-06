@@ -15,8 +15,10 @@ class MainPage extends Page {
     pickedItems: Product[];
     pickedPrice: { min: string; max: string; };
     pickedStock: { min: string; max: string; };
-    params: { categories: string[]; brands: string[]; price: { min: string; max: string; }; stock: { min: string; max: string; }; };
     layout: string;
+    searchParam: string;
+    sortParam: string;
+    params: { categories: string[]; brands: string[]; sort: string; search: string; layout: string; };
     
     constructor(pageName: string) {
         super(pageName);
@@ -30,16 +32,24 @@ class MainPage extends Page {
         this.pickedItems = [];
         this.pickedPrice = {min: '0', max: '2000'};
         this.pickedStock = {min: '0', max: '160'};
+        this.searchParam = '';
+        this.sortParam = '';
+        this.layout = 'squares';
         this.params = {
             categories: this.pickedCategories,
             brands: this.pickedBrands,
-            price: this.pickedPrice,
-            stock: this.pickedStock
+            sort: this.sortParam,
+            search: this.searchParam,
+            layout: this.layout
         }
-        this.layout = 'squares';
+        
     }
 
+
     getFilteredItems() {
+
+        this.hideNotFound();
+
         const prods: Product[] = [...products.products];
         let res: Product[] = [];
         if(this.pickedCategories.length === 0) {
@@ -73,23 +83,65 @@ class MainPage extends Page {
         const maxStock = this.pickedStock.max;
         picked = picked.filter((item) => +item.stock >= +minStock && +item.stock <= +maxStock);
 
-        // this.getParams()
+        if(picked.length === 0) {
+            this.showNotFound();
+        }
+
+        this.getParams()
         // console.log(window.location.href)
         return picked;
     }
 
+    drawCards(products: Product[]) { 
+        this.cardsWrapper.innerHTML = '';
+        if(this.layout === 'lines') {
+            this.cardsWrapper.classList.add('long-cards');
+            products.forEach((item) => {
+                const cardItem = new CardLong();
+                const card = cardItem.draw(item);
+                this.cardsWrapper.append(card);
+            })
+        } else {
+            if(this.cardsWrapper.classList.contains('long-cards')) {
+                this.cardsWrapper.classList.remove('long-cards');
+            }
+            products.forEach((item) => {
+                const cardItem = new Card();
+                const card = cardItem.draw(item);
+                this.cardsWrapper.append(card);
+            })   
+        }
+    }
+
     getParams() {
-        const url = new URL(window.location.href);
+        const urlStr = window.location.pathname;
 
-        if(this.pickedCategories.length > 0) {
-            url.searchParams.set('category', this.pickedCategories.join(','));
-        }
+        const url = urlStr.split('?')[0];
 
-        if(this.pickedBrands.length > 0) {
-            url.searchParams.set('brand', this.pickedBrands.join(','));
-        }
+        const paramsArr = Object.entries(this.params);
+
+        let resArr = paramsArr.map((item) => {
+            const [param, values] = item;
+            let resultValues;
+            if(values.length === 0) {
+                return '';
+            }
+
+            if(Array.isArray(values)) {
+                resultValues = values.join(',')
+            }else {
+                resultValues = values;
+            }
+            return `${param}=${values}`;
+        })
+
+        resArr = resArr.filter((item) => item.length !== 0); 
+
+        const paramsUrl = `?${resArr.join('&')}`;
+
+        const endUrl = url + paramsUrl;
         
-        window.history.pushState({}, '', url);
+        window.history.pushState({}, '', endUrl);
     }
 
     drawChosenItems() {
@@ -98,7 +150,8 @@ class MainPage extends Page {
         this.getNumberItems(chosenItems.length);
     }
 
-    createCheckboxFilter(filterName: string, listItems: string[]) {
+    // Filters' block
+    private createCheckboxFilter(filterName: string, listItems: string[]) {
         const filterWrapper = document.createElement('div');
         filterWrapper.className = `${filterName}`;
 
@@ -166,7 +219,7 @@ class MainPage extends Page {
         this.filtersContainer.append(filterWrapper);
     }
 
-    createDualFilter(title: string, minValue: string, maxValue: string) {
+    private createDualFilter(title: string, minValue: string, maxValue: string) {
         const filterWrapper = document.createElement('div');
         filterWrapper.className = `filters__${title}-slider-container`;
 
@@ -236,7 +289,6 @@ class MainPage extends Page {
                     this.drawChosenItems();
                 }   
             }
-
             if(title === 'stock') {
                 const valueOne = <HTMLSpanElement>document.querySelector('.stock-slider__value-one');
                 const val1 = valueOne.textContent;
@@ -260,7 +312,6 @@ class MainPage extends Page {
                     this.drawChosenItems();
                 }   
             }
-
             if(title === 'stock') {
                 const valueOne = <HTMLSpanElement>document.querySelector('.stock-slider__value-one');
                 const val1 = valueOne.textContent;
@@ -296,6 +347,114 @@ class MainPage extends Page {
         let percentOne = (parseInt(sliderOne.value) / parseInt(maxValue)) * 100;
         let percentTwo = (parseInt(sliderTwo.value) / parseInt(maxValue)) * 100;
         sliderTrack.style.background = `linear-gradient(to right, #efefef ${percentOne}%, #333e48 ${percentOne}%, #333e48 ${percentTwo}%, #efefef ${percentTwo}%)`;
+    }
+
+    private createFilterButtons() {
+        const filterButtons = document.createElement('div');
+        filterButtons.className = 'filters__buttons';
+
+        const resetButton = document.createElement('button');
+        resetButton.className = 'filters__button button_reset';
+        resetButton.textContent = 'Reset Filters';
+
+        // resetButton.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     window.location.href = '#main-page';
+        // })
+
+        const linkButton = document.createElement('button');
+        linkButton.className = 'filters__button button_link';
+        linkButton.textContent = 'Copy Link';
+
+        filterButtons.append(resetButton);
+        filterButtons.append(linkButton);
+        
+        this.filtersContainer.append(filterButtons);
+    }
+
+    // Search block
+    private createSearchBar() {
+        const searchWrapper = document.createElement('form');
+        searchWrapper.className = 'search';
+
+        const searchInput = document.createElement('input');
+        searchInput.className = 'search__input';
+        searchInput.type = 'search';
+        searchInput.placeholder = 'Search...';
+        searchWrapper.append(searchInput)
+
+        const searchButton = document.createElement('button');
+        searchButton.type = 'submit';
+        searchButton.className = 'search__button';
+        searchWrapper.append(searchButton);
+
+        searchButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const searchValue = searchInput.value;
+            this.searchParam = searchValue;
+            this.searchItems(searchValue);
+        });
+
+        return searchWrapper; 
+    }
+
+    searchItems(value: string) {
+        if(value.length === 0) {
+            this.hideNotFound();
+        }
+        const chosenItems = this.getFilteredItems();
+        const itemsFound = chosenItems.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
+        || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
+        || item.category.toLowerCase().includes(value.toLowerCase()) || item.price.toString().includes(value.toLowerCase())
+        || item.stock.toString().includes(value.toLowerCase()));
+        if(itemsFound.length === 0) {
+            this.showNotFound();
+        }
+        this.drawCards(itemsFound);
+        this.getNumberItems(itemsFound.length);
+    }
+
+    private createSorting() {
+        const sortOptions = ['Select sorting options','Sort by price ascending', 'Sort by price descending', 'Sort by brand, A-Z', 'Sort by brand, Z-A'];
+        const select = document.createElement('select');
+        select.className = 'sorting';
+        select.name = 'sort';
+
+        sortOptions.forEach(item => {
+            const option = document.createElement('option');
+            option.className = 'sort__option';
+            option.value = item;
+            option.textContent = item;
+            select.append(option);
+        })
+
+        select.addEventListener('change', (e) => {
+            const target = <HTMLOptionElement>e.target;
+            const chosenItems = this.getFilteredItems();
+            const newArr = this.sortItems(chosenItems, target.value);
+            this.drawCards(newArr);
+        })
+        return select;
+    }
+
+    sortItems(items: Product[], value: string) {
+        if(value === 'Sort by price ascending') {
+            items.sort((item1, item2) => item1.price - item2.price);
+            this.sortParam = 'ASC';
+        }
+        else if(value === 'Sort by price descending') {
+            items.sort((item1, item2) => item2.price - item1.price);
+            this.sortParam = 'DES';
+        }
+        else if(value === 'Sort by brand, A-Z') {
+            items.sort((item1, item2) => item1.brand.localeCompare(item2.brand));
+            this.sortParam = 'A-Z';
+        }
+        else if(value === 'Sort by brand, Z-A') {
+            items.sort((item1, item2) => item2.brand.localeCompare(item1.brand));
+            this.sortParam = 'Z-A';
+        } 
+        return items;
     }
 
     private createLayoutButtons() {
@@ -339,129 +498,7 @@ class MainPage extends Page {
         return buttonWrapper;
     }
 
-    private createSearchBar() {
-        const searchWrapper = document.createElement('form');
-        searchWrapper.className = 'search';
-
-        const searchInput = document.createElement('input');
-        searchInput.className = 'search__input';
-        searchInput.type = 'search';
-        searchInput.placeholder = 'Search...';
-        searchWrapper.append(searchInput)
-
-        const searchButton = document.createElement('button');
-        searchButton.type = 'submit';
-        searchButton.className = 'search__button';
-        searchWrapper.append(searchButton);
-
-        searchButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const searchParam = searchInput.value;
-            this.searchItems(searchParam);
-        });
-
-        return searchWrapper; 
-    }
-
-    searchItems(value: string) {
-        if(value.length === 0) {
-            this.hideNotFound();
-        }
-        const chosenItems = this.getFilteredItems();
-        const itemsFound = chosenItems.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
-        || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
-        || item.category.toLowerCase().includes(value.toLowerCase()) || item.price.toString().includes(value.toLowerCase())
-        || item.stock.toString().includes(value.toLowerCase()));
-        if(itemsFound.length === 0) {
-            this.showNotFound();
-        }
-        this.drawCards(itemsFound);
-        this.getNumberItems(itemsFound.length);
-    }
-
-    createSorting() {
-        const sortOptions = ['Select sorting options','Sort by price ascending', 'Sort by price descending', 'Sort by brand, A-Z', 'Sort by brand, Z-A'];
-        const select = document.createElement('select');
-        select.className = 'sorting';
-        select.name = 'sort';
-
-        sortOptions.forEach(item => {
-            const option = document.createElement('option');
-            option.className = 'sort__option';
-            option.value = item;
-            option.textContent = item;
-            select.append(option);
-        })
-
-        select.addEventListener('change', (e) => {
-            const target = <HTMLOptionElement>e.target;
-            const chosenItems = this.getFilteredItems();
-            const newArr = this.sortItems(chosenItems, target.value);
-            this.drawCards(newArr);
-        })
-        return select;
-    }
-
-    sortItems(items: Product[], value: string) {
-        if(value === 'Sort by price ascending') {
-            items.sort((item1, item2) => item1.price - item2.price);
-        }
-        else if(value === 'Sort by price descending') {
-            items.sort((item1, item2) => item2.price - item1.price);
-        }
-        else if(value === 'Sort by brand, A-Z') {
-            items.sort((item1, item2) => item1.brand.localeCompare(item2.brand));
-        }
-        else if(value === 'Sort by brand, Z-A') {
-            items.sort((item1, item2) => item2.brand.localeCompare(item1.brand));
-        } 
-        return items;
-    }
-
-    private createFilterButtons() {
-        const filterButtons = document.createElement('div');
-        filterButtons.className = 'filters__buttons';
-
-        const resetButton = document.createElement('button');
-        resetButton.className = 'filters__button button_reset';
-        resetButton.textContent = 'Reset Filters';
-
-        // resetButton.addEventListener('click', (e) => {
-        //     e.preventDefault();
-        //     window.location.href = '#main-page';
-        // })
-
-        const linkButton = document.createElement('button');
-        linkButton.className = 'filters__button button_link';
-        linkButton.textContent = 'Copy Link';
-
-        filterButtons.append(resetButton);
-        filterButtons.append(linkButton);
-        
-        this.filtersContainer.append(filterButtons);
-    }
-
-    drawCards(products: Product[]) { 
-        this.cardsWrapper.innerHTML = '';
-        if(this.layout === 'lines') {
-            this.cardsWrapper.classList.add('long-cards');
-            products.forEach((item) => {
-                const cardItem = new CardLong();
-                const card = cardItem.draw(item);
-                this.cardsWrapper.append(card);
-            })
-        } else {
-            if(this.cardsWrapper.classList.contains('long-cards')) {
-                this.cardsWrapper.classList.remove('long-cards');
-            }
-            products.forEach((item) => {
-                const cardItem = new Card();
-                const card = cardItem.draw(item);
-                this.cardsWrapper.append(card);
-            })   
-        }
-    }
-
+    // additional functions
     getNumberItems(num: number) {
         const numberCards = <HTMLSpanElement>document.querySelector('.items-found__number');
         numberCards.textContent = `${num}`;
