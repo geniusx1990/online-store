@@ -89,8 +89,13 @@ class CardLong {
                 addCart.className = 'add-to-cart added-to-cart';
             } 
         }
-        
-        this.container.append(addCart);
+
+        buttonContainer.append(addCart);
+
+        const inStock = document.createElement('h4');
+        inStock.className = 'product-item__stock';
+        inStock.textContent = `In stock: ${product.stock}`;
+        buttonContainer.append(inStock);
 
         this.container.addEventListener('click', (e) => {
             console.log(e.target)
