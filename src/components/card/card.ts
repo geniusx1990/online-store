@@ -60,17 +60,24 @@ class Card {
         priceContent.append(stockCard);
 
         const addCart = document.createElement('span');
+
+        let addToCartButtonColor = JSON.parse(localStorage.cartItems)
         addCart.className = 'add-to-cart';
+
+        for (let i = 0; i < addToCartButtonColor.length; i++) {
+            if (addToCartButtonColor[i]['id'] === product.id) {
+                addCart.className = 'add-to-cart added-to-cart';
+            } 
+        }
+        
         priceContent.append(addCart);
 
         this.container.addEventListener('click', (e) => {
 
-            console.log(e.target)
             const target = <HTMLElement>e.target;
             if (target.classList.contains('add-to-cart')) {
                 target.classList.toggle('added-to-cart')
                 if (target.classList.contains('added-to-cart')) {
-                    console.log('aaa')
                     this.addToCart(product)
                     let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
                     let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
@@ -108,25 +115,6 @@ class Card {
 
             }
 
-            /* if(target.classList.contains('add-to-cart')) {
-                target.classList.toggle('added-to-cart');
-                this.addToCart(product)
-
-
-                let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
-                let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
-                let sum = 0;
-                for (let i = 0; i < finalSumLocalStorage.length; i++) {
-                    if (finalSumLocalStorage[i]['count'] == undefined) {
-                        finalSumLocalStorage[i]['count'] = 1;
-                    }
-                    sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
-                }
-                headerTotalSum.textContent = `${sum} $`;
-
-            } else {
-                window.location.href = `#product-page/${product.id}`;
-            }  */
         })
 
         return this.container;
@@ -148,7 +136,6 @@ class Card {
                     test[i]['count'] = 1;
                 }
                 sumOfItems += test[i]['count'];
-                console.log(test[i]['count'])
             }
             productsCounter.textContent = `${sumOfItems}`;
 
