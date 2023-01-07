@@ -70,7 +70,18 @@ class Header {
 
         const totalSum = document.createElement('span');
         totalSum.className = 'header__total-sum';
-        totalSum.textContent = '';
+        let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+        let sum = 0;
+        for (let i = 0; i < finalSumLocalStorage.length; i++) {
+            if (finalSumLocalStorage[i]['count'] == undefined) {
+                finalSumLocalStorage[i]['count'] = 1;
+            }
+            sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+
+        }
+
+        totalSum.textContent = `${sum} $`;
+        
 
         cartTotal.appendChild(totalText);
         cartTotal.appendChild(totalSum);

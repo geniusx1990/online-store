@@ -74,9 +74,10 @@ class CartProduct {
 
         leftButton.addEventListener('click', (e) => {
             count = Number(productsNumber.textContent);
-            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number')
-            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number')
-            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number')
+            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number');
+            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number');
+            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number');
+            let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
 
             e.preventDefault();
 
@@ -114,8 +115,9 @@ class CartProduct {
             finalSum.textContent = `$ ${sum}`;
             sumCountDisplay.textContent = `${sumCount}`
             sumCountDisplayHeader.textContent = `${sumCount}`;
-            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
+            headerTotalSum.textContent = `${sum} $`;
 
+            priceSum.textContent = (countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].count * countNumberDisplay.filter((item: Product) => item.id === this.product.id)[0].price).toString();
             stockNumber.textContent = (Number(stockNumber.textContent) + 1).toString();
 
         })
@@ -141,9 +143,11 @@ class CartProduct {
 
             e.preventDefault();
             count = Number(productsNumber.textContent);
-            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number')
-            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number')
-            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number')
+            let finalSum = <HTMLDivElement>document.querySelector('.summary__total-number');
+            let sumCountDisplay = <HTMLDivElement>document.querySelector('.summary__products-number');
+            let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number');
+            let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
+
 
             count = count + 1;
             let test = JSON.parse(localStorage.cartItems);
@@ -169,6 +173,7 @@ class CartProduct {
             finalSum.textContent = `$ ${sum}`;
             sumCountDisplay.textContent = `${sumCount}`
             sumCountDisplayHeader.textContent = `${sumCount}`;
+            headerTotalSum.textContent = `${sum} $`;
 
 
             let countNumberDisplay = JSON.parse(localStorage.cartItems)
