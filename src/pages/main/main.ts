@@ -18,12 +18,15 @@ class MainPage extends Page {
     layout: string;
     sort: string;
     search: string;
+    sortingWrapper: any;
     
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
         this.filtersContainer = document.createElement('div');
         this.filtersContainer.className = 'main__filters filters';
+        this.sortingWrapper = document.createElement('div');
+        this.sortingWrapper.className = 'sorting-wrapper';
         this.cardsWrapper = document.createElement('div');
         this.cardsWrapper.className = 'cards';
         this.pickedCategories = [];
@@ -146,26 +149,45 @@ class MainPage extends Page {
             }
         })
 
+        this.pickedCategories = [];
+        this.pickedBrands = [];
+
         const priceSliderContainer = <HTMLDivElement>document.querySelector('.filters__price-slider-container');
         this.filtersContainer.removeChild(priceSliderContainer);
+        this.pickedPrice.min = '0';
+        this.pickedPrice.max = '2000';
 
         const stockSliderContainer = <HTMLDivElement>document.querySelector('.filters__stock-slider-container');
         this.filtersContainer.removeChild(stockSliderContainer);
+        this.pickedStock.min = '0';
+        this.pickedStock.max = '160';
 
         const buttonsContainer = <HTMLDivElement>document.querySelector('.filters__buttons');
         this.filtersContainer.removeChild(buttonsContainer);
+
+        const sorting = <HTMLSelectElement>document.querySelector('.sorting');
+        this.sortingWrapper.removeChild(sorting);
+        this.sort = '';
+
+        const searchInput = <HTMLInputElement>document.querySelector('.search__input');
+        searchInput.value = '';
+        this.search = '';
 
         const url = new URL(window.location.href);
         url.searchParams.delete('category');
         url.searchParams.delete('brand');
         url.searchParams.delete('price');
         url.searchParams.delete('stock');
+        // url.searchParams.delete('layout');
+        url.searchParams.delete('sort');
+        url.searchParams.delete('search');
         window.history.pushState(null, '', url);
 
         // this.hideNotFound();
         this.createDualFilter('price', '0', '2000');
         this.createDualFilter('stock', '0', '160');
         this.createFilterButtons();
+        this.createSorting();
         this.drawCards(products.products);
         this.getNumberItems(products.products.length);
     }
@@ -516,7 +538,7 @@ class MainPage extends Page {
 
         const param: string = url.searchParams.get('search') || '';
         if(param) {
-            if(value.length === 0){
+            if(value.length === 0 || this.search === ''){
                 url.searchParams.delete('search');
             } else {
                 url.searchParams.delete('search');
@@ -634,7 +656,7 @@ class MainPage extends Page {
             this.addParamsForSorting(sortAbbr[abbrIndex - 1]);
             this.drawCards(newArr);
         })
-        return select;
+        this.sortingWrapper.prepend(select);
     }
 
     sortItems(items: Product[], value: string) {
@@ -701,7 +723,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonLines.classList.remove('active-layout');
             this.layout = 'squares';
-            this. addParamsForLayout(this.layout);
+            this.addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })
@@ -715,7 +737,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonSquares.classList.remove('active-layout');
             this.layout = 'lines';
-            this. addParamsForLayout(this.layout);
+            this.addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })
@@ -770,15 +792,12 @@ class MainPage extends Page {
         content.className = 'content';
         main.append(content);
 
-        const sortingWrapper = document.createElement('div');
-        sortingWrapper.className = 'sorting-wrapper';
-        content.prepend(sortingWrapper);
+        content.prepend(this.sortingWrapper);
 
-        const sortMain = this.createSorting();
-        sortingWrapper.append(sortMain);
+        this.createSorting();
 
         const search = this.createSearchBar();
-        sortingWrapper.append(search);
+        this.sortingWrapper.append(search);
 
         const itemsFound = document.createElement('div');
         itemsFound.className = 'items-found';
@@ -802,7 +821,7 @@ class MainPage extends Page {
         }
 
         const layoutButtons = this.createLayoutButtons();
-        sortingWrapper.append(layoutButtons);
+        this.sortingWrapper.append(layoutButtons);
 
         content.append(this.cardsWrapper);
 

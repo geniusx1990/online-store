@@ -172,6 +172,7 @@ class CartPage extends Page {
         nameInput.className = 'form__name';
         nameInput.type = 'text';
         nameInput.placeholder = 'Name';
+        nameInput.pattern = '\b[a-zA-Z]{3,20}[a-zA-Z]\b\s\b[a-zA-Z]{3,20}[a-zA-Z]\b(\s/-)\b[a-zA-Z]*\b'; // под вопросом
         nameInput.required = true;
         formContainer.append(nameInput);
         
@@ -179,6 +180,7 @@ class CartPage extends Page {
         phoneInput.className = 'form__phone';
         phoneInput.type = 'tel';
         phoneInput.placeholder = 'Phone number';
+        phoneInput.pattern = '\+?[0-9\s\-\(\)]+'
         phoneInput.required = true;
         formContainer.append(phoneInput);
         
@@ -213,6 +215,7 @@ class CartPage extends Page {
         const cardNumberInput = document.createElement('input');
         cardNumberInput.id = 'card-number';
         cardNumberInput.type = 'number';
+        cardNumberInput.pattern = '[0-9]{16}';
         cardNumberInput.required = true;
         cardInfo.append(cardNumberInput);
 
@@ -227,7 +230,8 @@ class CartPage extends Page {
 
         const cardValidInput = document.createElement('input');
         cardValidInput.id = 'valid';
-        cardValidInput.type = 'date';
+        cardValidInput.type = 'number';
+        cardValidInput.pattern = '(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])';
         cardValidInput.required = true;
         cardsAdd.append(cardValidInput);
 
@@ -239,6 +243,7 @@ class CartPage extends Page {
         const cardCvvInput = document.createElement('input');
         cardCvvInput.id = 'cvv';
         cardCvvInput.type = 'number';
+        cardCvvInput.pattern = '[0-9]{3}';
         cardCvvInput.required = true;
         cardsAdd.append(cardCvvInput);
 
