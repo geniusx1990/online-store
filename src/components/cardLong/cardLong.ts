@@ -1,5 +1,5 @@
 import './cardLong.css';
-import {Product} from '../../utils/types';
+import { Product } from '../../utils/types';
 
 class CardLong {
     private container: HTMLElement;
@@ -61,7 +61,7 @@ class CardLong {
     }
 
     draw(product: Product) {
-        
+
         const imageWrapper = document.createElement('div');
         imageWrapper.className = 'product-item__image-wrapper';
         this.container.append(imageWrapper);
@@ -80,22 +80,59 @@ class CardLong {
 
         const addCart = document.createElement('span');
         addCart.className = 'add-to-cart';
-        buttonContainer.append(addCart);
 
-        const inStock = document.createElement('h4');
-        inStock.className = 'product-item__stock';
-        inStock.textContent = `In stock: ${product.stock}`;
-        buttonContainer.append(inStock);
+        let addToCartButtonColor = JSON.parse(localStorage.cartItems)
+        addCart.className = 'add-to-cart';
+
+        for (let i = 0; i < addToCartButtonColor.length; i++) {
+            if (addToCartButtonColor[i]['id'] === product.id) {
+                addCart.className = 'add-to-cart added-to-cart';
+            } 
+        }
+        
+        this.container.append(addCart);
 
         this.container.addEventListener('click', (e) => {
             console.log(e.target)
             const target = <HTMLElement>e.target;
-            if(target.classList.contains('add-to-cart')) {
-                target.classList.add('added-to-cart');
-                this.addToCart(product)
+            if (target.classList.contains('add-to-cart')) {
+                target.classList.toggle('added-to-cart')
+                if (target.classList.contains('added-to-cart')) {
+                    this.addToCart(product)
+                    let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
+                    let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+                    let sum = 0;
+                    for (let i = 0; i < finalSumLocalStorage.length; i++) {
+                        if (finalSumLocalStorage[i]['count'] == undefined) {
+                            finalSumLocalStorage[i]['count'] = 1;
+                        }
+                        sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+                    }
+                    headerTotalSum.textContent = `$${sum}`;
+                } else if (target.classList.contains('add-to-cart')) {
+                    let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+                    localStorage.cartItems = JSON.stringify(itemsInStorage)
+                    let newItemStorage = itemsInStorage.filter((item: Product) => item.id !== product.id);
+                    localStorage.removeItem('cartItems')
+                    localStorage.cartItems = JSON.stringify(newItemStorage);
+                    let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
+                    let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number');
+                    let finalSumLocalStorage = JSON.parse(localStorage.cartItems)
+                    let sum = 0;
+                    let sumCount = 0;
+                    for (let i = 0; i < finalSumLocalStorage.length; i++) {
+                        if (finalSumLocalStorage[i]['count'] == undefined) {
+                            finalSumLocalStorage[i]['count'] = 1;
+                        }
+                        sum += finalSumLocalStorage[i]['count'] * finalSumLocalStorage[i]['price'];
+                        sumCount += finalSumLocalStorage[i]['count'];
+                    }
+                    headerTotalSum.textContent = `${sum} $`;
+                    sumCountDisplayHeader.textContent = `${sumCount}`
+                }
             } else {
                 window.location.href = `#product-page/${product.id}`;
-            } 
+            }
         })
 
         return this.container;
@@ -104,14 +141,23 @@ class CardLong {
     addToCart(product: Product) {
         const productsCounter = <HTMLDivElement>document.querySelector('.header__products-number');
         let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
-        if(itemsInStorage.some((item: Product) => item.id === product.id)) {
+        if (itemsInStorage.some((item: Product) => item.id === product.id)) {
             return;
         } else {
             itemsInStorage.push(product);
             localStorage.cartItems = JSON.stringify(itemsInStorage);
-            productsCounter.textContent = itemsInStorage.length.toString();
+
+            let test = JSON.parse(localStorage.cartItems);
+            let sumOfItems = 0;
+            for (let i = 0; i < test.length; i++) {
+                if (test[i]['count'] == undefined) {
+                    test[i]['count'] = 1;
+                }
+                sumOfItems += test[i]['count'];
+            }
+            productsCounter.textContent = `${sumOfItems}`;
         }
-       
+
     }
 
 }
