@@ -42,12 +42,17 @@ class CardLong {
         extraInfo.className = 'product-item__extra';
         productInfo.append(extraInfo);
 
-        const rating = document.createElement('div');
+        const category = document.createElement('h5');
+        category.className = 'product-item__category';
+        category.textContent = `Category: ${product.category}`;
+        extraInfo.append(category);
+
+        const rating = document.createElement('h5');
         rating.className = 'product-item__rating';
         rating.textContent = `Rating: ${product.rating}`;
         extraInfo.append(rating);
 
-        const discount = document.createElement('div');
+        const discount = document.createElement('h5');
         discount.className = 'product-item__discount';
         discount.textContent = `Discount: ${product.discountPercentage}%`;
         extraInfo.append(discount);
@@ -69,9 +74,18 @@ class CardLong {
 
         this.createProductInfo(product);
 
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'product-item__button-container';
+        this.container.append(buttonContainer);
+
         const addCart = document.createElement('span');
         addCart.className = 'add-to-cart';
-        this.container.append(addCart);
+        buttonContainer.append(addCart);
+
+        const inStock = document.createElement('h4');
+        inStock.className = 'product-item__stock';
+        inStock.textContent = `In stock: ${product.stock}`;
+        buttonContainer.append(inStock);
 
         this.container.addEventListener('click', (e) => {
             console.log(e.target)
