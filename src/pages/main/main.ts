@@ -701,7 +701,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonLines.classList.remove('active-layout');
             this.layout = 'squares';
-            this. addParamsForLayout(this.layout);
+            this.addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })
@@ -715,7 +715,7 @@ class MainPage extends Page {
             target.classList.add('active-layout');
             buttonSquares.classList.remove('active-layout');
             this.layout = 'lines';
-            this. addParamsForLayout(this.layout);
+            this.addParamsForLayout(this.layout);
             const pickedItems = this.getFilteredItems();
             this.drawCards(pickedItems);
         })
