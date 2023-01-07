@@ -74,12 +74,10 @@
     background-position: center;
     cursor: pointer;
     transition: 0.5s;
-    /* -webkit-box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0); 
-    box-shadow: 0px 10px 13px -7px #000000, 5px 5px 15px 5px rgba(0,0,0,0); */
 }
 
 .add-to-cart:hover {
-    background:  url('../../assets/svg/cart-icon-white.png'), #E9C808;
+    background:  url('../../assets/svg/cart-icon-white.png'), #e7c400;
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;

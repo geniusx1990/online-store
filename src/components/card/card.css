@@ -77,7 +77,7 @@
 }
 
 .add-to-cart:hover {
-    background:  url('../../assets/svg/cart-icon-white.png'), #E9C808;
+    background:  url('../../assets/svg/cart-icon-white.png'), #e7c400;
     background-size: 60%;
     background-repeat: no-repeat;
     background-position: center;

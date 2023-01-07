@@ -146,6 +146,11 @@
     font-size: 16px;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.5s;
+}
+
+.filters__button:hover {
+    background-color: #e7c400;
 }
 
 .categories__title,

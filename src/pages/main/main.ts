@@ -129,6 +129,39 @@ class MainPage extends Page {
         window.history.pushState(null, '', url);
     }
 
+    resetAllFilters() {
+        const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('.list-item__checkbox');
+        checkboxes.forEach((checkbox) => {
+            if(checkbox.checked === true) {
+                checkbox.checked = false;
+            }
+        })
+
+        const priceSliderContainer = <HTMLDivElement>document.querySelector('.filters__price-slider-container');
+        this.filtersContainer.removeChild(priceSliderContainer);
+
+        const stockSliderContainer = <HTMLDivElement>document.querySelector('.filters__stock-slider-container');
+        this.filtersContainer.removeChild(stockSliderContainer);
+
+        const buttonsContainer = <HTMLDivElement>document.querySelector('.filters__buttons');
+        this.filtersContainer.removeChild(buttonsContainer);
+
+        this.createDualFilter('price', '0', '2000');
+        this.createDualFilter('stock', '0', '160');
+        this.createFilterButtons();
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete('category');
+        url.searchParams.delete('brand');
+        url.searchParams.delete('price');
+        url.searchParams.delete('stock');
+        window.history.pushState(null, '', url);
+
+        this.hideNotFound();
+        this.drawCards(products.products);
+        this.getNumberItems(products.products.length);
+    }
+
     private createCheckboxFilter(filterName: string, listItems: string[]) {
         const filterWrapper = document.createElement('div');
         filterWrapper.className = `${filterName}`;
@@ -358,7 +391,7 @@ class MainPage extends Page {
 
         resetButton.addEventListener('click', (e) => {
             e.preventDefault();
-
+            this.resetAllFilters();
         })
 
         const linkButton = document.createElement('button');
