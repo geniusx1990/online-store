@@ -218,7 +218,7 @@ class CartPage extends Page {
         buyButton.addEventListener('click', (e) => {
             e.preventDefault();
             const modal = new Modal();
-            this.container.prepend(modal.draw()); 
+            modal.draw(); 
         })
 
         this.summary.append(summary);

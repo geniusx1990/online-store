@@ -1,4 +1,5 @@
 import Header from "../../components/header/header";
+import Modal from "../../components/modal/modal";
 import Page from "../../components/templates/page";
 import products from '../../utils/products';
 import { Product } from "../../utils/types";
@@ -160,6 +161,40 @@ class ProductPage extends Page {
         const buyNow = document.createElement('button');
         buyNow.className = 'buy-now-button';
         buyNow.textContent = 'BUY NOW';
+
+        buyNow.addEventListener('click', (e) => {
+            e.preventDefault();
+            let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+
+            if (itemsInStorage.some((item: Product) => item.id === this.id)) {
+                window.location.href = '#cart-page';
+                const modal = new Modal();
+                modal.draw();
+            } else {
+                const productsCounter = <HTMLDivElement>document.querySelector('.header__products-number');
+                const headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
+                itemsInStorage.push(products.products[this.id - 1]);
+                localStorage.cartItems = JSON.stringify(itemsInStorage);
+                let test = JSON.parse(localStorage.cartItems);
+                let sumOfItems = 0;
+                let sum = 0;
+                for (let i = 0; i < test.length; i++) {
+                    if (test[i]['count'] == undefined) {
+                        test[i]['count'] = 1;
+                    }
+                    sumOfItems += test[i]['count'];
+                    sum += test[i]['count'] * test[i]['price'];
+
+                }
+                productsCounter.textContent = `${sumOfItems}`;
+                headerTotalSum.textContent = `${sum} $`;
+                window.location.href = '#cart-page';
+                const modal = new Modal();
+                modal.draw();
+            }
+
+            
+        })
 
         addToCart.append(priceTitle, addToCartButton, buyNow);
 

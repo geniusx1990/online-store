@@ -114,7 +114,7 @@ class Modal {
             }
         })
 
-        return this.container;
+        document.body.prepend(this.container);
     }
 }
 
