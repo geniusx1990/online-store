@@ -518,11 +518,17 @@ class MainPage extends Page {
         linkButton.addEventListener('click', (e) => {
             e.preventDefault();
             const url = window.location.href;
-            localStorage.pathName = JSON.stringify(url);
-            linkButton.textContent = 'Copied!';
-            setTimeout(() => {
-                linkButton.textContent = 'Copy Link';
-            }, 1000)
+            
+            navigator.clipboard.writeText(url)
+            .then(() => {
+                linkButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    linkButton.textContent = 'Copy Link';
+                }, 1000)
+            })
+            .catch(err => {
+            console.log('Something went wrong', err);
+            });
         })
 
         filterButtons.append(resetButton);

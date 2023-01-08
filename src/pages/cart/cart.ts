@@ -84,6 +84,7 @@ class CartPage extends Page {
         pagesNumber.className = 'pages__number';
         if(pageParam) {
             pagesNumber.textContent = `${pageParam}`;
+            this.pageNumber = Number(pageParam);
         } else {
             pagesNumber.textContent = '1';
         }
