@@ -45,7 +45,6 @@ class App {
     private enableRouteChange() {
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash.slice(1);
-            console.log(hash);
             App.renderNewPage(hash)
         });
     }
@@ -56,7 +55,13 @@ class App {
             localStorage.setItem("cartItems", JSON.stringify(cartItems));
         }
 
-        App.renderNewPage(Pages.MainPage); // MainPage
+        const hash = window.location.hash.slice(1);
+        if(hash) {
+            App.renderNewPage(hash);
+        } else {
+            App.renderNewPage(Pages.MainPage); // MainPage
+        }
+
         this.enableRouteChange();
     }
 }
