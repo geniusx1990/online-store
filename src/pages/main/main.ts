@@ -41,9 +41,6 @@ class MainPage extends Page {
 
 
     getFilteredItems() {
-
-        // this.hideNotFound();
-
         const prods: Product[] = [...products.products];
         let res: Product[] = [];
         if(this.pickedCategories.length === 0) {
@@ -81,10 +78,6 @@ class MainPage extends Page {
 
         picked = this.searchItems(this.search, picked);
 
-        // if(picked.length === 0) {
-        //     this.showNotFound();
-        // }
-        // this.getNumberItems(picked.length);
         return picked;
     }
 
@@ -113,6 +106,11 @@ class MainPage extends Page {
         const chosenItems = this.getFilteredItems();
         this.drawCards(chosenItems);
         this.getNumberItems(chosenItems.length);
+        if(chosenItems.length === 0) {
+            this.showNotFound();
+        } else {
+            this.hideNotFound();
+        }
     }
 
      // Filters' block
@@ -178,12 +176,10 @@ class MainPage extends Page {
         url.searchParams.delete('brand');
         url.searchParams.delete('price');
         url.searchParams.delete('stock');
-        // url.searchParams.delete('layout');
         url.searchParams.delete('sort');
         url.searchParams.delete('search');
         window.history.pushState(null, '', url);
 
-        // this.hideNotFound();
         this.createDualFilter('price', '0', '2000');
         this.createDualFilter('stock', '0', '160');
         this.createFilterButtons();
