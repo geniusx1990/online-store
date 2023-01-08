@@ -12,10 +12,13 @@ class CartPage extends Page {
     pageNumber: number;
     cards: any;
     maxPage: number;
+    main: HTMLElement;
   
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
+        this.main = document.createElement('main');
+        this.main.className = 'main';
         this.summary = document.createElement('div');
         this.summary.className = 'main__summary';
         this.products = document.createElement('div');
@@ -355,6 +358,8 @@ class CartPage extends Page {
     private createPaginationArray(itemsPerPage: number) {
         const cartItems = this.getLocalStorage();
         if(cartItems.length === 0) {
+            this.main.innerHTML = '';
+            this.summary.style.display = 'none';
             this.showNothingAdded();
         }
         const paginationArr = [];
@@ -395,18 +400,16 @@ class CartPage extends Page {
         const noAdded = document.createElement('h2');
         noAdded.className = 'no-added';
         noAdded.textContent = 'Cart is empty';
-        this.products.append(noAdded);
+        this.main.append(noAdded);
     }
 
     draw() {
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
         
-        const main = document.createElement('main');
-        main.className = 'main';
-        this.container.append(main);
+        this.container.append(this.main);
 
-        main.append(this.products);
+        this.main.append(this.products);
 
         const productsPanel = this.createProductsCounter();
         this.products.append(productsPanel);
@@ -423,7 +426,7 @@ class CartPage extends Page {
             this.drawPage(this.pageNumber, this.pageLength);
         }
 
-        main.append(this.summary);
+        this.main.append(this.summary);
 
         this.createSummary();
 
