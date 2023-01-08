@@ -7,12 +7,22 @@ import './cart.css';
 class CartPage extends Page {
     header: Header;
     summary: HTMLDivElement;
+    products: HTMLDivElement;
+    pageLength: number;
+    pageNumber: number;
+    cards: any;
   
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
         this.summary = document.createElement('div');
         this.summary.className = 'main__summary';
+        this.products = document.createElement('div');
+        this.products.className = 'main__products';
+        this.cards = document.createElement('div');
+        this.cards.className = 'main__cards';
+        this.pageLength = 3;
+        this.pageNumber = 1;
     }
 
     private createProductsCounter() {
@@ -43,6 +53,7 @@ class CartPage extends Page {
         itemsCounter.id = 'items';
         itemsCounter.min = '3';
         itemsCounter.max = '10';
+        itemsCounter.value = '3';
         itemsWrapper.append(itemsCounter);
 
         const pages = document.createElement('div');
@@ -66,6 +77,35 @@ class CartPage extends Page {
         const rightButton = document.createElement('button');
         rightButton.className = 'pages__button button_right';
         pages.append(rightButton);
+
+        leftButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
+            const pageNumber = numberSpan.textContent;
+            if(pageNumber === '1') {
+                return;
+            } else {
+                const page = Number(pageNumber) - 1;
+                this.drawPage(page, this.pageLength);
+                numberSpan.textContent = `${page}`;
+            }
+        })
+
+        rightButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
+            const pageNumber = numberSpan.textContent;
+            const page = Number(pageNumber) + 1;
+            this.drawPage(page, this.pageLength);
+            numberSpan.textContent = `${page}`;
+        })
+
+        itemsCounter.addEventListener('change', (e) => {
+            const target = <HTMLInputElement>e.target;
+            const newValue = target.value;
+            this.pageLength = Number(newValue);
+            this.drawPage(1, this.pageLength);
+        })
 
         return productsPanel;
     }
@@ -118,8 +158,6 @@ class CartPage extends Page {
         const totalNumber = document.createElement('span');
         totalNumber.className = 'summary__total-number';
         const storageSum: number = storageProducts.reduce((sum: number, el: Product) => sum + el.price, 0);
-
-
 
         totalNumber.textContent = `$${sum}` || '$0';
         total.append(totalNumber);
@@ -231,7 +269,7 @@ class CartPage extends Page {
         const cardValidInput = document.createElement('input');
         cardValidInput.id = 'valid';
         cardValidInput.type = 'number';
-        cardValidInput.pattern = '(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])';
+        cardValidInput.pattern = '(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])'; // возможно
         cardValidInput.required = true;
         cardsAdd.append(cardValidInput);
 
@@ -262,14 +300,48 @@ class CartPage extends Page {
 
     }
 
+    private setPageParams(page: number) {
+        const url = new URL(window.location.href);
+        const pageParam = url.searchParams.get('page');
+        if(pageParam) {
+            url.searchParams.delete('page');
+            url.searchParams.set('page', page.toString());
+        } else {
+            url.searchParams.set('page', page.toString());
+        }
+        window.history.pushState(null, '', url);
+    }
+
+    private createPaginationArray(itemsPerPage: number) {
+        const cartItems = this.getLocalStorage();
+        const paginationArr = [];
+        for(let i = 0; i < cartItems.length; i += itemsPerPage) {
+            paginationArr.push(cartItems.slice(i, i + itemsPerPage));
+        }
+        return paginationArr;
+    }
+
+    private drawPage(pageNumber: number, pageLength: number) {
+        this.cards.innerHTML = '';
+        const pageItems = this.createPaginationArray(pageLength);
+        if(pageNumber > pageItems.length) {
+            return;
+        }
+        const itemsToDraw = pageItems[pageNumber - 1];
+        itemsToDraw.forEach((item) => {
+            const card = new CartProduct(item);
+            const productCard = card.draw();
+            this.cards.append(productCard);
+        })
+        // this.setPageParams(pageNumber);
+    }
+
     getLocalStorage() {
         const storageItems: Product[] = JSON.parse(localStorage.cartItems);
         return storageItems;
     }
 
     draw() {
-        this.container.innerHTML = '';
-
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
         
@@ -277,21 +349,21 @@ class CartPage extends Page {
         main.className = 'main';
         this.container.append(main);
 
-        const products = document.createElement('div');
-        products.className = 'main__products';
-        main.append(products);
+        main.append(this.products);
 
         const productsPanel = this.createProductsCounter();
-        products.append(productsPanel);
+        this.products.append(productsPanel);
 
-        const storage = this.getLocalStorage();
-        storage.forEach(item => {
-            const card = new CartProduct(item);
-            const productCard = card.draw();
-            products.append(productCard)
-        });
+        this.products.append(this.cards);
+
+        // const url = new URL(window.location.href);
+        // const pageParam = url.searchParams.get('page') || '';
+        // if(pageParam) {
+        //     this.pageNumber = Number(pageParam);
+        // }
+
+        this.drawPage(this.pageNumber, this.pageLength);
       
-
         main.append(this.summary);
 
         this.createSummary();
