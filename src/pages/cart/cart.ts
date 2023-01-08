@@ -28,6 +28,9 @@ class CartPage extends Page {
     }
 
     private createProductsCounter() {
+        const url = new URL(window.location.href);
+        const pageParam = url.searchParams.get('page') || '';
+
         const productsPanel = document.createElement('div');
         productsPanel.className = 'main__products-panel products-panel';
 
@@ -73,7 +76,12 @@ class CartPage extends Page {
 
         const pagesNumber = document.createElement('span');
         pagesNumber.className = 'pages__number';
-        pagesNumber.textContent = '1';
+        if(pageParam) {
+            pagesNumber.textContent = `${pageParam}`;
+        } else {
+            pagesNumber.textContent = '1';
+        }
+       
         pages.append(pagesNumber);
 
         const rightButton = document.createElement('button');
