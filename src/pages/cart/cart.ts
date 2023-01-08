@@ -297,7 +297,6 @@ class CartPage extends Page {
                 moduleLayer.style.display = 'none';
             }
         })
-
     }
 
     private setPageParams(page: number) {
@@ -328,12 +327,19 @@ class CartPage extends Page {
             return;
         }
         const itemsToDraw = pageItems[pageNumber - 1];
-        itemsToDraw.forEach((item) => {
-            const card = new CartProduct(item);
+        itemsToDraw.forEach((item, index) => {
+            let orderNumber = 0;
+            if(pageNumber === 1) {
+                orderNumber = pageNumber + index;
+            } else {
+                orderNumber = pageNumber + pageLength - 1 + index; // придумать как сделать нумерацию
+            }
+            
+            const card = new CartProduct(item, orderNumber);
             const productCard = card.draw();
             this.cards.append(productCard);
         })
-        // this.setPageParams(pageNumber);
+        this.setPageParams(pageNumber);
     }
 
     getLocalStorage() {
@@ -355,12 +361,6 @@ class CartPage extends Page {
         this.products.append(productsPanel);
 
         this.products.append(this.cards);
-
-        // const url = new URL(window.location.href);
-        // const pageParam = url.searchParams.get('page') || '';
-        // if(pageParam) {
-        //     this.pageNumber = Number(pageParam);
-        // }
 
         this.drawPage(this.pageNumber, this.pageLength);
       

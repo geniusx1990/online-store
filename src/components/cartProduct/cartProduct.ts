@@ -4,11 +4,13 @@ import './cartProduct.css';
 class CartProduct {
     private container: HTMLElement;
     product: Product;
+    orderNumber: number;
 
-    constructor(product: Product) {
+    constructor(product: Product, orderNumber: number) {
         this.container = document.createElement('div');
         this.container.className = 'product-card';
         this.product = product;
+        this.orderNumber = orderNumber;
     }
 
     private createProductInfo() {
@@ -208,6 +210,11 @@ class CartProduct {
     }
 
     draw() {
+        const numberCard = document.createElement('div');
+        numberCard.className = 'order-number';
+        numberCard.textContent = `${this.orderNumber}`;
+        this.container.append(numberCard);
+
         const imageWrapper = document.createElement('div');
         imageWrapper.className = 'product-card__image-wrapper';
         this.container.append(imageWrapper);

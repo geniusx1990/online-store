@@ -1,10 +1,24 @@
 .product-card {
     width: 100%;
     display: flex;
+    align-items: center;
     border-radius: 15px;
     box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
     padding: 10px;
     margin-bottom: 5px;
+}
+
+.order-number {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 50%;
+    background-color: #ffdd22;
+    margin-right: 10px;
 }
 
 .product-card__image-wrapper {
@@ -53,6 +67,7 @@
 
 .product-card__price-block {
     width: 20%;
+    height: 160px;
     padding: 10px;
     display: flex;
     flex-direction: column;
