@@ -63,6 +63,15 @@ class App {
         }
 
         this.enableRouteChange();
+
+        window.addEventListener('popstate', () => {
+            const hash = window.location.hash.slice(1);
+            if(hash) {
+                App.renderNewPage(hash);
+            } else {
+                App.renderNewPage(Pages.MainPage);
+            }  
+        })
     }
 }
 
