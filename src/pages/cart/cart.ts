@@ -11,6 +11,7 @@ class CartPage extends Page {
     pageLength: number;
     pageNumber: number;
     cards: any;
+    maxPage: number;
   
     constructor(pageName: string) {
         super(pageName);
@@ -23,6 +24,7 @@ class CartPage extends Page {
         this.cards.className = 'main__cards';
         this.pageLength = 3;
         this.pageNumber = 1;
+        this.maxPage = 1;
     }
 
     private createProductsCounter() {
@@ -95,6 +97,12 @@ class CartPage extends Page {
             e.preventDefault();
             const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
             const pageNumber = numberSpan.textContent;
+            if(Number(pageNumber) === this.maxPage) {
+                return;   
+            }
+            else if(this.getLocalStorage().length === 0) {
+                return;
+            }
             const page = Number(pageNumber) + 1;
             this.drawPage(page, this.pageLength);
             numberSpan.textContent = `${page}`;
@@ -103,8 +111,13 @@ class CartPage extends Page {
         itemsCounter.addEventListener('change', (e) => {
             const target = <HTMLInputElement>e.target;
             const newValue = target.value;
+            if(this.getLocalStorage().length === 0) {
+                return;
+            }
             this.pageLength = Number(newValue);
             this.drawPage(1, this.pageLength);
+            const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
+            numberSpan.textContent = '1';
         })
 
         return productsPanel;
@@ -313,10 +326,14 @@ class CartPage extends Page {
 
     private createPaginationArray(itemsPerPage: number) {
         const cartItems = this.getLocalStorage();
+        if(cartItems.length === 0) {
+            this.showNothingAdded();
+        }
         const paginationArr = [];
         for(let i = 0; i < cartItems.length; i += itemsPerPage) {
             paginationArr.push(cartItems.slice(i, i + itemsPerPage));
         }
+        this.maxPage = paginationArr.length;
         return paginationArr;
     }
 
@@ -327,14 +344,12 @@ class CartPage extends Page {
             return;
         }
         const itemsToDraw = pageItems[pageNumber - 1];
+        let counter = 0;
+        if(pageNumber > 1) {
+            counter = pageLength * (pageNumber - 1);
+        }
         itemsToDraw.forEach((item, index) => {
-            let orderNumber = 0;
-            if(pageNumber === 1) {
-                orderNumber = pageNumber + index;
-            } else {
-                orderNumber = pageNumber + pageLength - 1 + index; // придумать как сделать нумерацию
-            }
-            
+            const orderNumber = counter + (index + 1);      
             const card = new CartProduct(item, orderNumber);
             const productCard = card.draw();
             this.cards.append(productCard);
@@ -345,6 +360,13 @@ class CartPage extends Page {
     getLocalStorage() {
         const storageItems: Product[] = JSON.parse(localStorage.cartItems);
         return storageItems;
+    }
+
+    showNothingAdded() {
+        const noAdded = document.createElement('h2');
+        noAdded.className = 'no-added';
+        noAdded.textContent = 'Cart is empty';
+        this.products.append(noAdded);
     }
 
     draw() {
@@ -362,8 +384,15 @@ class CartPage extends Page {
 
         this.products.append(this.cards);
 
-        this.drawPage(this.pageNumber, this.pageLength);
-      
+        const url = new URL(window.location.href);
+        const pageParam = url.searchParams.get('page') || '';
+
+        if(pageParam) {
+            this.drawPage(Number(pageParam), this.pageLength);
+        } else {
+            this.drawPage(this.pageNumber, this.pageLength);
+        }
+
         main.append(this.summary);
 
         this.createSummary();
