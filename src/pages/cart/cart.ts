@@ -30,6 +30,7 @@ class CartPage extends Page {
     private createProductsCounter() {
         const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('page') || '';
+        const lengthParam = url.searchParams.get('length') || '';
 
         const productsPanel = document.createElement('div');
         productsPanel.className = 'main__products-panel products-panel';
@@ -58,7 +59,12 @@ class CartPage extends Page {
         itemsCounter.id = 'items';
         itemsCounter.min = '3';
         itemsCounter.max = '10';
-        itemsCounter.value = '3';
+        if(lengthParam) {
+            itemsCounter.value = `${lengthParam}`;
+            this.pageLength = Number(lengthParam);
+        } else {
+            itemsCounter.value = '3';
+        }
         itemsWrapper.append(itemsCounter);
 
         const pages = document.createElement('div');
@@ -126,6 +132,7 @@ class CartPage extends Page {
             this.drawPage(1, this.pageLength);
             const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
             numberSpan.textContent = '1';
+            this.setLengthParams(this.pageLength);
         })
 
         return productsPanel;
@@ -320,6 +327,18 @@ class CartPage extends Page {
         })
     }
 
+    private setLengthParams(length: number) {
+        const url = new URL(window.location.href);
+        const pageParam = url.searchParams.get('length');
+        if(pageParam) {
+            url.searchParams.delete('length');
+            url.searchParams.set('length', length.toString());
+        } else {
+            url.searchParams.set('length', length.toString());
+        }
+        window.history.pushState(null, '', url);
+    }
+
     private setPageParams(page: number) {
         const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('page');
@@ -363,6 +382,7 @@ class CartPage extends Page {
             this.cards.append(productCard);
         })
         this.setPageParams(pageNumber);
+        this.setLengthParams(pageLength);
     }
 
     getLocalStorage() {
@@ -394,9 +414,10 @@ class CartPage extends Page {
 
         const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('page') || '';
+        const lengthParam = url.searchParams.get('length') || '';
 
-        if(pageParam) {
-            this.drawPage(Number(pageParam), this.pageLength);
+        if(pageParam && lengthParam) {
+            this.drawPage(Number(pageParam), Number(lengthParam));
         } else {
             this.drawPage(this.pageNumber, this.pageLength);
         }
