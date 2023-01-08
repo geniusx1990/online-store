@@ -1,6 +1,7 @@
 import Header from "../../components/header/header";
 import Page from "../../components/templates/page";
 import products from '../../utils/products';
+import { Product } from "../../utils/types";
 import './product.css';
 
 class ProductPage extends Page {
@@ -51,8 +52,8 @@ class ProductPage extends Page {
         const productInfo = document.createElement('div');
         productInfo.className = 'product-info';
 
-        let arrayNamesTitles = [`Description:`, 'Discount Percentage:', 'Rating:', 'Stock:', 'Brand:', 'Category:']
-        let arraData = [products.products.filter(x => x.id === this.id)[0].description, products.products.filter(x => x.id === this.id)[0].discountPercentage, products.products.filter(x => x.id === this.id)[0].rating, products.products.filter(x => x.id === this.id)[0].stock, products.products.filter(x => x.id === this.id)[0].category]
+        let arrayNamesTitles = ['Description:', 'Discount Percentage:', 'Rating:', 'Stock:', 'Brand:', 'Category:']
+        let arraData = [products.products.filter(x => x.id === this.id)[0].description, products.products.filter(x => x.id === this.id)[0].discountPercentage, products.products.filter(x => x.id === this.id)[0].rating, products.products.filter(x => x.id === this.id)[0].stock, products.products.filter(x => x.id === this.id)[0].brand, products.products.filter(x => x.id === this.id)[0].category]
         for (let i = 0; i < arrayNamesTitles.length; i++) {
             const item = document.createElement('div');
             item.className = 'product-detail-item';
@@ -81,6 +82,80 @@ class ProductPage extends Page {
         const addToCartButton = document.createElement('button');
         addToCartButton.className = 'add-to-cart-button';
         addToCartButton.textContent = 'ADD TO CART';
+
+        let itemsInStorage = JSON.parse(localStorage.cartItems);
+        if (itemsInStorage.length !== 0) {
+            for (let i = 0; i < itemsInStorage.length; i++) {
+                if (itemsInStorage[i]['id'] == this.id) {
+                    addToCartButton.className = 'add-to-cart-button remove-from-cart';
+                    addToCartButton.textContent = 'REMOVE FROM CART';
+                }
+            }
+        }
+
+
+
+
+        addToCartButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productsCounter = <HTMLDivElement>document.querySelector('.header__products-number');
+            const headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
+
+            addToCartButton.classList.toggle('remove-from-cart')
+            if (addToCartButton.classList.contains('remove-from-cart')) {
+                addToCartButton.className = 'add-to-cart-button remove-from-cart';
+                addToCartButton.textContent = 'REMOVE FROM CART'
+
+                let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+
+                if (itemsInStorage.some((item: Product) => item.id === this.id)) {
+                    return;
+                } else {
+                    itemsInStorage.push(products.products[this.id - 1]);
+                    localStorage.cartItems = JSON.stringify(itemsInStorage);
+                    let test = JSON.parse(localStorage.cartItems);
+                    let sumOfItems = 0;
+                    let sum = 0;
+                    for (let i = 0; i < test.length; i++) {
+                        if (test[i]['count'] == undefined) {
+                            test[i]['count'] = 1;
+                        }
+                        sumOfItems += test[i]['count'];
+                        sum += test[i]['count'] * test[i]['price'];
+
+                    }
+                    productsCounter.textContent = `${sumOfItems}`;
+                    headerTotalSum.textContent = `${sum} $`;
+
+                }
+
+            } else {
+                addToCartButton.className = 'add-to-cart-button';
+                addToCartButton.textContent = 'ADD TO CART'
+                let itemsInStorage: Product[] = JSON.parse(localStorage.cartItems);
+                let newItemStorage = itemsInStorage.filter((x: Product) => x.id !== this.id)
+                localStorage.removeItem('cartItems')
+                localStorage.cartItems = JSON.stringify(newItemStorage);
+
+                let test = JSON.parse(localStorage.cartItems);
+                let sumOfItems = 0;
+                let sum = 0;
+                for (let i = 0; i < test.length; i++) {
+                    if (test[i]['count'] == undefined) {
+                        test[i]['count'] = 1;
+                    }
+                    sumOfItems += test[i]['count'];
+                    sum += test[i]['count'] * test[i]['price'];
+
+                }
+                productsCounter.textContent = `${sumOfItems}`;
+                headerTotalSum.textContent = `${sum} $`;
+
+            }
+
+
+
+        })
 
         const buyNow = document.createElement('button');
         buyNow.className = 'buy-now-button';
@@ -126,8 +201,6 @@ class ProductPage extends Page {
         this.container.append(cartHeader);
         this.container.append(this.createProductPage());
 
-        /*         const productHeader = this.header.draw();
-                this.container.append(productHeader); */
 
         return this.container;
     }
