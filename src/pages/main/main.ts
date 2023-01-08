@@ -84,7 +84,7 @@ class MainPage extends Page {
         // if(picked.length === 0) {
         //     this.showNotFound();
         // }
-
+        // this.getNumberItems(picked.length);
         return picked;
     }
 
@@ -586,26 +586,17 @@ class MainPage extends Page {
             this.addParamsForSearch(searchValue);
             const chosenItems = this.getFilteredItems();
             const found = this.searchItems(searchValue, chosenItems);
-            this.drawCards(found);
+            this.drawChosenItems();
         });
 
         return searchWrapper; 
     }
 
     searchItems(value: string, items: Product[]) {
-        // if(value.length === 0) {
-        //     this.hideNotFound();
-        // }
-        // const chosenItems = this.getFilteredItems();
         const itemsFound = items.filter((item) => item.title.toLowerCase().includes(value.toLowerCase()) 
         || item.brand.toLowerCase().includes(value.toLowerCase()) || item.description.toLowerCase().includes(value.toLowerCase())
         || item.category.toLowerCase().includes(value.toLowerCase()) || item.price.toString().includes(value.toLowerCase())
         || item.stock.toString().includes(value.toLowerCase()));
-        // if(itemsFound.length === 0) {
-        //     this.showNotFound();
-        // }
-        // this.drawCards(itemsFound);
-        // this.getNumberItems(itemsFound.length);
         return itemsFound;
     }
 
