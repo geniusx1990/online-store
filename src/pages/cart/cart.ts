@@ -2,7 +2,7 @@ import Page from "../../components/templates/page";
 import Header from '../../components/header/header';
 import CartProduct from '../../components/cartProduct/cartProduct';
 import Modal from '../../components/modal/modal';
-import {Product} from '../../utils/types';
+import { Product } from '../../utils/types';
 import './cart.css';
 
 class CartPage extends Page {
@@ -14,7 +14,7 @@ class CartPage extends Page {
     cards: any;
     maxPage: number;
     main: HTMLElement;
-  
+
     constructor(pageName: string) {
         super(pageName);
         this.header = new Header();
@@ -63,7 +63,7 @@ class CartPage extends Page {
         itemsCounter.id = 'items';
         itemsCounter.min = '3';
         itemsCounter.max = '10';
-        if(lengthParam) {
+        if (lengthParam) {
             itemsCounter.value = `${lengthParam}`;
             this.pageLength = Number(lengthParam);
         } else {
@@ -86,13 +86,13 @@ class CartPage extends Page {
 
         const pagesNumber = document.createElement('span');
         pagesNumber.className = 'pages__number';
-        if(pageParam) {
+        if (pageParam) {
             pagesNumber.textContent = `${pageParam}`;
             this.pageNumber = Number(pageParam);
         } else {
             pagesNumber.textContent = '1';
         }
-       
+
         pages.append(pagesNumber);
 
         const rightButton = document.createElement('button');
@@ -103,7 +103,7 @@ class CartPage extends Page {
             e.preventDefault();
             const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
             const pageNumber = numberSpan.textContent;
-            if(pageNumber === '1') {
+            if (pageNumber === '1') {
                 return;
             } else {
                 const page = Number(pageNumber) - 1;
@@ -116,10 +116,10 @@ class CartPage extends Page {
             e.preventDefault();
             const numberSpan = <HTMLSpanElement>document.querySelector('.pages__number');
             const pageNumber = numberSpan.textContent;
-            if(Number(pageNumber) === this.maxPage) {
-                return;   
+            if (Number(pageNumber) === this.maxPage) {
+                return;
             }
-            else if(this.getLocalStorage().length === 0) {
+            else if (this.getLocalStorage().length === 0) {
                 return;
             }
             const page = Number(pageNumber) + 1;
@@ -130,7 +130,7 @@ class CartPage extends Page {
         itemsCounter.addEventListener('change', (e) => {
             const target = <HTMLInputElement>e.target;
             const newValue = target.value;
-            if(this.getLocalStorage().length === 0) {
+            if (this.getLocalStorage().length === 0) {
                 return;
             }
             this.pageLength = Number(newValue);
@@ -175,7 +175,7 @@ class CartPage extends Page {
         const productsNumber = document.createElement('span');
         productsNumber.className = 'summary__products-number';
         const storageProducts: Product[] = JSON.parse(localStorage.cartItems);
-        
+
         productsNumber.textContent = `${sumCount}`;
         productsCounter.append(productsNumber);
 
@@ -195,6 +195,18 @@ class CartPage extends Page {
         totalNumber.textContent = `$${sum}` || '$0';
         total.append(totalNumber);
 
+        const totalPromo = document.createElement('div');
+        totalPromo.className = 'summary__total_promo';
+        summary.append(totalPromo);
+
+        const totalTitlePromo = document.createElement('h4');
+        totalTitlePromo.className = 'summary__total-title_promo';
+        totalPromo.append(totalTitlePromo);
+
+        const totalNumberPromo = document.createElement('span');
+        totalNumberPromo.className = 'summary__total-number_promo';
+        totalPromo.append(totalNumberPromo);
+
         const promo = document.createElement('div');
         promo.className = 'summary__promo';
         summary.append(promo);
@@ -203,22 +215,198 @@ class CartPage extends Page {
         promoInput.type = 'text';
         promoInput.className = 'summary__promo-input';
         promoInput.placeholder = 'Enter promo code';
-        promo.append(promoInput);
-
         const promoText = document.createElement('p');
         promoText.className = 'summary__promo-text';
         promoText.textContent = 'Test promo codes: EX22, SV22';
+
+        promo.append(promoInput);
         promo.append(promoText);
+
+        let promoArray = ['EX22', 'SV22'];
+
+        let couponLocalstorage = JSON.parse(localStorage.promoItems);
+        console.log(couponLocalstorage);
+
+        if (couponLocalstorage.length !== 0) {
+            for (let i = 0; i < couponLocalstorage.length; i++) {
+
+
+                let couponLocalstorageUpdated = JSON.parse(localStorage.promoItems);
+
+                totalNumberPromo.textContent = `$${Number(totalNumber.textContent?.substring(1)) - (Number(totalNumber.textContent?.substring(1)) * 10 * (couponLocalstorageUpdated.length)) / 100}`
+
+                totalTitle.style.textDecoration = 'line-through'
+                totalNumber.style.textDecoration = 'line-through'
+                totalTitlePromo.textContent = 'Total: ';
+
+
+
+                const promoItemsContainer = document.createElement('div');
+                promoItemsContainer.className = 'promo-container';
+                const promoItem = document.createElement('p');
+                const promoButtonAddCoupon = document.createElement('button');
+                promoButtonAddCoupon.className = 'button-add-coupon remove';
+                promoButtonAddCoupon.textContent = 'drop';
+                promoItem.className = 'promo-item';
+                promoItem.textContent = `${couponLocalstorage[i]} coupon = -10%`
+                promoItemsContainer.append(promoItem);
+                promoItemsContainer.append(promoButtonAddCoupon);
+                promo.append(promoItemsContainer);
+
+
+
+                promoButtonAddCoupon.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (promoButtonAddCoupon.classList.contains('remove')) {
+                        promoButtonAddCoupon.className = 'button-add-coupon remove'
+                        promoButtonAddCoupon.textContent = 'drop';
+                        const totalSumm = <HTMLDivElement>document.querySelector('.summary__total-number');
+                        const changeStyleTitle = <HTMLDivElement>document.querySelector('.summary__total-title');
+                        const changeStyleNumber = <HTMLDivElement>document.querySelector('.summary__total-number');
+
+                        promoButtonAddCoupon.remove();
+                        promoItem.remove();
+                        totalNumberPromo.textContent = `$${Number(totalNumber.textContent?.substring(1)) - (Number(totalNumber.textContent?.substring(1)) * 10 * (couponLocalstorageUpdated.length)) / 100}`
+
+
+
+                        let couponLocalstorage = JSON.parse(localStorage.promoItems);
+                        let newArray = couponLocalstorage.filter((item: string) => item !== couponLocalstorage[i]);
+                        localStorage.promoItems = JSON.stringify(newArray);
+
+                        let result = JSON.parse(localStorage.promoItems);
+
+
+
+
+                        totalTitlePromo.textContent = 'Total: ';
+                        changeStyleTitle.style.textDecoration = 'line-through';
+                        changeStyleNumber.style.textDecoration = 'line-through';
+
+
+                    }
+
+
+                })
+
+
+
+
+
+
+            }
+        }
+
+
+        promoInput.addEventListener('input', updateValue);
+        function updateValue(this: HTMLInputElement, ev: Event) {
+            let couponLocalstorage = JSON.parse(localStorage.promoItems);
+            console.log(couponLocalstorage);
+
+            if (promoArray.includes(promoInput.value.toUpperCase()) && !couponLocalstorage.includes(promoInput.value.toUpperCase())) {
+                let couponLocalstorage = JSON.parse(localStorage.promoItems);
+
+
+
+
+                const promoItemsContainer = document.createElement('div');
+                promoItemsContainer.className = 'promo-container';
+                const promoItem = document.createElement('p');
+                const promoButtonAddCoupon = document.createElement('button');
+                promoButtonAddCoupon.className = 'button-add-coupon';
+                promoButtonAddCoupon.textContent = 'add';
+                promoItem.className = 'promo-item';
+                promoItem.textContent = `${promoInput.value} coupon = -10%`
+
+
+
+                promoItemsContainer.append(promoItem);
+                promoItemsContainer.append(promoButtonAddCoupon);
+                promo.append(promoItemsContainer);
+
+
+
+                console.log(`you added promocode ${promoInput.value}`);
+
+                console.log('aaa')
+
+
+                promoButtonAddCoupon.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    promoButtonAddCoupon.classList.toggle('remove')
+                    if (promoButtonAddCoupon.classList.contains('remove')) {
+                        promoButtonAddCoupon.className = 'button-add-coupon remove'
+                        promoButtonAddCoupon.textContent = 'drop';
+                        const totalSumm = <HTMLDivElement>document.querySelector('.summary__total-number');
+                        const changeStyleTitle = <HTMLDivElement>document.querySelector('.summary__total-title');
+                        const changeStyleNumber = <HTMLDivElement>document.querySelector('.summary__total-number');
+
+
+                        let couponLocalstorageUpdated = JSON.parse(localStorage.promoItems);
+                        if (couponLocalstorageUpdated.length === 0) {
+                            totalNumberPromo.textContent = `$${Number(totalSumm.textContent?.substring(1)) - (Number(totalSumm.textContent?.substring(1)) * 10) / 100}`
+                        } else {
+                            totalNumberPromo.textContent = `$${Number(totalSumm.textContent?.substring(1)) - (Number(totalSumm.textContent?.substring(1)) * 10 * (couponLocalstorageUpdated.length + 1)) / 100}`
+                        }
+
+                        couponLocalstorage.push(promoInput.value.toUpperCase());
+                        localStorage.promoItems = JSON.stringify(couponLocalstorage)
+                        totalTitlePromo.textContent = 'Total: ';
+                        changeStyleTitle.style.textDecoration = 'line-through';
+                        changeStyleNumber.style.textDecoration = 'line-through';
+
+
+                    } else {
+                        promoButtonAddCoupon.className = 'button-add-coupon'
+                        promoButtonAddCoupon.textContent = 'add';
+
+                        let couponLocalstorage = JSON.parse(localStorage.promoItems);
+                        let newArray = couponLocalstorage.filter((item: string) => item !== promoInput.value.toUpperCase());
+                        localStorage.promoItems = JSON.stringify(newArray);
+
+
+
+                        promoButtonAddCoupon.remove();
+                        promoItem.remove();
+
+                        let couponLocalstorageUpdated = JSON.parse(localStorage.promoItems);
+                        const totalSumm = <HTMLDivElement>document.querySelector('.summary__total-number');
+                        const changeStyleTitle = <HTMLDivElement>document.querySelector('.summary__total-title');
+                        const changeStyleNumber = <HTMLDivElement>document.querySelector('.summary__total-number');
+
+                        if (couponLocalstorageUpdated.length === 0) {
+                            totalTitlePromo.textContent = '';
+                            totalNumberPromo.textContent = ''
+                            changeStyleTitle.style.textDecoration = 'none'
+                            changeStyleNumber.style.textDecoration = 'none'
+                        } else {
+                            totalNumberPromo.textContent = `$${Number(totalSumm.textContent?.substring(1)) - (Number(totalSumm.textContent?.substring(1)) * 10 * (couponLocalstorageUpdated.length)) / 100}`
+
+                        }
+
+
+
+                    }
+
+
+                })
+
+
+            }
+
+        }
+
 
         const buyButton = document.createElement('button');
         buyButton.className = 'summary__button';
         buyButton.textContent = 'BUY NOW';
         summary.append(buyButton);
-        
+
         buyButton.addEventListener('click', (e) => {
             e.preventDefault();
             const modal = new Modal();
-            modal.draw(); 
+            modal.draw();
         })
 
         this.summary.append(summary);
@@ -227,7 +415,7 @@ class CartPage extends Page {
     private setLengthParams(length: number) {
         const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('length');
-        if(pageParam) {
+        if (pageParam) {
             url.searchParams.delete('length');
             url.searchParams.set('length', length.toString());
         } else {
@@ -239,7 +427,7 @@ class CartPage extends Page {
     private setPageParams(page: number) {
         const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('page');
-        if(pageParam) {
+        if (pageParam) {
             url.searchParams.delete('page');
             url.searchParams.set('page', page.toString());
         } else {
@@ -250,13 +438,13 @@ class CartPage extends Page {
 
     private createPaginationArray(itemsPerPage: number) {
         const cartItems = this.getLocalStorage();
-        if(cartItems.length === 0) {
+        if (cartItems.length === 0) {
             this.main.innerHTML = '';
             this.summary.style.display = 'none';
             this.showNothingAdded();
         }
         const paginationArr = [];
-        for(let i = 0; i < cartItems.length; i += itemsPerPage) {
+        for (let i = 0; i < cartItems.length; i += itemsPerPage) {
             paginationArr.push(cartItems.slice(i, i + itemsPerPage));
         }
         this.maxPage = paginationArr.length;
@@ -266,16 +454,16 @@ class CartPage extends Page {
     private drawPage(pageNumber: number, pageLength: number) {
         this.cards.innerHTML = '';
         const pageItems = this.createPaginationArray(pageLength);
-        if(pageNumber > pageItems.length) {
+        if (pageNumber > pageItems.length) {
             return;
         }
         const itemsToDraw = pageItems[pageNumber - 1];
         let counter = 0;
-        if(pageNumber > 1) {
+        if (pageNumber > 1) {
             counter = pageLength * (pageNumber - 1);
         }
         itemsToDraw.forEach((item, index) => {
-            const orderNumber = counter + (index + 1);      
+            const orderNumber = counter + (index + 1);
             const card = new CartProduct(item, orderNumber);
             const productCard = card.draw();
             this.cards.append(productCard);
@@ -309,7 +497,7 @@ class CartPage extends Page {
 
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
-        
+
         this.container.append(this.main);
 
         this.main.append(this.products);
@@ -322,7 +510,7 @@ class CartPage extends Page {
         const pageParam = url.searchParams.get('page') || '';
         const lengthParam = url.searchParams.get('length') || '';
 
-        if(pageParam && lengthParam) {
+        if (pageParam && lengthParam) {
             this.drawPage(Number(pageParam), Number(lengthParam));
         } else {
             this.drawPage(this.pageNumber, this.pageLength);
@@ -334,7 +522,7 @@ class CartPage extends Page {
 
         return this.container;
 
-    } 
+    }
 }
 
 export default CartPage;

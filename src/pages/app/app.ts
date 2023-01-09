@@ -28,13 +28,13 @@ class App {
 
         if (idPage === Pages.MainPage) {
             page = new MainPage(idPage);
-        }  
+        }
         else if (idPage === Pages.CartPage) {
             page = new CartPage(idPage);
-        }  
+        }
         else if (matches !== null && matches.groups !== undefined && matches.groups['productId']) {
             page = new ProductPage(idPage, parseInt(matches.groups['productId']))
-        } 
+        }
 
         if (page) {
             const pageHtml = page.draw();
@@ -51,12 +51,16 @@ class App {
 
     start() {
         let cartItems: Product[] = [];
-        if(!localStorage.cartItems) {
+        if (!localStorage.cartItems) {
             localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        }
+        let promoItems: string[] = [];
+        if (!localStorage.promoItems) {
+            localStorage.setItem("promoItems", JSON.stringify(promoItems));
         }
 
         const hash = window.location.hash.slice(1);
-        if(hash) {
+        if (hash) {
             App.renderNewPage(hash);
         } else {
             App.renderNewPage(Pages.MainPage); // MainPage
@@ -65,11 +69,11 @@ class App {
 
         window.addEventListener('popstate', () => {
             const hash = window.location.hash.slice(1);
-            if(hash) {
+            if (hash) {
                 App.renderNewPage(hash);
             } else {
                 App.renderNewPage(Pages.MainPage);
-            }  
+            }
         })
     }
 }
