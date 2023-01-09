@@ -1,0 +1,195 @@
+.module-layer {
+    position: fixed;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.form {
+    /* position: relative; */
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: fit-content;
+    padding: 30px 40px;
+    border-radius: 25px;
+    /* border: 2px solid #ffdd22; */
+    background-color: #f5f5f5;
+}
+
+.form__title,
+.form__card-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.form__name,
+.form__phone,
+.form__address,
+.form__email {
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    font-size: 14px;
+    padding-left: 20px;
+    outline: none;
+    border: 2px solid #ffdd22;
+    margin-bottom: 5px;
+}
+
+.form__name:focus {
+    border: 2px solid #b00808;
+}
+
+/* .form__name:valid,
+.form__phone:valid,
+.form__address:valid,
+.form__email:valid {
+    border: 2px solid #7C9F6E;
+} */
+
+/* .form__name:valid {
+    border: 2px solid #7C9F6E;
+} */
+.form__phone:valid,
+.form__email:valid {
+    border: 2px solid #7C9F6E;
+}
+
+.form__name:focus:invalid,
+.form__phone:focus:invalid,
+.form__address:focus:invalid,
+.form__email:focus:invalid {
+    border: 2px solid #b00808;
+}
+
+/* .form__name:invalid,
+.form__phone:invalid,
+.form__address:invalid, */
+/* .form__email:invalid {
+    border: 2px solid #b00808;
+} */
+
+.form__card-info {
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.card-info__add {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#card-number {
+    margin-bottom: 20px;
+}
+
+.form__button {
+    width: 150px;
+    height: 50px;
+    border: none;
+    border-radius: 25px;
+    background-color: #ffdd22;
+    color: #333e48;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.inactive {
+    opacity: 0.2;
+}
+
+.form__button:hover {
+    background-color: #e7c400;
+}
+
+label {
+    font-size: 14px;
+    padding-right: 5px;
+}
+
+#card-number {
+    width: 250px;
+    height: 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    padding-left: 50px;
+    outline: none;
+    border: 2px solid #ffdd22;
+    background: url('../../assets/svg/visa.svg');
+    background-position: left 10px center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#card-number:valid {
+    border: 2px solid #7C9F6E;
+}
+
+#card-number:focus:invalid,
+#valid:focus:invalid,
+#cvv:focus:invalid {
+    border: 2px solid #b00808;
+}
+
+#card-number:valid,
+#valid:valid,
+#cvv:valid {
+    border: 2px solid #7C9F6E;
+}
+
+#valid {
+    width: 100px;
+    height: 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    padding-left: 10px;
+    outline: none;
+    border: 2px solid #ffdd22;
+    margin-right: auto;
+}
+
+#cvv {
+    width: 100px;
+    height: 25px;
+    border-radius: 12px;
+    font-size: 14px;
+    padding-left: 10px;
+    outline: none;
+    border: 2px solid #ffdd22;
+}
+
+.valid {
+    border: 2px solid #7C9F6E;
+}
+
+.invalid {
+    border: 2px solid #b00808;
+}
+
+.name-warning,
+.phone-warning,
+.address-warning,
+.email-warning,
+.card-number-warning {
+    display: none;
+    font-size: 12px;
+    align-self: flex-start;
+    margin-top: 0;
+    padding-left: 10px;
+    color: #b00808;
+}
+
+.shown {
+    display: block;
+}
