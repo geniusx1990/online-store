@@ -14,6 +14,49 @@ class ProductPage extends Page {
         this.id = productId;
     }
 
+    private createBreadCrums() {
+        const crumsWrapper = document.createElement('div');
+        crumsWrapper.className = 'crums';
+        this.container.append(crumsWrapper);
+
+        const storeLink = document.createElement('a');
+        storeLink.className = 'crums__store store-link';
+        storeLink.textContent = 'Store';
+        storeLink.href = '#main-page';
+        crumsWrapper.append(storeLink);
+
+        const arrows = document.createElement('span');
+        arrows.className = 'crums__arrows';
+        arrows.textContent = '>>';
+        crumsWrapper.append(arrows);
+
+        const prodCategory = document.createElement('h3');
+        prodCategory.className = 'crums__category';
+        prodCategory.textContent = `${products.products.filter(x => x.id === this.id)[0].category}`;
+        crumsWrapper.append(prodCategory);
+
+        const arrows2 = document.createElement('span');
+        arrows2.className = 'crums__arrows';
+        arrows2.textContent = '>>';
+        crumsWrapper.append(arrows2);
+
+        const prodBrand = document.createElement('h3');
+        prodBrand.className = 'crums__brand';
+        prodBrand.textContent = `${products.products.filter(x => x.id === this.id)[0].brand}`;
+        crumsWrapper.append(prodBrand);
+
+        const arrows3 = document.createElement('span');
+        arrows3.className = 'crums__arrows';
+        arrows3.textContent = '>>';
+        crumsWrapper.append(arrows3);
+
+        const prodName = document.createElement('h3');
+        prodName.className = 'crums__name';
+        prodName.textContent = `${products.products.filter(x => x.id === this.id)[0].title}`;
+        crumsWrapper.append(prodName);
+
+    }
+
     private createGallery() {
 
         const galleryImages = document.createElement('div');
@@ -78,7 +121,7 @@ class ProductPage extends Page {
 
         const priceTitle = document.createElement('h3');
         priceTitle.className = 'price-cart';
-        priceTitle.textContent = `${products.products.filter(x => x.id === this.id)[0].price} $`
+        priceTitle.textContent = `${products.products.filter(x => x.id === this.id)[0].price} $`;
 
         const addToCartButton = document.createElement('button');
         addToCartButton.className = 'add-to-cart-button';
@@ -93,8 +136,6 @@ class ProductPage extends Page {
                 }
             }
         }
-
-
 
 
         addToCartButton.addEventListener('click', (e) => {
@@ -234,8 +275,8 @@ class ProductPage extends Page {
     draw() {
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
+        this.createBreadCrums();
         this.container.append(this.createProductPage());
-
 
         return this.container;
     }

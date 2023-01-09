@@ -44,10 +44,21 @@
     margin-bottom: 10px;
 }
 
+.form__name:valid,
+.form__phone:valid,
+.form__address:valid,
+.form__email:valid {
+    border: 2px solid #7C9F6E;
+}
+
+.form__name:focus:invalid,
+.form__phone:focus:invalid,
+.form__address:focus:invalid,
+.form__email:focus:invalid {
+    border: 2px solid #b00808;
+}
+
 .form__card-info {
-    /* width: 60%;
-    height: 100px; */
-    /* border: 1px dotted #ff0000; */
     margin: 0 auto 20px;
     padding: 20px 0;
 }
@@ -55,7 +66,6 @@
 .card-info__add {
     width: 100%;
     display: flex;
-    /* justify-content: space-between; */
     align-items: center;
 }
 
@@ -93,6 +103,22 @@ label {
     padding-left: 10px;
     outline: none;
     border: 2px solid #ffdd22;
+}
+
+#card-number:valid {
+    border: 2px solid #7C9F6E;
+}
+
+#card-number:focus:invalid,
+#valid:focus:invalid,
+#cvv:focus:invalid {
+    border: 2px solid #b00808;
+}
+
+#card-number:valid,
+#valid:valid,
+#cvv:valid {
+    border: 2px solid #7C9F6E;
 }
 
 #valid {

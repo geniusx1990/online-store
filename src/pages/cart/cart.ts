@@ -297,6 +297,16 @@ class CartPage extends Page {
     }
 
     draw() {
+        const url = new URL(window.location.href);
+        // url.searchParams.delete('category');
+        // url.searchParams.delete('brand');
+        // url.searchParams.delete('price');
+        // url.searchParams.delete('stock');
+        // url.searchParams.delete('sort');
+        // url.searchParams.delete('search');
+        // url.searchParams.delete('layout');
+        // window.history.pushState(null, '', url);
+
         const cartHeader = this.header.draw();
         this.container.append(cartHeader);
         
@@ -309,7 +319,6 @@ class CartPage extends Page {
 
         this.products.append(this.cards);
 
-        const url = new URL(window.location.href);
         const pageParam = url.searchParams.get('page') || '';
         const lengthParam = url.searchParams.get('length') || '';
 
@@ -322,8 +331,6 @@ class CartPage extends Page {
         this.main.append(this.summary);
 
         this.createSummary();
-
-        // this.createCardModule();
 
         return this.container;
 

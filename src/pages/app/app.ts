@@ -61,7 +61,6 @@ class App {
         } else {
             App.renderNewPage(Pages.MainPage); // MainPage
         }
-
         this.enableRouteChange();
 
         window.addEventListener('popstate', () => {

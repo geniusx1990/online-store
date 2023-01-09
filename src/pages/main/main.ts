@@ -160,9 +160,6 @@ class MainPage extends Page {
         this.pickedStock.min = '0';
         this.pickedStock.max = '160';
 
-        const buttonsContainer = <HTMLDivElement>document.querySelector('.filters__buttons');
-        this.filtersContainer.removeChild(buttonsContainer);
-
         const sorting = <HTMLSelectElement>document.querySelector('.sorting');
         this.sortingWrapper.removeChild(sorting);
         this.sort = '';
@@ -182,7 +179,6 @@ class MainPage extends Page {
 
         this.createDualFilter('price', '0', '2000');
         this.createDualFilter('stock', '0', '160');
-        this.createFilterButtons();
         this.createSorting();
         this.drawCards(products.products);
         this.getNumberItems(products.products.length);
@@ -755,6 +751,11 @@ class MainPage extends Page {
     }
 
     draw() {
+        // const url = new URL(window.location.href);
+        // url.searchParams.delete('page');
+        // url.searchParams.delete('length');
+        // window.history.pushState(null, '', url);
+
         const mainHeader = this.header.draw();
         this.container.append(mainHeader);
 
@@ -769,6 +770,8 @@ class MainPage extends Page {
         title.textContent = 'Filters';
         this.filtersContainer.append(title);
 
+        this.createFilterButtons();
+
         const categoriesNames = Array.from(new Set(products.products.map(item => item.category)));
         this.createCheckboxFilter('categories', categoriesNames);
 
@@ -778,8 +781,6 @@ class MainPage extends Page {
         this.createDualFilter('price', '0', '2000');
 
         this.createDualFilter('stock', '0', '160');
-
-        this.createFilterButtons();
 
         const content = document.createElement('div');
         content.className = 'content';

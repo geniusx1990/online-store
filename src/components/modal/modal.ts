@@ -9,10 +9,6 @@ class Modal {
     }
 
     draw() {
-        // const moduleLayer = document.createElement('div');
-        // moduleLayer.className = 'module-layer';
-        // document.body.append(moduleLayer);
-
         const formContainer = document.createElement('form');
         formContainer.className = 'form';
         this.container.append(formContainer);
@@ -25,16 +21,28 @@ class Modal {
         const nameInput = document.createElement('input');
         nameInput.className = 'form__name';
         nameInput.type = 'text';
-        nameInput.placeholder = 'Name';
-        nameInput.pattern = '\b[a-zA-Z]{3,20}[a-zA-Z]\b\s\b[a-zA-Z]{3,20}[a-zA-Z]\b(\s/-)\b[a-zA-Z]*\b'; // под вопросом
+        nameInput.placeholder = 'Enter Your name & surname';
+        // nameInput.pattern = '/[a-zA-Z]\b[a-zA-Z]/'; // под вопросом
         nameInput.required = true;
         formContainer.append(nameInput);
+
+        nameInput.addEventListener('change', (e) => {
+            const target = <HTMLInputElement>e.target;
+            const numbers = '01234567890¬`!"£$%^&*()_+[]{}@:,./\\|<>#';
+            const valueItems = target.value.split(' ');
+            valueItems.forEach((item) => {
+                if(item.length < 3) {
+                    
+                }
+            })
+        })
         
         const phoneInput = document.createElement('input');
         phoneInput.className = 'form__phone';
         phoneInput.type = 'tel';
-        phoneInput.placeholder = 'Phone number';
-        phoneInput.pattern = '\+?[0-9\s\-\(\)]+'
+        phoneInput.placeholder = '+375 XXX XXX';
+        const regPhone = '\+?[0-9\s\-\(\)]+';
+        phoneInput.pattern = regPhone;
         phoneInput.required = true;
         formContainer.append(phoneInput);
         
@@ -48,7 +56,7 @@ class Modal {
         const emailInput = document.createElement('input');
         emailInput.className = 'form__email';
         emailInput.type = 'email';
-        emailInput.placeholder = 'E-mail';
+        emailInput.placeholder = 'E-mail: ex. john2022@yahoo.com';
         emailInput.required = true;
         formContainer.append(emailInput);
 
