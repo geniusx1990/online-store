@@ -96,7 +96,7 @@ p {
 }
 
 .crums {
-    width: 60%;
+    width: 70%;
     display: flex;
     justify-content: space-between;
     text-transform: uppercase;
@@ -105,13 +105,20 @@ p {
 }
 
 .crums__store {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #333e48;
     text-decoration: none;
 }
 
 .crums__arrows {
-    font-size: 18px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.crums__category,
+.crums__brand,
+.crums__name {
+    font-size: 16px;
     font-weight: bold;
 }

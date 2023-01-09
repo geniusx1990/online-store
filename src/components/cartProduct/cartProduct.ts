@@ -150,6 +150,9 @@ class CartProduct {
             let sumCountDisplayHeader = <HTMLDivElement>document.querySelector('.header__products-number');
             let headerTotalSum = <HTMLDivElement>document.querySelector('.header__total-sum');
 
+            if(stockNumber.textContent == '0') {
+                return;
+            }
 
             count = count + 1;
             let test = JSON.parse(localStorage.cartItems);
