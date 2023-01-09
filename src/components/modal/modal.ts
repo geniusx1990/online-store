@@ -18,11 +18,16 @@ class Modal {
         detailsTitle.textContent = 'Personal details';
         formContainer.append(detailsTitle);
 
+        const nameWarning = document.createElement('p'); 
+        nameWarning.className = 'name-warning';
+        nameWarning.textContent = 'Your name and surname should be no shorter than 3 symbols each';
+        formContainer.append(nameWarning);   
+        
         const nameInput = document.createElement('input');
         nameInput.className = 'form__name';
         nameInput.type = 'text';
         nameInput.placeholder = 'Enter Your name & surname';
-        // nameInput.pattern = '/[a-zA-Z]\b[a-zA-Z]/'; // под вопросом
+        nameInput.pattern = '/[a-zA-Z]\b[a-zA-Z]/'; // под вопросом
         nameInput.required = true;
         formContainer.append(nameInput);
 
@@ -32,8 +37,13 @@ class Modal {
             const valueItems = target.value.split(' ');
             valueItems.forEach((item) => {
                 if(item.length < 3) {
-                    
+                    nameInput.classList.add('invalid');
+                    nameWarning.style.display = 'block';
+                } else {
+                    nameInput.classList.add('valid');
+                    nameWarning.style.display = 'none';
                 }
+                
             })
         })
         
@@ -41,8 +51,7 @@ class Modal {
         phoneInput.className = 'form__phone';
         phoneInput.type = 'tel';
         phoneInput.placeholder = '+375 XXX XXX';
-        const regPhone = '\+?[0-9\s\-\(\)]+';
-        phoneInput.pattern = regPhone;
+        phoneInput.pattern = '\+?[0-9\s\-\(\)]+';
         phoneInput.required = true;
         formContainer.append(phoneInput);
         
