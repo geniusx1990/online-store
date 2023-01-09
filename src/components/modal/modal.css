@@ -41,7 +41,7 @@
     padding-left: 20px;
     outline: none;
     border: 2px solid #ffdd22;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .form__name:focus {
@@ -55,7 +55,11 @@
     border: 2px solid #7C9F6E;
 } */
 
-.form__name:focus:valid {
+/* .form__name:valid {
+    border: 2px solid #7C9F6E;
+} */
+.form__phone:valid,
+.form__email:valid {
     border: 2px solid #7C9F6E;
 }
 
@@ -66,8 +70,15 @@
     border: 2px solid #b00808;
 }
 
+/* .form__name:invalid,
+.form__phone:invalid,
+.form__address:invalid, */
+/* .form__email:invalid {
+    border: 2px solid #b00808;
+} */
+
 .form__card-info {
-    margin: 0 auto 20px;
+    margin: 0 auto;
     padding: 20px 0;
 }
 
@@ -94,6 +105,10 @@
     transition: 0.5s;
 }
 
+.inactive {
+    opacity: 0.2;
+}
+
 .form__button:hover {
     background-color: #e7c400;
 }
@@ -108,12 +123,16 @@ label {
     height: 25px;
     border-radius: 12px;
     font-size: 14px;
-    padding-left: 10px;
+    padding-left: 50px;
     outline: none;
     border: 2px solid #ffdd22;
+    background: url('../../assets/svg/visa.svg');
+    background-position: left 10px center;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
-/* #card-number:valid {
+#card-number:valid {
     border: 2px solid #7C9F6E;
 }
 
@@ -127,7 +146,7 @@ label {
 #valid:valid,
 #cvv:valid {
     border: 2px solid #7C9F6E;
-} */
+}
 
 #valid {
     width: 100px;
@@ -158,11 +177,19 @@ label {
     border: 2px solid #b00808;
 }
 
-.name-warning {
+.name-warning,
+.phone-warning,
+.address-warning,
+.email-warning,
+.card-number-warning {
     display: none;
     font-size: 12px;
     align-self: flex-start;
-    margin-bottom: 0;
+    margin-top: 0;
     padding-left: 10px;
     color: #b00808;
+}
+
+.shown {
+    display: block;
 }
