@@ -98,6 +98,32 @@
     margin-bottom: 20px;
 }
 
+.summary__total_promo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.promo-item {
+    font-size: 14px;
+}
+
+.promo-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.button-add-coupon {
+    background-color: #ffdd22;
+    border: 1px solid #ffdd22;
+    border-radius: 10px;
+
+}
+
 .summary__promo {
     margin-bottom: 30px;
 }
